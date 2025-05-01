@@ -10,7 +10,7 @@ type InputProps = {
   function Input({ label, type = "text", value, onChange, placeholder, name }: InputProps) {
     return (
       <div style={{ marginBottom: "16px" }}>
-        <label style={{ display: "block", marginBottom: "4px" }}>{label}</label>
+        <label style={{ display: "block", marginBottom: "4px", color: "#000000" }}>{label}</label>
         <input
           type={type}
           value={value}
@@ -21,7 +21,8 @@ type InputProps = {
             padding: "8px",
             width: "80%",
             borderRadius: "4px",
-            border: "1px solid #ccc"
+            border: "1px solid #ccc",
+            color: "#FFF"
           }}
         />
       </div>

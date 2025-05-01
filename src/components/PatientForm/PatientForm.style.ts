@@ -11,6 +11,6 @@ export const Title = styled.h1`
   margin-bottom: 20px;
   padding: 20px;
   text-align: start;
-  color: #fff;
+  color: #FFF;
   background: var(--Color, #253F6A);
 `
