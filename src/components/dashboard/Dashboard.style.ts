@@ -11,7 +11,7 @@ export const Container = styled.div`
 
 
 export const Sidebar = styled(motion.div)<{ collapsed: boolean }>`
-  height: 100vh;
+  height: 100%;
   background-color: #405c9b;
   display: flex;
   flex-direction: column;
@@ -104,7 +104,7 @@ export const Main = styled.main`
   flex: 1;
   background-color: #e8edf9;
   padding: 24px;
-
+  height: 100%;
   .welcome {
     margin-top: 80px;
     text-align: center;

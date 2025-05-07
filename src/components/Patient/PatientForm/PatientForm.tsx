@@ -1,6 +1,6 @@
 import { useState } from "react"
-import Input from "../Input"
-import FormActions from "../FormActions"
+import Input from "../../Input"
+import FormActions from "../../FormActions"
 import * as S from "./PatientForm.style"
 
 type PatientFormData = {

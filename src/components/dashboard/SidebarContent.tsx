@@ -16,13 +16,13 @@ import {
   FaChevronRight
 } from "react-icons/fa";
 
-export default function SidebarContent({ collapsed, setCollapsed }) {
+export default function SidebarContent({ collapsed, setCollapsed, setActiveSection }) {
   return (
     <Sidebar collapsed={collapsed}>
         <CollapseButton onClick={() => setCollapsed((prev) => !prev)}>
             {collapsed ? <FaChevronRight /> : <FaChevronLeft />}
         </CollapseButton>
-        <MenuButton collapsed={collapsed}><FaUser /> {!collapsed && "Paciente"}</MenuButton>
+        <MenuButton collapsed={collapsed} onClick={() => setActiveSection("paciente")}><FaUser /> {!collapsed && "Paciente"}</MenuButton>
         <MenuButton collapsed={collapsed}><FaClipboard /> {!collapsed && "Consulta"}</MenuButton>
         <MenuButton collapsed={collapsed}><FaTools /> {!collapsed && "Manutenção"}</MenuButton>
         <MenuButton collapsed={collapsed}><FaMoneyBill /> {!collapsed && "Orçamento"}</MenuButton>

@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import SidebarContent from "./SidebarContent";
+import PatientList from "../Patient/PatientList/PatientList";
+
 import {
   Container,
   Main,
@@ -15,6 +17,7 @@ import {
 
 export default function Dashboard() {
   const [collapsed, setCollapsed] = useState(false);
+  const [activeSection, setActiveSection] = useState("home");
 
   return (
     <Container>
@@ -31,15 +34,19 @@ export default function Dashboard() {
                 animate={{ width: collapsed ? 80 : 230 }}
                 transition={{ duration: 0.3 }}
                 >
-                <SidebarContent collapsed={collapsed} setCollapsed={setCollapsed} />
+                <SidebarContent collapsed={collapsed} setCollapsed={setCollapsed} setActiveSection={setActiveSection}/>
             </Sidebar>
 
             <Main>
                 
-                <div className="welcome">
-                <h2>Olá, Seja Bem-Vindo [Nome Usuário]</h2>
-                <p>Selecione uma opção no menu para começar</p>
-                </div>
+                {activeSection === "paciente" ? (
+                  <PatientList />
+                ) : (
+                  <div className="welcome">
+                    <h2>Olá, Seja Bem-Vindo [Nome Usuário]</h2>
+                    <p>Selecione uma opção no menu para começar</p>
+                  </div>
+                )}
             </Main>
 
 
