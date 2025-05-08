@@ -10,7 +10,7 @@ export const Container = styled.div`
 
 
 
-export const Sidebar = styled(motion.div)<{ collapsed: boolean }>`
+export const SidebarArea = styled(motion.div)<{ collapsed: boolean }>`
   height: 100%;
   background-color: #405c9b;
   display: flex;

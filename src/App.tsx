@@ -4,13 +4,25 @@ import './App.css'
 import PatientForm from './components/Patient/PatientForm'
 import PatientList from './components/Patient/PatientList/PatientList'
 import Dashboard from './components/dashboard/Dashboard'
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from "./pages/home/Home";
+import Pacientes from "./pages/pacientes/Pacientes";
+//import Dentistas from "./pages/Dentistas";
+import MainLayout from "./layout/MainLayout";
 
 function App() {
   return (
-    <>
-      <Dashboard/>
-    </>
-  )
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<MainLayout />}>
+          <Route index element={<Home />} />
+          <Route path="pacientes" element={<Pacientes />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
-export default App
+
+          //<Route path="dentistas" element={<Dentistas />} />
+export default App;

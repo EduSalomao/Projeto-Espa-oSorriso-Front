@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import SidebarContent from "./SidebarContent";
-import PatientList from "../Patient/PatientList/PatientList";
+import Sidebar from "../components/Sidebar/Sidebar";
 
 import {
   Container,
@@ -9,11 +8,12 @@ import {
   UserArea,
   Header,
   BodyArea,
-  Sidebar
-} from "./Dashboard.style";
+  SidebarArea
+} from "./MainLayout.style";
 import {
   FaBell,
 } from "react-icons/fa";
+import { Outlet } from "react-router-dom";
 
 export default function Dashboard() {
   const [collapsed, setCollapsed] = useState(false);
@@ -29,24 +29,16 @@ export default function Dashboard() {
             </UserArea>
         </Header>
         <BodyArea>
-            <Sidebar
+            <SidebarArea
                 collapsed={collapsed}
                 animate={{ width: collapsed ? 80 : 230 }}
                 transition={{ duration: 0.3 }}
                 >
-                <SidebarContent collapsed={collapsed} setCollapsed={setCollapsed} setActiveSection={setActiveSection}/>
-            </Sidebar>
+                <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} setActiveSection={setActiveSection}/>
+            </SidebarArea>
 
             <Main>
-                
-                {activeSection === "paciente" ? (
-                  <PatientList />
-                ) : (
-                  <div className="welcome">
-                    <h2>Olá, Seja Bem-Vindo [Nome Usuário]</h2>
-                    <p>Selecione uma opção no menu para começar</p>
-                  </div>
-                )}
+                <Outlet />
             </Main>
 
 
