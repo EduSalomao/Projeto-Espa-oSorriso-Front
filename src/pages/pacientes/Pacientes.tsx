@@ -24,6 +24,7 @@ const PatientList = () => {
 
   useEffect(() => {
     const mockData = Array.from({ length: 3 }).map(() => ({
+      id: 2,
       nome: "Michael Jackson de Souza",
       cpf: "123.456.789-33",
       telefone: "(38) 99123-5678",

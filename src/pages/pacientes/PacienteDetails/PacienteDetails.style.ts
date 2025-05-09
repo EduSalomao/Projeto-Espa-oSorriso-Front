@@ -12,6 +12,7 @@ export const ContainerDetails = styled.div`
 export const ContainerAside = styled.div`
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     align-items: center;
     width: 80%;
     background-color: #fff;
@@ -48,31 +49,64 @@ export const ContainerOptions = styled.div`
     height: 50%;
     width: 95%;
     background-color: #EDF2FD;
-    padding: 16px;
-    gap: 16px;
+    padding: 15px;
+    border-radius: 6px;
+    
 `;
 
 export const ContainerOptionsMenu = styled.div`
     display: flex;
     width: 100%;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: center;
     
-`
+`;
 
-export const OptionsMenu = styled.p`
+export const OptionsMenu = styled.p<{ selected?: boolean }>`
     color: #3d5582;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Roboto Condensed', sans-serif;
     font-size: 20px;
+    width: 100%;
     font-weight: bold;
     margin: 0;
+    border-color: #3d5582;
+    border-bottom: ${({ selected }) => (selected ? "2px solid" : "transparent")};
+`;
+
+export const ContentOptionsMenu = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: space-around;
+    width: 100%;
+    height: 100%;
+`;
+
+export const ContentSetOptionsMenu = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-left:30px;
 `
+export const ContentTitleOptionsMenu = styled.h2`
+   color: #3d5582;
+   margin: 0;
+   font-family: 'Roboto Condensed', sans-serif;
+   text-align: left;
+`;
+
+export const ContentDescriptionOptionsMenu = styled.p`
+   color: #000;
+   margin: 0;
+   font-family: 'Inter', sans-serif;
+`;
 
 export const Line = styled.hr`
     border: none;
-    height: 2px;
-    background-color: #3d5582;
-    margin: 0 0;
+    height: 1px;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    background-color: #d3d3d3;
 `;
 
 export const SidebarButtons = styled.div`
@@ -84,6 +118,7 @@ export const SidebarButtons = styled.div`
   border-radius: 6px;
   padding: 16px;
 `;
+
 
 export const ActionButton = styled.button`
   background-color: #153e75;

@@ -24,7 +24,7 @@ export default function Dashboard() {
     <Container>
         <HeaderArea>
             <Header>
-                <img src="src/assets/logo.png" alt="Espaço Sorriso" />
+                <img src="/src/assets/logo.png" alt="Espaço Teste" />
                 <UserArea>
                     <FaBell />
                     <span>Usuário ▼</span>

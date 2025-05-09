@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { motion } from "framer-motion";
 
 export const Card = styled.div`
   text-align: left;
@@ -6,6 +7,10 @@ export const Card = styled.div`
   border-radius: 6px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.2);
   padding: 8px;
+  transition: background-color 0.3s;
+  &:hover {
+    background-color: #fff;
+  }
 `;
 
 export const CardTitle = styled.h2`

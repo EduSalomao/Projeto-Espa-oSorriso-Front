@@ -9,15 +9,16 @@ import Home from "./pages/home/Home";
 import Pacientes from "./pages/pacientes/Pacientes";
 //import Dentistas from "./pages/Dentistas";
 import MainLayout from "./layout/MainLayout";
-import PacienteCard from './components/Paciente/Card/Card'
 import PacienteDetails from './pages/pacientes/PacienteDetails/PacienteDetails'
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<PacienteDetails />}>
+        <Route path="/" element={<MainLayout />}>
           <Route index element={<Home />} />
           <Route path="pacientes" element={<Pacientes />} />
+          <Route path="pacientes/:id" element={<PacienteDetails />} />
+          
         </Route>
       </Routes>
     </BrowserRouter>
