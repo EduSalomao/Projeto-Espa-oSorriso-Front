@@ -14,7 +14,6 @@ export const SidebarArea = styled(motion.div)<{ collapsed: boolean }>`
   background-color: #405c9b;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
   padding: 5px;
 `;
 

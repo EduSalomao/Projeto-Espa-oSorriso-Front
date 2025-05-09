@@ -6,19 +6,22 @@ export const SidebarContent = styled(motion.div)<{ collapsed: boolean }>`
   background-color: #405c9b;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  position: relative;
   padding: 5px;
 `;
 
-export const CollapseButton = styled.button<{ collapsed?: boolean }>`
+export const CollapseButton = styled(motion.button)<{ collapsed?: boolean }>`
   border: none;
   color: white;
   font-size: 20px;
   cursor: pointer;
   padding: 5px;
   background-color: #2f4370;
-  border-radius: 50%;
-  position: relative;
+  border-radius: 100%;
+  position: absolute;
+  top: 0;
+  right: -18px;
+  z-index: 2;
 `;
 
 

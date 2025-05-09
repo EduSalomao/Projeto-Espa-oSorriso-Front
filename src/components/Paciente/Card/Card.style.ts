@@ -11,6 +11,7 @@ export const Card = styled.div`
   &:hover {
     background-color: #fff;
   }
+  cursor: pointer;
 `;
 
 export const CardTitle = styled.h2`
