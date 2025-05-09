@@ -11,7 +11,6 @@ export const Container = styled.div`
 
 
 export const SidebarArea = styled(motion.div)<{ collapsed: boolean }>`
-  height: 100%;
   background-color: #405c9b;
   display: flex;
   flex-direction: column;
@@ -20,17 +19,20 @@ export const SidebarArea = styled(motion.div)<{ collapsed: boolean }>`
 `;
 
 
+export const HeaderArea = styled.div`
+  background-color: #2f4370;
+  padding: 10px 20px;
+`
+
+
 export const Header = styled.div`
   background-color: #2f4370;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 100%;
-  padding: 10px;
   border-radius: 0;
   img {
     height: 40px;
-
   }
 `;
 
@@ -103,8 +105,7 @@ export const MenuButton = styled.button<{ collapsed?: boolean }>`
 export const Main = styled.main`
   flex: 1;
   background-color: #e8edf9;
-  padding: 24px;
-  height: 100%;
+  padding: 0px;
   .welcome {
     margin-top: 80px;
     text-align: center;
@@ -123,15 +124,14 @@ export const Main = styled.main`
 `;
 export const BodyArea = styled.div`
   display: flex;
+  height: 100%;
 `
 
 export const UserArea = styled.div`
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  padding: 12px 24px;
   gap: 12px;
   font-weight: bold;
   color: #ffffff;
-  width: 100%;
 `;

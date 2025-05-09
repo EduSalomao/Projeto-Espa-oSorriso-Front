@@ -9,6 +9,7 @@ import Home from "./pages/home/Home";
 import Pacientes from "./pages/pacientes/Pacientes";
 //import Dentistas from "./pages/Dentistas";
 import MainLayout from "./layout/MainLayout";
+import PacienteCard from './components/Paciente/Card/Card'
 
 function App() {
   return (

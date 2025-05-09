@@ -20,7 +20,6 @@ type ButtonProps = {
           color: "white",
           border: "none",
           padding: "10px 20px",
-          margin: "0 5px",
           borderRadius: "4px",
           cursor: "pointer"
         }}

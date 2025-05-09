@@ -8,7 +8,8 @@ import {
   UserArea,
   Header,
   BodyArea,
-  SidebarArea
+  SidebarArea,
+  HeaderArea
 } from "./MainLayout.style";
 import {
   FaBell,
@@ -21,13 +22,15 @@ export default function Dashboard() {
 
   return (
     <Container>
-        <Header>
-            <img src="src/assets/logo.png" alt="Espaço Sorriso" />
-            <UserArea>
-                <FaBell />
-                <span>Usuário ▼</span>
-            </UserArea>
-        </Header>
+        <HeaderArea>
+            <Header>
+                <img src="src/assets/logo.png" alt="Espaço Sorriso" />
+                <UserArea>
+                    <FaBell />
+                    <span>Usuário ▼</span>
+                </UserArea>
+            </Header>
+        </HeaderArea>
         <BodyArea>
             <SidebarArea
                 collapsed={collapsed}

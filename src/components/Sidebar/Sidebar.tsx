@@ -27,12 +27,20 @@ export default function Sidebar({ collapsed, setCollapsed, setActiveSection }) {
           label="Paciente"
           collapsed={collapsed} 
           to="/pacientes"/> 
-        
-        <MenuButton collapsed={collapsed}><FaClipboard /> {!collapsed && "Consulta"}</MenuButton>
-        <MenuButton collapsed={collapsed}><FaTools /> {!collapsed && "Manutenção"}</MenuButton>
-        <MenuButton collapsed={collapsed}><FaMoneyBill /> {!collapsed && "Orçamento"}</MenuButton>
-        <MenuButton collapsed={collapsed}><FaProcedures /> {!collapsed && "Procedimento"}</MenuButton>
-        <MenuButton collapsed={collapsed}><FaTooth /> {!collapsed && "Dentista"}</MenuButton>
+        <MenuItemButton
+          icon={FaTooth}
+          label="Dentista"
+          collapsed={collapsed}
+          to="/dentistas"
+        />
     </SidebarContent>
   );
 }
+
+/*
+<MenuButton collapsed={collapsed}><FaClipboard /> {!collapsed && "Consulta"}</MenuButton>
+<MenuButton collapsed={collapsed}><FaTools /> {!collapsed && "Manutenção"}</MenuButton>
+<MenuButton collapsed={collapsed}><FaMoneyBill /> {!collapsed && "Orçamento"}</MenuButton>
+<MenuButton collapsed={collapsed}><FaProcedures /> {!collapsed && "Procedimento"}</MenuButton>
+
+*/

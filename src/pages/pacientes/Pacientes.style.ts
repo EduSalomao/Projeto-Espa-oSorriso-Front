@@ -48,16 +48,35 @@ export const CardInfoGrid = styled.div`
   row-gap: 2px;
 `;
 
-export const ListaContainer = styled.div`
+export const ContainerPacientes = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: space-between
   align-items: flex-start;
-  gap: 30px;
+  height: 100%;
+  gap: 2px;
+`;
+
+export const ContainerLista = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 80%;
+    background-color: #EDF2FD;
+    padding: 16px;
+    gap: 16px;
+`;
+
+export const ListArea = styled.div`
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 10px 30px 10px;
+    border-radius: 6px;
+    gap: 16px;
 `;
 
 export const CardsArea = styled.div`
-  flex: 1;
-  padding-right: 24px;
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -68,7 +87,10 @@ export const SidebarButtons = styled.div`
   display: flex;
   flex-direction: column;
   gap: 16px;
-  width: 150px;
+  width: 20%;
+  background-color: #fff;
+  border-radius: 6px;
+  padding: 16px;
 `;
 
 export const ActionButton = styled.button`

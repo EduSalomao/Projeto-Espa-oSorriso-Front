@@ -1,18 +1,21 @@
 import React, { useEffect, useState } from "react";
 import {
-  ListaContainer,
+  ContainerPacientes,
   CardsArea,
   SidebarButtons,
   ActionButton,
+  ContainerLista,
   Card,
   CardTitle,
   CardInfo,
   CardLine,
-  CardInfoGrid
+  CardInfoGrid,
+  ListArea
 } from "./Pacientes.style";
-
+import PacienteCard from "../../components/Paciente/Card/Card";
 import CreatePatientModal from "../../components/Modals/createPatientModal/CreatePatientModal";
 import SearchPatientModal from "../../components/Modals/searchPatientModal/SearchPatientModal";
+import PaginationOption from "../../components/PaginationOption/PaginationOption";
 
 const PatientList = () => {
   const [patients, setPatients] = useState([]);
@@ -20,7 +23,7 @@ const PatientList = () => {
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
 
   useEffect(() => {
-    const mockData = Array.from({ length: 5 }).map(() => ({
+    const mockData = Array.from({ length: 3 }).map(() => ({
       nome: "Michael Jackson de Souza",
       cpf: "123.456.789-33",
       telefone: "(38) 99123-5678",
@@ -38,22 +41,24 @@ const PatientList = () => {
   const handleCloseSearchModal = () => setIsSearchModalOpen(false);
 
   return (
-    <ListaContainer>
-      <CardsArea>
-        {patients.map((pessoa, idx) => (
-          <Card key={idx}>
-            <CardTitle>{pessoa.nome}</CardTitle>
-            <CardLine />
-            <CardInfoGrid>
-              <CardInfo><strong>CPF:</strong> {pessoa.cpf}</CardInfo>
-              <CardInfo><strong>Telefone:</strong> {pessoa.telefone}</CardInfo>
-              <CardInfo><strong>Data de nascimento:</strong> {pessoa.nascimento}</CardInfo>
-              <CardInfo><strong>Endereço:</strong> {pessoa.endereco}</CardInfo>
-            </CardInfoGrid>
-          </Card>
-        ))}
-      </CardsArea>
-
+    <ContainerPacientes>
+        <ContainerLista>
+        <ListArea>
+            <CardsArea>
+                {patients.map((pessoa, idx) => (
+                <PacienteCard 
+                    id={pessoa.id}
+                    nome={pessoa.nome}
+                    cpf={pessoa.cpf}
+                    telefone={pessoa.telefone}
+                    nascimento={pessoa.nascimento}
+                    endereco={pessoa.endereco}/>
+                ))}
+            </CardsArea>
+            
+        </ListArea>
+        <PaginationOption />
+      </ContainerLista>
       <SidebarButtons>
         <ActionButton onClick={handleOpenSearchModal}>Pesquisar</ActionButton>
         <ActionButton onClick={handleOpenCreateModal}>Cadastrar</ActionButton>
@@ -64,7 +69,7 @@ const PatientList = () => {
 
       {/* Modal de Pesquisa */}
       <SearchPatientModal isOpen={isSearchModalOpen} onClose={handleCloseSearchModal} />
-    </ListaContainer>
+    </ContainerPacientes>
   );
 };
 
