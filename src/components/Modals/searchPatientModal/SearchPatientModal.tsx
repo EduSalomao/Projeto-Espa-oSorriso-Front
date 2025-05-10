@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import * as S from "./SearchPatientModal.style";
-
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+import { useNavigate } from "react-router-dom";
 type Props = {
   isOpen: boolean;
   onClose: () => void;
@@ -8,12 +9,31 @@ type Props = {
 
 function SearchPatientModal({ isOpen, onClose }: Props) {
   const [cpf, setCpf] = useState("");
+  const [idPaciente, setIdPaciente] = useState(null);
+  const navigate = useNavigate();
 
-  const handleSearch = () => {
-    console.log("Pesquisar CPF:", cpf);
-    alert(`Pesquisar paciente com CPF: ${cpf}`);
+  const handleSearch = async () => {
+    try {
+        const response = await fetch(`${BACKEND_URL}/pacientes/cpf/${cpf}`);
+        // Verifica se a resposta é válida
+        if (!response.ok) {
+          throw new Error("Erro ao buscar paciente");
+        }
+        const data = await response.json();
+        setIdPaciente(data.id);
+    } catch (error) {
+        console.error("Erro ao buscar paciente:", error);
+    }
+
     onClose();
   };
+
+  useEffect(() => {
+    if (idPaciente !== null) {
+      navigate(`/pacientes/${idPaciente}`);
+    }
+  }, [idPaciente, navigate]);
+
 
   const handleCancel = () => {
     onClose();
@@ -26,12 +46,13 @@ function SearchPatientModal({ isOpen, onClose }: Props) {
       <S.ModalContent>
         <S.Title>Pesquisar Paciente</S.Title>
         <S.Description>Digite o CPF do Paciente abaixo:</S.Description>
-        <S.Input
-          type="text"
-          placeholder="xxx.xxx.xxx-xx"
+        <S.MaskedInput
+          mask="000.000.000-00"
           value={cpf}
-          onChange={(e) => setCpf(e.target.value)}
+          onAccept={(value: any) => setCpf(value)}
+          placeholder="xxx.xxx.xxx-xx"
         />
+        
         <S.ButtonGroup>
           <S.Button onClick={handleSearch}>Pesquisar</S.Button>
           <S.CancelButton onClick={handleCancel}>Cancelar</S.CancelButton>

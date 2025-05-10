@@ -1,54 +1,54 @@
-import { useState } from "react"
-import FormActions from "../../FormActions"
-import * as S from "./DeletePatientModal.style"
+import { useState } from "react";
+import * as S from "./DeletePatientModal.style";
+import { useParams } from "react-router-dom";
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-type PatientFormData = {
-  name: string
-  birthDate: string
-  cpf: string
-  phone: string
-  address: string
-}
+type Props = {
+  isOpen: boolean;
+  onClose: (isDeleted) => void;
+};
 
-type DeletePatientModalProps = {
-  isOpen: boolean
-  onClose: () => void
-}
+function DeletePacientModal({ isOpen, onClose }: Props) {
+  const { id } = useParams(); 
+  const [isDeleted, setIsDeleted] = useState(false);
+  const handleDelete = async () => {
+    try {
+        const response = await fetch(`${BACKEND_URL}/pacientes/${id}`, {
+          method: "DELETE"});
+        // Verifica se a resposta é válida
+        if (!response.ok) {
+          throw new Error("Erro ao excluir paciente");
+        }
+        const data = await response.json();
+        setIsDeleted(true);
 
-function DeletePatientModal({ isOpen, onClose }: DeletePatientModalProps) {
-  const [form, setForm] = useState<PatientFormData>({
-    name: "",
-    birthDate: "",
-    cpf: "",
-    phone: "",
-    address: ""
-  })
+    } catch (error) {
+        console.error("Erro ao excluir paciente:", error);
+    }
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value })
-  }
-
-  const handleSave = () => {
-    console.log(form)
-    alert("Paciente salvo!")
-    onClose()
-  }
+    console.log("Teste" + isDeleted)
+    onClose(true);
+  };
 
   const handleCancel = () => {
-    console.log("Cancelado")
-    onClose()
-  }
+    onClose(false);
+  };
 
-  if (!isOpen) return null
+  if (!isOpen) return null;
 
   return (
     <S.ModalOverlay>
       <S.ModalContent>
         <S.Title>Excluir Paciente</S.Title>
-        <FormActions onCancel={handleCancel} onSave={handleSave} />
+        <S.Description>Deseja excluir este paciente?<br/>Esta ação é irreversível!</S.Description>
+        
+        <S.ButtonGroup>
+          <S.Button onClick={handleDelete}>Excluir</S.Button>
+          <S.CancelButton onClick={handleCancel}>Cancelar</S.CancelButton>
+        </S.ButtonGroup>
       </S.ModalContent>
     </S.ModalOverlay>
-  )
+  );
 }
 
-export default DeletePatientModal
+export default DeletePacientModal;

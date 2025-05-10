@@ -5,35 +5,47 @@ import {
   SidebarButtons,
   ActionButton,
   ContainerLista,
-  Card,
-  CardTitle,
-  CardInfo,
-  CardLine,
-  CardInfoGrid,
   ListArea
 } from "./Pacientes.style";
 import PacienteCard from "../../components/Paciente/Card/Card";
 import CreatePatientModal from "../../components/Modals/createPatientModal/CreatePatientModal";
 import SearchPatientModal from "../../components/Modals/searchPatientModal/SearchPatientModal";
 import PaginationOption from "../../components/PaginationOption/PaginationOption";
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const PatientList = () => {
   const [patients, setPatients] = useState([]);
+  const [totalPatients, setTotalPatients] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [limit] = useState(5);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
 
   useEffect(() => {
-    const mockData = Array.from({ length: 3 }).map(() => ({
-      id: 2,
-      nome: "Michael Jackson de Souza",
-      cpf: "123.456.789-33",
-      telefone: "(38) 99123-5678",
-      nascimento: "01/01/1900",
-      endereco: "Av Sergio Vieira de Melo, 3150, Urbis V, Vitória da Conquista, BA",
-    }));
+    const fetchPatients = async () => {
+    try {
+        console.log(`${BACKEND_URL}/pacientes`)
+        const response = await fetch(`${BACKEND_URL}/pacientes?page=${currentPage}&limit=${limit}`);
+        if (!response.ok) {
+          throw new Error("Erro ao buscar pacientes");
+        }
 
-    setPatients(mockData);
-  }, []);
+        const data = await response.json();
+        
+        setPatients(data.pacientes);
+        setTotalPatients(data.total);
+        setCurrentPage(data.page);
+      } catch (error) {
+        console.error("Erro ao carregar pacientes:", error);
+      }
+    };
+
+    fetchPatients();
+  },[currentPage, limit]);
+
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+  };
 
   const handleOpenCreateModal = () => setIsCreateModalOpen(true);
   const handleCloseCreateModal = () => setIsCreateModalOpen(false);
@@ -49,16 +61,16 @@ const PatientList = () => {
                 {patients.map((pessoa, idx) => (
                 <PacienteCard 
                     id={pessoa.id}
-                    nome={pessoa.nome}
+                    nome={pessoa.name}
                     cpf={pessoa.cpf}
-                    telefone={pessoa.telefone}
-                    nascimento={pessoa.nascimento}
-                    endereco={pessoa.endereco}/>
-                ))}
+                    telefone={pessoa.phone}
+                    nascimento={pessoa.birthdate}
+                    endereco={pessoa.address}/>
+                  ))}
             </CardsArea>
             
         </ListArea>
-        <PaginationOption />
+        <PaginationOption page={currentPage} total={totalPatients} limit={limit} onPageChange={handlePageChange}/>
       </ContainerLista>
       <SidebarButtons>
         <ActionButton onClick={handleOpenSearchModal}>Pesquisar</ActionButton>

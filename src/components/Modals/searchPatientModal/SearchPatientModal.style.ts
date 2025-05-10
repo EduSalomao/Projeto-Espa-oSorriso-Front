@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { IMaskInput } from "react-imask";
 
 export const ModalOverlay = styled.div`
   position: fixed;
@@ -11,7 +12,7 @@ export const ModalOverlay = styled.div`
 `;
 
 export const ModalContent = styled.div`
-  background-color: #f4f4f4;
+  background-color: #d9d9d9;
   border-radius: 10px;
   padding: 2rem;
   width: 100%;
@@ -22,27 +23,52 @@ export const ModalContent = styled.div`
 
 export const Title = styled.h2`
   background-color: #5a75a3;
+  font-family: var(--font-roboto);
   color: white;
   padding: 0.75rem;
   border-radius: 8px 8px 0 0;
   margin: -2rem -2rem 1rem -2rem;
-  font-size: 1.25rem;
+  font-size: 32px;
 `;
 
 export const Description = styled.p`
+  font-family: var(--font-roboto);
   font-size: 1rem;
   color: #333;
-  margin-bottom: 1rem;
+  margin-bottom: 2px;
 `;
 
 export const Input = styled.input`
   padding: 0.5rem;
   font-size: 1rem;
+  color: #000;
   width: 100%;
-  border: 2px dashed #a59bff;
+  background-color: #fff;
+  border: none;
   border-radius: 6px;
-  margin-bottom: 1.5rem;
-  text-align: center;
+  margin-bottom: 50px;
+  text-align: left;
+  &::placeholder {
+    color: #000; /* Altere para a cor que quiser */
+    opacity: 1;  /* Garante que a cor será visível */
+  }
+`;
+
+export const MaskedInput = styled(IMaskInput)`
+  padding: 0.5rem;
+  font-size: 1rem;
+  color: #000;
+  width: 100%;
+  background-color: #fff;
+  border: none;
+  border-radius: 6px;
+  margin-bottom: 50px;
+  text-align: left;
+
+  &::placeholder {
+    color: #000;
+    opacity: 1;
+  }
 `;
 
 export const ButtonGroup = styled.div`
@@ -52,13 +78,16 @@ export const ButtonGroup = styled.div`
 `;
 
 export const Button = styled.button`
-  padding: 0.5rem 1rem;
+  padding: 0.05rem 2.5rem;
   background-color: white;
   color: #3a5a99;
-  border: 2px solid #3a5a99;
+  border: 1px solid #3a5a99;
   border-radius: 6px;
+  font-family: var(--font-roboto);
+  font-size: 24px;
   cursor: pointer;
-  font-weight: bold;
+  font-weight: 200;
+  
   &:hover {
     background-color: #3a5a99;
     color: white;

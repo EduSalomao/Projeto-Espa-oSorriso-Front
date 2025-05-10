@@ -64,11 +64,14 @@ export const ContainerLista = styled.div`
     background-color: #EDF2FD;
     padding: 16px;
     gap: 16px;
+    justify-content: space-between;
+
 `;
 
 export const ListArea = styled.div`
     box-shadow: 0 2px 6px rgba(0,0,0,0.2);
     display: flex;
+    width: 95%;
     flex-direction: column;
     align-items: center;
     padding: 30px 10px 30px 10px;
@@ -80,6 +83,7 @@ export const CardsArea = styled.div`
   display: flex;
   flex-direction: column;
   gap: 16px;
+  width: 95%;
   align-items: left;
 `;
 
