@@ -11,8 +11,8 @@ import {
   CardInfoGrid
 } from "./PatientList.style";
 
-import CreatePatientModal from "../../Modals/createPatientModal/CreatePatientModal";
-import SearchPatientModal from "../../Modals/searchPatientModal/SearchPatientModal";
+import CreatePatientModal from "../../Modals/patient/createPatientModal/CreatePatientModal";
+import SearchPatientModal from "../../Modals/patient/searchPatientModal/SearchPatientModal";
 
 const PatientList = () => {
   const [patients, setPatients] = useState([]);

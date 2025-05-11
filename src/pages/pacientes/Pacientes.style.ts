@@ -50,9 +50,10 @@ export const CardInfoGrid = styled.div`
 
 export const ContainerPacientes = styled.div`
   display: flex;
-  justify-content: space-between
+  flex: 1;
+  justify-content: space-between;
+  width: 100%;
   align-items: flex-start;
-  height: 100%;
   gap: 2px;
 `;
 
@@ -60,12 +61,12 @@ export const ContainerLista = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    height: 100%;
     width: 80%;
     background-color: #EDF2FD;
-    padding: 16px;
     gap: 16px;
     justify-content: space-between;
-
+    padding: 0 16px;
 `;
 
 export const ListArea = styled.div`
@@ -75,6 +76,7 @@ export const ListArea = styled.div`
     flex-direction: column;
     align-items: center;
     padding: 30px 10px 30px 10px;
+    margin-top: 16px;
     border-radius: 6px;
     gap: 16px;
 `;
@@ -90,16 +92,17 @@ export const CardsArea = styled.div`
 export const SidebarButtons = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 16px;
   width: 20%;
+  height: 100%;
   background-color: #fff;
   border-radius: 6px;
-  padding: 16px;
+  padding: 0 16px;
 `;
 
 export const ActionButton = styled.button`
   background-color: #153e75;
   color: white;
+  margin-top: 16px;
   border: none;
   padding: 10px 12px;
   border-radius: 6px;

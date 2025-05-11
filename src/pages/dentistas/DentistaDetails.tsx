@@ -1,6 +1,7 @@
-import {ContentSetOptionsMenu, ContentOptionsMenu, ContentDescriptionOptionsMenu, ContentTitleOptionsMenu, Line, ContainerOptionsMenu, OptionsMenu, DescriptionArea, Title, Data, ContainerDetails, ContainerAside, ContainerOptions, SidebarButtons, ActionButton } from "./PacienteDetails.style";
-import DeletePacientModal from "../../../components/Modals/patient/deletePatientModal/DeletePatientModal";
-import EditPacientModal from "../../../components/Modals/patient/editPatientModal/EditPatientModal";
+import {PaginationAreaContainer, ContentSetOptionsMenu, ContentOptionsMenu, ContentDescriptionOptionsMenu, ContentTitleOptionsMenu, Line, ContainerOptionsMenu, OptionsMenu, DescriptionArea, Title, Data, ContainerDetails, ContainerAside, ContainerOptions, SidebarButtons, ActionButton } from "../../components/Containers/ContainerDetails.style";
+import DeleteDentistModal from "../../components/Modals/dentist/deleteDetistModal/DeleteDentistModal";
+import EditDentistModal from "../../components/Modals/dentist/editDentistModal/EditDentistModal";
+
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
@@ -8,10 +9,19 @@ import { useNavigate } from "react-router-dom";
 
 
 
-const PacienteDetails = () => {
+const DentistaDetails = () => {
     const navigate = useNavigate();
     const { id } = useParams(); // pega o id da URL
-    const [paciente, setPaciente] = useState({id: "", name: "", phone: "", cpf: "", birthdate: "", address: ""});
+    const [dentista, setDentista] = useState(
+        {id: "", 
+        name: "",
+        cro: "",
+        phone: "",
+        working_hours: "",
+        email: "",
+        address: "",
+        notes: "",
+        specialization: ""});
 
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const handleOpenDeleteModal = () => setIsDeleteModalOpen(true);
@@ -20,32 +30,32 @@ const PacienteDetails = () => {
         setIsDeleteModalOpen(false);
         if (isDeleted) {
             // Redirecionar ou fazer algo após a exclusão
-            navigate(`/pacientes`);
+            navigate(`/dentistas`);
         }
     }
 
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const handleOpenEditModal = () => setIsEditModalOpen(true);
-    const handleCloseEditModal = (isUpdated, paciente) => {
+    const handleCloseEditModal = (isUpdated, dentista) => {
         if(isUpdated) {
-            setPaciente(paciente);
+            setDentista(dentista);
         }
         setIsEditModalOpen(false)
     };
 
     useEffect(() => {
-        const fetchPaciente = async () => {
+        const fetchDentista = async () => {
             try {
-                const response = await fetch(`${BACKEND_URL}/pacientes/${id}`);
+                const response = await fetch(`${BACKEND_URL}/dentistas/${id}`);
                 const data = await response.json();
-                setPaciente(data);
+                setDentista(data);
             } catch (error) {
-                console.error("Erro ao buscar paciente:", error);
+                console.error("Erro ao buscar dentista:", error);
             }
         };
 
         if (id) {
-            fetchPaciente();
+            fetchDentista();
         }
     }, [id]);
 
@@ -53,17 +63,17 @@ const PacienteDetails = () => {
     <ContainerDetails>
         <ContainerAside>
             <DescriptionArea>
-                <Title>{paciente.name}</Title>
-                <Data>Telefone: {paciente.phone}</Data>
-                <Data>CPF: {paciente.cpf}</Data>
-                <Data>Data de Nascimento: {paciente.birthdate}</Data>
-                <Data>Endereço: {paciente.address}</Data>
+                <Title>{dentista.name}</Title>
+                <Data>CRO: {dentista.cro}</Data>
+                <Data>Especialização: {dentista.specialization}</Data>
+                <Data>Horárui de Trabalho: {dentista.working_hours}</Data>
+                <Data>Telefone: {dentista.phone}</Data>
+                <Data>Email: {dentista.email}</Data>
+                <Data>Endereço: {dentista.address}</Data>
+                <Data>Notas: {dentista.notes}</Data>
             </DescriptionArea>
             <ContainerOptions>
                 <ContainerOptionsMenu>
-                    <OptionsMenu>Ficha Clínica</OptionsMenu>
-                    <OptionsMenu>Anamnese</OptionsMenu>
-                    <OptionsMenu>Orçamentos</OptionsMenu>
                     <OptionsMenu selected={true}>Consultas</OptionsMenu>
                 </ContainerOptionsMenu>
                 <Line/>
@@ -89,9 +99,9 @@ const PacienteDetails = () => {
             <ActionButton onClick={handleOpenDeleteModal}>Excluir</ActionButton>
         </SidebarButtons>
         {/* Modal de Cadastro */}
-        <DeletePacientModal isOpen={isDeleteModalOpen} onClose={handleCloseDeleteModal} />
+        <DeleteDentistModal isOpen={isDeleteModalOpen} onClose={handleCloseDeleteModal} />
         {/* Modal de Cadastro */}
-        <EditPacientModal paciente={paciente} isOpen={isEditModalOpen} onClose={handleCloseEditModal} />
+        <EditDentistModal dentista={dentista} isOpen={isEditModalOpen} onClose={handleCloseEditModal} />
 
       
     </ContainerDetails>
@@ -99,4 +109,4 @@ const PacienteDetails = () => {
 }
 
 
-export default PacienteDetails;
+export default DentistaDetails;

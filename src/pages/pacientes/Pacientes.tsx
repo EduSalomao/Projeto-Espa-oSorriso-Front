@@ -7,9 +7,9 @@ import {
   ContainerLista,
   ListArea
 } from "./Pacientes.style";
-import PacienteCard from "../../components/Paciente/Card/Card";
-import CreatePatientModal from "../../components/Modals/createPatientModal/CreatePatientModal";
-import SearchPatientModal from "../../components/Modals/searchPatientModal/SearchPatientModal";
+import PacienteCard from "../../components/Card/paciente/Card";
+import CreatePatientModal from "../../components/Modals/patient/createPatientModal/CreatePatientModal";
+import SearchPatientModal from "../../components/Modals/patient/searchPatientModal/SearchPatientModal";
 import PaginationOption from "../../components/PaginationOption/PaginationOption";
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -24,7 +24,9 @@ const PatientList = () => {
   useEffect(() => {
     const fetchPatients = async () => {
       try {
+        console.log(`${BACKEND_URL}/pacientes?page=${currentPage}&limit=${limit}`)
         const response = await fetch(`${BACKEND_URL}/pacientes?page=${currentPage}&limit=${limit}`);
+
         if (!response.ok) {
           throw new Error("Erro ao buscar pacientes");
         }
@@ -71,7 +73,7 @@ const PatientList = () => {
                     cpf={pessoa.cpf}
                     telefone={pessoa.phone}
                     nascimento={pessoa.birthdate}
-                    endereco={pessoa.address}/>
+                    endereco={`${pessoa.address.slice(0, 25)}...`}/>
                   ))}
             </CardsArea>
             

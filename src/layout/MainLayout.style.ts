@@ -3,7 +3,9 @@ import { motion } from "framer-motion";
 
 export const Container = styled.div`
   display: flex;
-  height: 100vh;
+  flex: 1;
+  height: 100%;
+  min-height: 100vh;
   flex-direction: column;
   width: 100%;
 `;
@@ -102,7 +104,9 @@ export const MenuButton = styled.button<{ collapsed?: boolean }>`
 `;
 
 export const Main = styled.main`
+  display: flex;
   flex: 1;
+  flex-direction: column;
   background-color: #e8edf9;
   padding: 0px;
   .welcome {
@@ -123,7 +127,7 @@ export const Main = styled.main`
 `;
 export const BodyArea = styled.div`
   display: flex;
-  height: 100%;
+  flex: 1;
 `
 
 export const UserArea = styled.div`

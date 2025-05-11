@@ -1,6 +1,4 @@
 import { useState } from "react";
-import Input from "../../Input";
-import FormActions from "../../FormActions";
 import * as S from "./CreatePatientModal.style";
 import { useNavigate } from "react-router-dom";
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;

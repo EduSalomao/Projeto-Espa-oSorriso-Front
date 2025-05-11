@@ -25,14 +25,14 @@ function SearchPatientModal({ isOpen, onClose }: Props) {
     }
   
     try {
-      const response = await fetch(`${BACKEND_URL}/pacientes/cpf/${cpfLimpo}`);
+      const response = await fetch(`${BACKEND_URL}/pacientes/cpf/${cpf}`);
   
       if (!response.ok) {
         throw new Error("Erro ao buscar paciente");
       }
   
       const data = await response.json();
-  
+      console.log(data);
       if (!data.id) {
         alert("Paciente não encontrado.");
         return;
