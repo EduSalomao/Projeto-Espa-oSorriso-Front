@@ -65,7 +65,7 @@ function CreateDentistModal({ isOpen, onClose }: Props) {
       const data = await response.json();
       console.log(data);
       alert("Dentista cadastrado com sucesso!");
-      navigate(`/pacientes/${data.data.id}`);
+      navigate(`/dentistas/${data.data.id}`);
       onClose();
   
     } catch (error) {

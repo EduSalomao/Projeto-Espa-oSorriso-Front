@@ -5,7 +5,7 @@ import { ContainerLista } from "../../components/Containers/ContainerList.style"
 import { ListArea } from "../../components/Containers/ListArea.style";
 import { ActionButton, SidebarButtons } from "../../components/Buttons/Button.style";
 import { CardsArea } from "../../components/Containers/CardsArea.style";
-
+import { RotatingIcon, PaginationAreaContainer, PaginationButtonsContainer } from "../../components/Containers/PaginationAreaContainer.style";
 import CreateDentistModal from "../../components/Modals/dentist/createDentistModal/CreateDentistModal";
 import SearchDentistModal from "../../components/Modals/dentist/searchDentistModal/searchDentistModal";
 import PaginationOption from "../../components/PaginationOption/PaginationOption";
@@ -21,7 +21,14 @@ const DentistasList = () => {
     const [limit] = useState(5);
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
     const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
+    const [spinning, setSpinning] = useState(false);
+    const [refreshTrigger, setRefreshTrigger] = useState(0);
 
+    const handleRefresh = () => {
+        console.log("Refresh Dentistas");
+        setSpinning(true);
+        setRefreshTrigger((prev) => prev + 1); // ⬅️ força o useEffect a rodar
+    };
     useEffect(() => {
         const fetchPatients = async () => {
             try {
@@ -41,15 +48,16 @@ const DentistasList = () => {
                 setDentists(data.dentistas);
                 setTotalDentists(data.total);
                 setCurrentPage(data.page);
-
+                setSpinning(false);
             } catch (error) {
                 console.error("Erro ao carregar dentistas:", error);
                 alert("Não foi possível carregar os dentistas.");
+                setSpinning(false);
             }
         };
 
         fetchPatients();
-    }, [currentPage, limit]);
+    }, [currentPage, limit, refreshTrigger]);
 
     const handlePageChange = (newPage) => {
         setCurrentPage(newPage);
@@ -88,10 +96,15 @@ const DentistasList = () => {
 
                 </ListArea>
                 
-                <PaginationOption page={currentPage} total={totalDentists} limit={limit} onPageChange={handlePageChange} />
+                <PaginationAreaContainer>
+                    <PaginationButtonsContainer>
+                        <PaginationOption page={currentPage} total={totalDentists} limit={limit} onPageChange={handlePageChange} />
+                    </PaginationButtonsContainer>
                 
-                <FaSync style={{ color: "red" }} />
-                    
+                    <RotatingIcon spinning={spinning} onClick={handleRefresh} size={20} /> 
+
+                </PaginationAreaContainer>
+                
                 
                 
             </ContainerLista>

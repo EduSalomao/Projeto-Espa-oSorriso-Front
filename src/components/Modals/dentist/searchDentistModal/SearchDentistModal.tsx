@@ -39,14 +39,14 @@ function SearchDentistModal({ isOpen, onClose }: Props) {
             const data = await response.json();
             console.log(data);
             if (data.dentistas.length == 0) {
-                alert("Paciente não encontrado.");
+                alert("Dentista não encontrado.");
                 return;
             }
         
             onClose(data.dentistas);
         } catch (error) {
-            console.error("Erro ao buscar paciente:", error);
-            alert("Erro ao buscar paciente.");
+            console.error("Erro ao buscar dentista:", error);
+            alert("Erro ao buscar dentista.");
         }   
     };  
 

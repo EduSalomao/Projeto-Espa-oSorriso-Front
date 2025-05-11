@@ -13,10 +13,3 @@ export const ListArea = styled.div`
     gap: 16px;
 `;
 
-export const PaginationAreaContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;  
-
-`
