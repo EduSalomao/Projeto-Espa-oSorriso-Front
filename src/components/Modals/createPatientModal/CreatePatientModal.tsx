@@ -33,22 +33,55 @@ function CreatePatientModal({ isOpen, onClose }: Props) {
   };
 
   const handleSave = async () => {
-    try {
-        console.log(form);
-        const response = await fetch(`${BACKEND_URL}/pacientes/`, {method: "POST", body: JSON.stringify(form), headers: {"Content-Type": "application/json"}});
-        // Verifica se a resposta é válida
-        if (!response.ok) {
-          throw new Error("Erro ao adicionar paciente");
-        }
-        const data = await response.json();
-        console.log(data)
-        navigate(`/pacientes/${data.data.id}`);
-    } catch (error) {
-        console.error("Erro ao adicionar paciente:", error);
+    // Validação dos campos
+    if (!form.name || !form.birthdate || !form.cpf || !form.phone || !form.address) {
+      alert("Por favor, preencha todos os campos.");
+      return;
     }
-
-    onClose();
-  };
+  
+    // Validação de CPF (11 dígitos)
+    const cpfLimpo = form.cpf.replace(/\D/g, "");
+    if (cpfLimpo.length !== 11) {
+      alert("CPF inválido. Certifique-se de digitar 11 números.");
+      return;
+    }
+  
+    // Validação de telefone (mínimo 10 dígitos)
+    const telefoneLimpo = form.phone.replace(/\D/g, "");
+    if (telefoneLimpo.length < 10) {
+      alert("Telefone inválido. Certifique-se de digitar pelo menos 10 números.");
+      return;
+    }
+  
+    // Validação de data de nascimento
+    if (!form.birthdate) {
+      alert("Data de nascimento inválida.");
+      return;
+    }
+  
+    try {
+      console.log(form);
+      const response = await fetch(`${BACKEND_URL}/pacientes/`, {
+        method: "POST",
+        body: JSON.stringify(form),
+        headers: { "Content-Type": "application/json" }
+      });
+  
+      if (!response.ok) {
+        throw new Error("Erro ao adicionar paciente");
+      }
+  
+      const data = await response.json();
+      console.log(data);
+      alert("Paciente cadastrado com sucesso!");
+      navigate(`/pacientes/${data.data.id}`);
+      onClose();
+  
+    } catch (error) {
+      console.error("Erro ao adicionar paciente:", error);
+      alert("Não foi possível cadastrar o paciente.");
+    }
+  };  
 
   const handleCancel = () => {
     console.log("Cancelado");

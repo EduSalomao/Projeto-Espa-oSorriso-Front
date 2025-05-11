@@ -13,21 +13,41 @@ function SearchPatientModal({ isOpen, onClose }: Props) {
   const navigate = useNavigate();
 
   const handleSearch = async () => {
-    try {
-        const response = await fetch(`${BACKEND_URL}/pacientes/cpf/${cpf}`);
-        // Verifica se a resposta é válida
-        if (!response.ok) {
-          throw new Error("Erro ao buscar paciente");
-        }
-        const data = await response.json();
-        setIdPaciente(data.id);
-    } catch (error) {
-        console.error("Erro ao buscar paciente:", error);
+    if (!cpf) {
+      alert("Por favor, digite o CPF.");
+      return;
     }
-
+  
+    const cpfLimpo = cpf.replace(/\D/g, "");
+    if (cpfLimpo.length !== 11) {
+      alert("CPF inválido. Certifique-se de digitar 11 números.");
+      return;
+    }
+  
+    try {
+      const response = await fetch(`${BACKEND_URL}/pacientes/cpf/${cpfLimpo}`);
+  
+      if (!response.ok) {
+        throw new Error("Erro ao buscar paciente");
+      }
+  
+      const data = await response.json();
+  
+      if (!data.id) {
+        alert("Paciente não encontrado.");
+        return;
+      }
+  
+      setIdPaciente(data.id);
+  
+    } catch (error) {
+      console.error("Erro ao buscar paciente:", error);
+      alert("Erro ao buscar paciente.");
+    }
+  
     onClose();
-  };
-
+  };  
+  
   useEffect(() => {
     if (idPaciente !== null) {
       navigate(`/pacientes/${idPaciente}`);

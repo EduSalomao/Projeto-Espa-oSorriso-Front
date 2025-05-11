@@ -23,25 +23,31 @@ const PatientList = () => {
 
   useEffect(() => {
     const fetchPatients = async () => {
-    try {
-        console.log(`${BACKEND_URL}/pacientes`)
+      try {
         const response = await fetch(`${BACKEND_URL}/pacientes?page=${currentPage}&limit=${limit}`);
         if (!response.ok) {
           throw new Error("Erro ao buscar pacientes");
         }
-
+  
         const data = await response.json();
         
+        if (data.pacientes.length === 0) {
+          alert("Nenhum paciente encontrado.");
+        }
+  
         setPatients(data.pacientes);
         setTotalPatients(data.total);
         setCurrentPage(data.page);
+  
       } catch (error) {
         console.error("Erro ao carregar pacientes:", error);
+        alert("Não foi possível carregar os pacientes.");
       }
     };
-
+  
     fetchPatients();
-  },[currentPage, limit]);
+  }, [currentPage, limit]);
+  
 
   const handlePageChange = (newPage) => {
     setCurrentPage(newPage);

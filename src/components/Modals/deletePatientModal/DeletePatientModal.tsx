@@ -11,24 +11,36 @@ type Props = {
 function DeletePacientModal({ isOpen, onClose }: Props) {
   const { id } = useParams(); 
   const [isDeleted, setIsDeleted] = useState(false);
+  
   const handleDelete = async () => {
-    try {
-        const response = await fetch(`${BACKEND_URL}/pacientes/${id}`, {
-          method: "DELETE"});
-        // Verifica se a resposta é válida
-        if (!response.ok) {
-          throw new Error("Erro ao excluir paciente");
-        }
-        const data = await response.json();
-        setIsDeleted(true);
-
-    } catch (error) {
-        console.error("Erro ao excluir paciente:", error);
+    if (!id) {
+      alert("ID do paciente não encontrado.");
+      onClose(false);
+      return;
     }
-
-    console.log("Teste" + isDeleted)
+  
+    try {
+      const response = await fetch(`${BACKEND_URL}/pacientes/${id}`, {
+        method: "DELETE"
+      });
+  
+      if (!response.ok) {
+        throw new Error("Erro ao excluir paciente");
+      }
+  
+      const data = await response.json();
+      setIsDeleted(true);
+  
+      alert("Paciente excluído com sucesso!");
+  
+    } catch (error) {
+      console.error("Erro ao excluir paciente:", error);
+      alert("Erro ao excluir paciente.");
+    }
+  
     onClose(true);
   };
+  
 
   const handleCancel = () => {
     onClose(false);

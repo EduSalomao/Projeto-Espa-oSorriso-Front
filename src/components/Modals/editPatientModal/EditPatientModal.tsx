@@ -46,22 +46,52 @@ function EditPacientModal({ paciente, isOpen, onClose }: Props) {
   };
 
   const handleSave = async () => {
-    try {
-        console.log(form);
-        const response = await fetch(`${BACKEND_URL}/pacientes/${paciente.id}`, {method: "PUT", body: JSON.stringify(form), headers: {"Content-Type": "application/json"}});
-        // Verifica se a resposta é válida
-        if (!response.ok) {
-          throw new Error("Erro ao adicionar paciente");
-        }
-        const data = await response.json();
-        console.log(data)
-        onClose(true, data.data);
-    } catch (error) {
-        console.error("Erro ao adicionar paciente:", error);
+
+  if (!form.name || !form.birthdate || !form.cpf || !form.phone || !form.address) {
+    alert("Por favor, preencha todos os campos.");
+    return;
+  }
+
+  const cpfLimpo = form.cpf.replace(/\D/g, "");
+  if (cpfLimpo.length !== 11) {
+    alert("CPF inválido. Certifique-se de digitar 11 números.");
+    return;
+  }
+
+  const telefoneLimpo = form.phone.replace(/\D/g, "");
+  if (telefoneLimpo.length < 10) {
+    alert("Telefone inválido. Certifique-se de digitar pelo menos 10 números.");
+    return;
+  }
+
+  if (!form.birthdate) {
+    alert("Data de nascimento inválida.");
+    return;
+  }
+
+  try {
+    console.log(form);
+    const response = await fetch(`${BACKEND_URL}/pacientes/${paciente.id}`, {
+      method: "PUT",
+      body: JSON.stringify(form),
+      headers: { "Content-Type": "application/json" }
+    });
+
+    if (!response.ok) {
+      throw new Error("Erro ao atualizar paciente");
     }
 
-    
-  };
+    const data = await response.json();
+    console.log(data);
+    alert("Paciente atualizado com sucesso!");
+    onClose(true, data.data);
+
+  } catch (error) {
+    console.error("Erro ao atualizar paciente:", error);
+    alert("Não foi possível atualizar o paciente.");
+  }
+};
+
 
   const handleCancel = () => {
     console.log("Cancelado");
