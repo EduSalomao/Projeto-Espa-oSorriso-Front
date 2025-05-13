@@ -8,24 +8,16 @@ type Props = {
 };
 
 function SearchPatientModal({ isOpen, onClose }: Props) {
-  const [cpf, setCpf] = useState("");
-  const [idPaciente, setIdPaciente] = useState(null);
-  const navigate = useNavigate();
+  const [term, setTerm] = useState("");
 
   const handleSearch = async () => {
-    if (!cpf) {
-      alert("Por favor, digite o CPF.");
-      return;
-    }
-  
-    const cpfLimpo = cpf.replace(/\D/g, "");
-    if (cpfLimpo.length !== 11) {
-      alert("CPF inválido. Certifique-se de digitar 11 números.");
+    if (!term) {
+      alert("Por favor, digite o Nome ou CPF.");
       return;
     }
   
     try {
-      const response = await fetch(`${BACKEND_URL}/pacientes/cpf/${cpf}`);
+      const response = await fetch(`${BACKEND_URL}/pacientes?termo=${term}&page=1&limit=5`);
   
       if (!response.ok) {
         throw new Error("Erro ao buscar paciente");
@@ -33,26 +25,19 @@ function SearchPatientModal({ isOpen, onClose }: Props) {
   
       const data = await response.json();
       console.log(data);
-      if (!data.id) {
+      if (data.pacientes.length == 0) {
         alert("Paciente não encontrado.");
         return;
       }
   
-      setIdPaciente(data.id);
+      onClose(data.pacientes);
   
     } catch (error) {
       console.error("Erro ao buscar paciente:", error);
       alert("Erro ao buscar paciente.");
     }
   
-    onClose();
   };  
-  
-  useEffect(() => {
-    if (idPaciente !== null) {
-      navigate(`/pacientes/${idPaciente}`);
-    }
-  }, [idPaciente, navigate]);
 
 
   const handleCancel = () => {
@@ -65,12 +50,11 @@ function SearchPatientModal({ isOpen, onClose }: Props) {
     <S.ModalOverlay>
       <S.ModalContent>
         <S.Title>Pesquisar Paciente</S.Title>
-        <S.Description>Digite o CPF do Paciente abaixo:</S.Description>
+        <S.Description>Digite o Nome ou CPF do Paciente abaixo:</S.Description>
         <S.MaskedInput
-          mask="000.000.000-00"
-          value={cpf}
-          onAccept={(value: any) => setCpf(value)}
-          placeholder="xxx.xxx.xxx-xx"
+          value={term}
+          onChange={(e: any) => setTerm(e.target.value)}
+          placeholder="Nome ou CPF"
         />
         
         <S.ButtonGroup>
