@@ -14,17 +14,17 @@ import {
 import {
   FaBell,
 } from "react-icons/fa";
-import { Outlet } from "react-router-dom";
+import { useNavigate, Outlet } from "react-router-dom";
 
 export default function Dashboard() {
   const [collapsed, setCollapsed] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
-
+  const navigate = useNavigate();
   return (
     <Container>
         <HeaderArea>
             <Header>
-                <img src="/src/assets/logo.png" alt="Espaço Teste" />
+                <img onClick={() => navigate("/")} src="/src/assets/logo.png" alt="Espaço Teste" style={{cursor: "pointer"}}/>
                 <UserArea>
                     <FaBell />
                     <span>Usuário ▼</span>

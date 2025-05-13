@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import * as S from "./EditPatientModal.style";
-import { useAlert } from "../../../../context/AlertContext";
+import { useSnackbar } from 'notistack';
 
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
@@ -28,7 +28,7 @@ type Props = {
 };
 
 function EditPacientModal({ paciente, isOpen, onClose }: Props) {
-  const { showAlert } = useAlert();
+  const { enqueueSnackbar } = useSnackbar();
 
   const [form, setForm] = useState<PatientFormData>({
     name: paciente.name,
@@ -53,68 +53,55 @@ function EditPacientModal({ paciente, isOpen, onClose }: Props) {
 
   const handleSave = async () => {
 
-  if (!form.name || !form.birthdate || !form.cpf || !form.phone || !form.address) {
-    showAlert({
-        severity: "warning",
-        message: "Por favor, preencha todos os campos."
-      });
-    return;
-  }
+    if (!form.name || !form.birthdate || !form.cpf || !form.phone || !form.address) {
+      enqueueSnackbar('Por favor, preencha todos os campos!', { variant: 'error', autoHideDuration: 4000, TransitionProps: { direction: 'down' }, anchorOrigin: { vertical: 'top', horizontal: 'center' } });
 
-  const cpfLimpo = form.cpf.replace(/\D/g, "");
-  if (cpfLimpo.length !== 11) {
-    showAlert({
-      severity: "warning",
-      message: "CPF inválido. Certifique-se de digitar 11 números."
-    });
-    return;
-  }
-
-  const telefoneLimpo = form.phone.replace(/\D/g, "");
-  if (telefoneLimpo.length < 10) {
-    showAlert({
-      severity: "warning",
-      message: "Telefone inválido. Certifique-se de digitar pelo menos 10 números."
-    });
-    return;
-  }
-
-  if (!form.birthdate) {
-    showAlert({
-      severity: "warning",
-      message: "Data de nascimento inválida."
-    });
-    return;
-  }
-
-  try {
-    console.log(form);
-    const response = await fetch(`${BACKEND_URL}/pacientes/${paciente.id}`, {
-      method: "PUT",
-      body: JSON.stringify(form),
-      headers: { "Content-Type": "application/json" }
-    });
-
-    if (!response.ok) {
-      throw new Error("Erro ao atualizar paciente");
+      return;
     }
 
-    const data = await response.json();
-    console.log(data);
-    showAlert({
-      severity: "success",
-      message: "Paciente atualizado com sucesso!"
-    });
-    onClose(true, data.data);
+    const cpfLimpo = form.cpf.replace(/\D/g, "");
+    if (cpfLimpo.length !== 11) {
+      enqueueSnackbar('CPF inválido. Certifique-se de digitar 11 números!', { variant: 'warning', autoHideDuration: 4000, TransitionProps: { direction: 'down' }, anchorOrigin: { vertical: 'top', horizontal: 'center' } });
 
-  } catch (error) {
-    console.error("Erro ao atualizar paciente:", error);
-    showAlert({
-      severity: "error",
-      message: "Não foi possível atualizar o paciente."
-    });
-  }
-};
+      return;
+    }
+
+    const telefoneLimpo = form.phone.replace(/\D/g, "");
+    if (telefoneLimpo.length < 10) {
+      enqueueSnackbar('Telefone inválido. Certifique-se de digitar pelo menos 10 números!', { variant: 'warning', autoHideDuration: 4000, TransitionProps: { direction: 'down' }, anchorOrigin: { vertical: 'top', horizontal: 'center' } });
+
+      return;
+    }
+
+    if (!form.birthdate) {
+      enqueueSnackbar('Data de nascimento inválida.', { variant: 'warning', autoHideDuration: 4000, TransitionProps: { direction: 'down' }, anchorOrigin: { vertical: 'top', horizontal: 'center' } });
+
+      return;
+    }
+
+    try {
+      console.log(form);
+      const response = await fetch(`${BACKEND_URL}/pacientes/${paciente.id}`, {
+        method: "PUT",
+        body: JSON.stringify(form),
+        headers: { "Content-Type": "application/json" }
+      });
+
+      if (!response.ok) {
+        throw new Error("Erro ao atualizar paciente");
+      }
+
+      const data = await response.json();
+      
+      enqueueSnackbar('Paciente atualizada com successo!', { variant: 'success', autoHideDuration: 4000, TransitionProps: { direction: 'down' }, anchorOrigin: { vertical: 'top', horizontal: 'center' } });
+
+      onClose(true, data.data);
+
+    } catch (error) {
+      console.error("Erro ao atualizar paciente:", error);
+      enqueueSnackbar('Não foi possível atualizar o paciente!', { variant: 'error', autoHideDuration: 4000, TransitionProps: { direction: 'down' }, anchorOrigin: { vertical: 'top', horizontal: 'center' } });
+    }
+  };
 
 
   const handleCancel = () => {

@@ -2,8 +2,8 @@ import { useState } from "react";
 import * as S from "./CreatePatientModal.style";
 import { useNavigate } from "react-router-dom";
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
-import AutoAlert from "../../../Alerts/CustomAlert";
-import { useAlert } from "../../../../context/AlertContext";
+import { useSnackbar } from 'notistack';
+
 
 type PatientFormData = {
   name: string;
@@ -20,7 +20,7 @@ type Props = {
 
 function CreatePatientModal({ isOpen, onClose }: Props) {
   const navigate = useNavigate();
-  const { showAlert } = useAlert();
+  const { enqueueSnackbar } = useSnackbar();
   
   const [form, setForm] = useState<PatientFormData>({
     name: "",
@@ -37,11 +37,8 @@ function CreatePatientModal({ isOpen, onClose }: Props) {
   const handleSave = async () => {
     // Validação dos campos
     if (!form.name || !form.birthdate || !form.cpf || !form.phone || !form.address) {
-      //alert("Por favor, preencha todos os campos.");
-      showAlert({
-        severity: "warning",
-        message: "Por favor, preencha todos os campos."
-      });
+      
+      enqueueSnackbar('Por favor, preencha todos os campos.', { variant: 'warning', autoHideDuration: 4000, TransitionProps: { direction: 'down' }, anchorOrigin: { vertical: 'top', horizontal: 'center' } });
 
       return;
     }
@@ -49,29 +46,26 @@ function CreatePatientModal({ isOpen, onClose }: Props) {
     // Validação de CPF (11 dígitos)
     const cpfLimpo = form.cpf.replace(/\D/g, "");
     if (cpfLimpo.length !== 11) {
-      showAlert({
-        severity: "warning",
-        message: "CPF inválido. Certifique-se de digitar 11 números."
-      });
+      
+      enqueueSnackbar('CPF inválido. Certifique-se de digitar 11 números.', { variant: 'warning', autoHideDuration: 4000, TransitionProps: { direction: 'down' }, anchorOrigin: { vertical: 'top', horizontal: 'center' } });
+
       return;
     }
   
     // Validação de telefone (mínimo 10 dígitos)
     const telefoneLimpo = form.phone.replace(/\D/g, "");
     if (telefoneLimpo.length < 10) {
-      showAlert({
-        severity: "warning",
-        message: "Telefone inválido. Certifique-se de digitar pelo menos 10 números."
-      });
+      
+      enqueueSnackbar('Telefone inválido. Certifique-se de digitar pelo menos 10 números.', { variant: 'warning', autoHideDuration: 4000, TransitionProps: { direction: 'down' }, anchorOrigin: { vertical: 'top', horizontal: 'center' } });
+
       return;
     }
 
     // Validação de data de nascimento
     if (!form.birthdate) {
-      showAlert({
-        severity: "warning",
-        message: "Data de nascimento inválida."
-      });
+      
+      enqueueSnackbar('Data de nascimento inválida.', { variant: 'warning', autoHideDuration: 4000, TransitionProps: { direction: 'down' }, anchorOrigin: { vertical: 'top', horizontal: 'center' } });
+
       return;
     }
 
@@ -89,19 +83,16 @@ function CreatePatientModal({ isOpen, onClose }: Props) {
   
       const data = await response.json();
       console.log(data);
-      showAlert({
-        severity: "success",
-        message: "Paciente cadastrado com sucesso!"
-      });
+      
+      enqueueSnackbar('Paciente cadastrado com sucesso!', { variant: 'success', autoHideDuration: 4000, TransitionProps: { direction: 'down' }, anchorOrigin: { vertical: 'top', horizontal: 'center' } });
+
       navigate(`/pacientes/${data.data.id}`);
       onClose();
   
     } catch (error) {
       console.error("Erro ao adicionar paciente:", error);
-      showAlert({
-        severity: "error",
-        message: "Não foi possível cadastrar o paciente."
-      });
+      enqueueSnackbar('Erro ao adicionar paciente!', { variant: 'error', autoHideDuration: 4000, TransitionProps: { direction: 'down' }, anchorOrigin: { vertical: 'top', horizontal: 'center' } });
+
     }
     
   };

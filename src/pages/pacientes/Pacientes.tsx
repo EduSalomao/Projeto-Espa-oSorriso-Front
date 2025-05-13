@@ -14,7 +14,7 @@ import PaginationOption from "../../components/PaginationOption/PaginationOption
 import { RotatingIcon, PaginationAreaContainer, PaginationButtonsContainer } from "../../components/Containers/PaginationAreaContainer.style";
 import AutoAlert from "../../components/Alerts/CustomAlert";
 import { useAlert } from "../../context/AlertContext";
-
+import { SnackbarProvider, VariantType, useSnackbar } from 'notistack';
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 type AlertState = {
@@ -24,7 +24,7 @@ type AlertState = {
 
 
 const PatientList = () => {
-	const { showAlert } = useAlert();
+	const { enqueueSnackbar } = useSnackbar();
 
 	const [patients, setPatients] = useState([]);
 	const [totalPatients, setTotalPatients] = useState(0);
@@ -56,16 +56,17 @@ const PatientList = () => {
 				const data = await response.json();
 
 				if (data.pacientes.length === 0) {
-					showAlert({ severity: "info", message: "Nenhum paciente encontrado" });
-
+					enqueueSnackbar('Não há pacientes cadastrados!', { variant: 'info', autoHideDuration: 4000, TransitionProps: { direction: 'down' }, anchorOrigin: { vertical: 'top', horizontal: 'center' } });
 				}
 
 				setPatients(data.pacientes);
 				setTotalPatients(data.total);
-				setCurrentPage(data.page);
+				if (data.page !== currentPage) {
+					setCurrentPage(data.page);
+				}
 
 			} catch (error) {
-				showAlert({ severity: "error", message: "Erro ao carregar pacientes" });
+				enqueueSnackbar('Erro ao carregar pacientes', { variant: 'error', autoHideDuration: 4000, TransitionProps: { direction: 'down' }, anchorOrigin: { vertical: 'top', horizontal: 'center' } });
 				console.log("Erro ao carregar pacientes:", error);
 			}
 		};
@@ -91,7 +92,7 @@ const PatientList = () => {
 
 
 	return (
-		<ContainerPacientes>
+		<ContainerPacientes >
 			<ContainerLista>
 				<ListArea>
 					<CardsArea>

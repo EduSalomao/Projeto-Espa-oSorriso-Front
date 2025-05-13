@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import * as S from "./SearchPatientModal.style";
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
-import { useAlert } from "../../../../context/AlertContext";
+import { useSnackbar } from 'notistack';
 
 
 type Props = {
@@ -11,14 +11,12 @@ type Props = {
 
 function SearchPatientModal({ isOpen, onClose }: Props) {
   const [term, setTerm] = useState("");
-  const { showAlert } = useAlert();
+  const { enqueueSnackbar } = useSnackbar();
 
   const handleSearch = async () => {
     if (!term) {
-      showAlert({
-        severity: "warning",
-        message: "Por favor, digite o Nome ou CPF."
-      });
+      enqueueSnackbar('Por favor, digite o Nome ou CPF!', { variant: 'error', autoHideDuration: 4000, TransitionProps: { direction: 'down' }, anchorOrigin: { vertical: 'top', horizontal: 'center' } });
+
       return;
     }
 
@@ -32,10 +30,8 @@ function SearchPatientModal({ isOpen, onClose }: Props) {
       const data = await response.json();
       console.log(data);
       if (data.pacientes.length == 0) {
-        showAlert({
-          severity: "warning",
-          message: "Paciente não encontrado."
-        });
+        enqueueSnackbar('Paciente não encontrado!', { variant: 'warning', autoHideDuration: 4000, TransitionProps: { direction: 'down' }, anchorOrigin: { vertical: 'top', horizontal: 'center' } });
+
         return;
       }
 
@@ -43,14 +39,11 @@ function SearchPatientModal({ isOpen, onClose }: Props) {
 
     } catch (error) {
       console.error("Erro ao buscar paciente:", error);
-      showAlert({
-        severity: "error",
-        message: "Erro ao buscar paciente."
-      });
+      enqueueSnackbar('Erro ao buscar paciente!', { variant: 'error', autoHideDuration: 4000, TransitionProps: { direction: 'down' }, anchorOrigin: { vertical: 'top', horizontal: 'center' } });
+
     }
 
   };
-
 
   const handleCancel = () => {
     onClose();

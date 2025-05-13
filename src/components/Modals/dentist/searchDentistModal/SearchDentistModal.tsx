@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import * as S from "./searchDentistModal.style";
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 import { useNavigate } from "react-router-dom";
+import { useSnackbar } from "notistack";
 
 type Dentista = {
     id: string;
@@ -21,10 +22,11 @@ type Props = {
 function SearchDentistModal({ isOpen, onClose }: Props) {
     const [term, setTerm] = useState("");
     const navigate = useNavigate();
-
+    const {enqueueSnackbar} = useSnackbar();
     const handleSearch = async () => {
         if (!term) {
-            alert("Por favor, digite o Nome ou CRO.");
+            enqueueSnackbar('Por favor, digite o Nome ou CRO.', { variant: 'error', autoHideDuration: 4000, TransitionProps: { direction: 'down' }, anchorOrigin: { vertical: 'top', horizontal: 'center' } });
+
             return;
         }
     
@@ -39,14 +41,16 @@ function SearchDentistModal({ isOpen, onClose }: Props) {
             const data = await response.json();
             console.log(data);
             if (data.dentistas.length == 0) {
-                alert("Dentista não encontrado.");
+                enqueueSnackbar('Dentista não encontrado.', { variant: 'info', autoHideDuration: 4000, TransitionProps: { direction: 'down' }, anchorOrigin: { vertical: 'top', horizontal: 'center' } });
+
                 return;
             }
         
             onClose(data.dentistas);
         } catch (error) {
             console.error("Erro ao buscar dentista:", error);
-            alert("Erro ao buscar dentista.");
+            enqueueSnackbar('Erro ao buscar dentista.', { variant: 'error', autoHideDuration: 4000, TransitionProps: { direction: 'down' }, anchorOrigin: { vertical: 'top', horizontal: 'center' } });
+            
         }   
     };  
 

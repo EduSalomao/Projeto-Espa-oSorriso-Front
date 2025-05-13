@@ -11,6 +11,9 @@ import SearchDentistModal from "../../components/Modals/dentist/searchDentistMod
 import PaginationOption from "../../components/PaginationOption/PaginationOption";
 import DentistaCard from "../../components/Card/dentista/Card";
 import { FaSync } from "react-icons/fa";
+import { useSnackbar } from 'notistack';
+
+
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -23,6 +26,7 @@ const DentistasList = () => {
     const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
     const [spinning, setSpinning] = useState(false);
     const [refreshTrigger, setRefreshTrigger] = useState(0);
+    const { enqueueSnackbar } = useSnackbar();
 
     const handleRefresh = () => {
         console.log("Refresh Dentistas");
@@ -42,7 +46,7 @@ const DentistasList = () => {
                 const data = await response.json();
 
                 if (data.dentistas.length === 0) {
-                    alert("Nenhum dentista encontrado.");
+                    enqueueSnackbar('Nenhum dentista encontrado!', { variant: 'info', autoHideDuration: 4000, TransitionProps: { direction: 'down' }, anchorOrigin: { vertical: 'top', horizontal: 'center' } });
                 }
 
                 setDentists(data.dentistas);
@@ -51,7 +55,8 @@ const DentistasList = () => {
                 setSpinning(false);
             } catch (error) {
                 console.error("Erro ao carregar dentistas:", error);
-                alert("Não foi possível carregar os dentistas.");
+                enqueueSnackbar("Erro ao carregar dentistas!", { variant: 'error', autoHideDuration: 4000, TransitionProps: { direction: 'down' }, anchorOrigin: { vertical: 'top', horizontal: 'center' } });
+
                 setSpinning(false);
             }
         };

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import * as S from "./DeletePatientModal.style";
 import { useParams } from "react-router-dom";
-import { useAlert } from "../../../../context/AlertContext";
+import { useSnackbar } from 'notistack';
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -13,14 +13,13 @@ type Props = {
 function DeletePacientModal({ isOpen, onClose }: Props) {
   const { id } = useParams(); 
   const [isDeleted, setIsDeleted] = useState(false);
-  const { showAlert } = useAlert();
+  const { enqueueSnackbar } = useSnackbar();
 
   const handleDelete = async () => {
     if (!id) {
-      showAlert({
-        severity: "error",
-        message: "Id do paciente não encontrado."
-      });
+      
+      enqueueSnackbar('Id do paciente não encontrado!', { variant: 'error', autoHideDuration: 4000, TransitionProps: { direction: 'down' }, anchorOrigin: { vertical: 'top', horizontal: 'center' } });
+
       onClose(false);
       return;
     }
@@ -36,16 +35,11 @@ function DeletePacientModal({ isOpen, onClose }: Props) {
   
       const data = await response.json();
       setIsDeleted(true);
-      showAlert({
-        severity: "success",
-        message: "Paciente excluído com sucesso!"
-      });
+      
+      enqueueSnackbar('Paciente excluído com sucesso!', { variant: 'success', autoHideDuration: 4000, TransitionProps: { direction: 'down' }, anchorOrigin: { vertical: 'top', horizontal: 'center' } });
 
     } catch (error) {
-      showAlert({
-        severity: "error",
-        message: "Erro ao excluir paciente."
-      });
+      enqueueSnackbar('Erro ao excluir paciente!', { variant: 'error', autoHideDuration: 4000, TransitionProps: { direction: 'down' }, anchorOrigin: { vertical: 'top', horizontal: 'center' } });
       console.error("Erro ao excluir paciente:", error);
     }
   
