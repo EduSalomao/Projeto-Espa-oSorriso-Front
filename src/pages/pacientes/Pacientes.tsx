@@ -12,10 +12,20 @@ import CreatePatientModal from "../../components/Modals/patient/createPatientMod
 import SearchPatientModal from "../../components/Modals/patient/searchPatientModal/SearchPatientModal";
 import PaginationOption from "../../components/PaginationOption/PaginationOption";
 import { RotatingIcon, PaginationAreaContainer, PaginationButtonsContainer } from "../../components/Containers/PaginationAreaContainer.style";
+import AutoAlert from "../../components/Alerts/CustomAlert";
+import { useAlert } from "../../context/AlertContext";
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
+type AlertState = {
+  severity: "error" | "info" | "success" | "warning";
+  message: string;
+} | null;
+
+
 const PatientList = () => {
+	const { showAlert } = useAlert();
+
 	const [patients, setPatients] = useState([]);
 	const [totalPatients, setTotalPatients] = useState(0);
 	const [currentPage, setCurrentPage] = useState(1);
@@ -28,10 +38,12 @@ const PatientList = () => {
 	const handleRefresh = () => {
         console.log("Refresh Pacientes");
         setSpinning(true);
-        setRefreshTrigger((prev) => prev + 1); // ⬅️ força o useEffect a rodar
+        setRefreshTrigger((prev) => prev + 1); 
+		// ⬅️ força o useEffect a rodar
     };
 
 	useEffect(() => {
+		
 		const fetchPatients = async () => {
 			try {
 				console.log(`${BACKEND_URL}/pacientes?page=${currentPage}&limit=${limit}`)
@@ -44,7 +56,8 @@ const PatientList = () => {
 				const data = await response.json();
 
 				if (data.pacientes.length === 0) {
-					alert("Nenhum paciente encontrado.");
+					showAlert({ severity: "info", message: "Nenhum paciente encontrado" });
+
 				}
 
 				setPatients(data.pacientes);
@@ -52,13 +65,13 @@ const PatientList = () => {
 				setCurrentPage(data.page);
 
 			} catch (error) {
-				console.error("Erro ao carregar pacientes:", error);
-				alert("Não foi possível carregar os pacientes.");
+				showAlert({ severity: "error", message: "Erro ao carregar pacientes" });
+				console.log("Erro ao carregar pacientes:", error);
 			}
 		};
 
 		fetchPatients();
-	}, [currentPage, limit]);
+	}, [currentPage, limit, refreshTrigger]);
 
 
 	const handlePageChange = (newPage) => {
@@ -75,6 +88,7 @@ const PatientList = () => {
 			setPatients(pacientes);
 		}
 	};
+
 
 	return (
 		<ContainerPacientes>
@@ -112,6 +126,7 @@ const PatientList = () => {
 
 			{/* Modal de Pesquisa */}
 			<SearchPatientModal isOpen={isSearchModalOpen} onClose={handleCloseSearchModal} />
+			
 		</ContainerPacientes>
 	);
 };

@@ -1,21 +1,27 @@
 import { useState, useEffect } from "react";
 import * as S from "./SearchPatientModal.style";
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
-import { useNavigate } from "react-router-dom";
+import { useAlert } from "../../../../context/AlertContext";
+
+
 type Props = {
   isOpen: boolean;
-  onClose: () => void;
+  onClose: (pacientes) => void;
 };
 
 function SearchPatientModal({ isOpen, onClose }: Props) {
   const [term, setTerm] = useState("");
+  const { showAlert } = useAlert();
 
   const handleSearch = async () => {
     if (!term) {
-      alert("Por favor, digite o Nome ou CPF.");
+      showAlert({
+        severity: "warning",
+        message: "Por favor, digite o Nome ou CPF."
+      });
       return;
     }
-  
+
     try {
       const response = await fetch(`${BACKEND_URL}/pacientes?termo=${term}&page=1&limit=5`);
   
@@ -26,18 +32,24 @@ function SearchPatientModal({ isOpen, onClose }: Props) {
       const data = await response.json();
       console.log(data);
       if (data.pacientes.length == 0) {
-        alert("Paciente não encontrado.");
+        showAlert({
+          severity: "warning",
+          message: "Paciente não encontrado."
+        });
         return;
       }
-  
+
       onClose(data.pacientes);
-  
+
     } catch (error) {
       console.error("Erro ao buscar paciente:", error);
-      alert("Erro ao buscar paciente.");
+      showAlert({
+        severity: "error",
+        message: "Erro ao buscar paciente."
+      });
     }
-  
-  };  
+
+  };
 
 
   const handleCancel = () => {

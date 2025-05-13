@@ -1,6 +1,8 @@
 import { useState } from "react";
 import * as S from "./DeletePatientModal.style";
 import { useParams } from "react-router-dom";
+import { useAlert } from "../../../../context/AlertContext";
+
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 type Props = {
@@ -11,10 +13,14 @@ type Props = {
 function DeletePacientModal({ isOpen, onClose }: Props) {
   const { id } = useParams(); 
   const [isDeleted, setIsDeleted] = useState(false);
-  
+  const { showAlert } = useAlert();
+
   const handleDelete = async () => {
     if (!id) {
-      alert("ID do paciente não encontrado.");
+      showAlert({
+        severity: "error",
+        message: "Id do paciente não encontrado."
+      });
       onClose(false);
       return;
     }
@@ -30,12 +36,17 @@ function DeletePacientModal({ isOpen, onClose }: Props) {
   
       const data = await response.json();
       setIsDeleted(true);
-  
-      alert("Paciente excluído com sucesso!");
-  
+      showAlert({
+        severity: "success",
+        message: "Paciente excluído com sucesso!"
+      });
+
     } catch (error) {
+      showAlert({
+        severity: "error",
+        message: "Erro ao excluir paciente."
+      });
       console.error("Erro ao excluir paciente:", error);
-      alert("Erro ao excluir paciente.");
     }
   
     onClose(true);
