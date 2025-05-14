@@ -66,7 +66,7 @@ const DentistaDetails = () => {
                 <Title>{dentista.name}</Title>
                 <Data>CRO: {dentista.cro}</Data>
                 <Data>Especialização: {dentista.specialization}</Data>
-                <Data>Horárui de Trabalho: {dentista.working_hours}</Data>
+                <Data>Horário de Trabalho: {dentista.working_hours}</Data>
                 <Data>Telefone: {dentista.phone}</Data>
                 <Data>Email: {dentista.email}</Data>
                 <Data>Endereço: {dentista.address}</Data>

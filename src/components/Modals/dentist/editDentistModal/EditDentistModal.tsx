@@ -117,7 +117,7 @@ function EditDentistModal({ dentista, isOpen, onClose }: Props) {
     return (
         <S.ModalOverlay>
             <S.Container>
-                <S.Title>Novo Dentista</S.Title>
+                <S.Title>Editar Dentista</S.Title>
                 <S.FormContainer>
                     <S.FieldWrapper style={{ width: "70%" }}>
                         <S.Label htmlFor="name">Nome</S.Label>
