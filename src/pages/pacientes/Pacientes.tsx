@@ -12,21 +12,17 @@ import CreatePatientModal from "../../components/Modals/patient/createPatientMod
 import SearchPatientModal from "../../components/Modals/patient/searchPatientModal/SearchPatientModal";
 import PaginationOption from "../../components/PaginationOption/PaginationOption";
 import { RotatingIcon, PaginationAreaContainer, PaginationButtonsContainer } from "../../components/Containers/PaginationAreaContainer.style";
-import AutoAlert from "../../components/Alerts/CustomAlert";
-import { useAlert } from "../../context/AlertContext";
-import { SnackbarProvider, VariantType, useSnackbar } from 'notistack';
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+import { useSnackbar } from 'notistack';
+import { getPacientes } from '../../api/services/PacienteService'
+import { Paciente } from '../../api/types/paciente'
 
-type AlertState = {
-  severity: "error" | "info" | "success" | "warning";
-  message: string;
-} | null;
+
 
 
 const PatientList = () => {
 	const { enqueueSnackbar } = useSnackbar();
 
-	const [patients, setPatients] = useState([]);
+	const [patients, setPatients] = useState<Paciente[]>([]);
 	const [totalPatients, setTotalPatients] = useState(0);
 	const [currentPage, setCurrentPage] = useState(1);
 	const [limit] = useState(5);
@@ -39,36 +35,32 @@ const PatientList = () => {
         console.log("Refresh Pacientes");
         setSpinning(true);
         setRefreshTrigger((prev) => prev + 1); 
-		// ⬅️ força o useEffect a rodar
+		
     };
 
 	useEffect(() => {
 		
 		const fetchPatients = async () => {
-			try {
-				console.log(`${BACKEND_URL}/pacientes?page=${currentPage}&limit=${limit}`)
-				const response = await fetch(`${BACKEND_URL}/pacientes?page=${currentPage}&limit=${limit}`);
-
-				if (!response.ok) {
-					throw new Error("Erro ao buscar pacientes");
-				}
-
-				const data = await response.json();
-
-				if (data.pacientes.length === 0) {
-					enqueueSnackbar('Não há pacientes cadastrados!', { variant: 'info', autoHideDuration: 4000, TransitionProps: { direction: 'down' }, anchorOrigin: { vertical: 'top', horizontal: 'center' } });
-				}
-
-				setPatients(data.pacientes);
-				setTotalPatients(data.total);
-				if (data.page !== currentPage) {
-					setCurrentPage(data.page);
-				}
-
-			} catch (error) {
-				enqueueSnackbar('Erro ao carregar pacientes', { variant: 'error', autoHideDuration: 4000, TransitionProps: { direction: 'down' }, anchorOrigin: { vertical: 'top', horizontal: 'center' } });
-				console.log("Erro ao carregar pacientes:", error);
-			}
+			getPacientes({page: currentPage, limit: limit})
+				.then(res => {
+					const resp = res.data
+					console.log(resp)
+					if (resp.pacientes.length == 0) {
+						enqueueSnackbar('Não há pacientes cadastrados!', { variant: 'info', autoHideDuration: 4000, TransitionProps: { direction: 'down' }, anchorOrigin: { vertical: 'top', horizontal: 'center' } });
+					}
+					setPatients(resp.pacientes)
+					setTotalPatients(resp.total)
+					if (resp.page !== currentPage) {
+						setCurrentPage(resp.page);
+					}
+				})
+				.catch(err => {
+					enqueueSnackbar(`Erro ao carregar pacientes\n${err}`, { variant: 'error', autoHideDuration: 4000, TransitionProps: { direction: 'down' }, anchorOrigin: { vertical: 'top', horizontal: 'center' } });
+				})
+				.finally(() => {
+					
+					setSpinning(false);
+				})
 		};
 
 		fetchPatients();
