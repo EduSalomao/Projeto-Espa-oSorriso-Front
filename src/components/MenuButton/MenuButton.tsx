@@ -17,7 +17,7 @@ const MenuItemButton: React.FC<MenuItemButtonProps> = ({
   to,
 }) => {
     const navigate = useNavigate();
-    const isActive = location.pathname === to;
+    const isActive = location.pathname.startsWith(to);
     return (
         <MenuButton collapsed={collapsed} onClick={() => navigate(to)} $active={isActive}>
         <Icon />
