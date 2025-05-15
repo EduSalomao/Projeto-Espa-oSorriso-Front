@@ -125,6 +125,7 @@ export const Main = styled.main`
     }
   }
 `;
+
 export const BodyArea = styled.div`
   display: flex;
   flex: 1;

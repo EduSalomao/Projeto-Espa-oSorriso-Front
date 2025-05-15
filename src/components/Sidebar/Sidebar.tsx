@@ -20,8 +20,6 @@ export default function Sidebar({ collapsed, setCollapsed, setActiveSection }) {
   return (
     <SidebarContent collapsed={collapsed}>
         <CollapseButton 
-          
-          transition={{ duration: 0.3 }}
           onClick={() => setCollapsed((prev) => !prev)}>
             {collapsed ? <FaChevronRight /> : <FaChevronLeft />}
         </CollapseButton>

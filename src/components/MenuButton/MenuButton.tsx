@@ -21,7 +21,7 @@ const MenuItemButton: React.FC<MenuItemButtonProps> = ({
     return (
         <MenuButton collapsed={collapsed} onClick={() => navigate(to)} $active={isActive}>
         <Icon />
-        {!collapsed && label}
+        <span className="label">{label}</span>
         </MenuButton>
     );
 };

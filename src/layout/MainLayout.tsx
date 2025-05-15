@@ -43,8 +43,6 @@ export default function Dashboard() {
             <Main>
                 <Outlet />
             </Main>
-
-
         </BodyArea>
         
     </Container>
