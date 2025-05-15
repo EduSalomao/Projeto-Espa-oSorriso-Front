@@ -128,7 +128,7 @@ function EditDentistModal({ dentista, isOpen, onClose }: Props) {
                             placeholder="Digite o nome"
                         />
                     </S.FieldWrapper>
-                    <S.FieldWrapper>
+                    <S.FieldWrapper style={{ width: "20%" }}>
                         <S.Label htmlFor="cro">CRO</S.Label>
                         <S.Input
                             name="cro"
