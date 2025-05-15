@@ -7,21 +7,24 @@ export const SidebarContent = styled(motion.div)<{ collapsed: boolean }>`
   display: flex;
   flex-direction: column;
   position: relative;
-  padding: 5px;
+  padding: 1px;
 `;
 
 export const CollapseButton = styled(motion.button)<{ collapsed?: boolean }>`
+  display: flex;
   border: none;
   color: white;
   font-size: 20px;
   cursor: pointer;
   padding: 5px;
   background-color: #2f4370;
-  border-radius: 100%;
+  border-radius: 0 50% 50% 0;
   position: absolute;
   top: 0;
-  right: -18px;
-  z-index: 2;
+  right: -35px;
+  &:focus {
+    outline: none;
+  }
 `;
 
 
@@ -29,7 +32,7 @@ export const CollapseButton = styled(motion.button)<{ collapsed?: boolean }>`
 export const MenuButton = styled.button<{ collapsed?: boolean }>`
   display: flex;
   align-items: center;
-  background: #2f4370;
+  background: black;
   color: white;
   border: none;
   padding: 12px 16px;
@@ -49,6 +52,10 @@ export const MenuButton = styled.button<{ collapsed?: boolean }>`
       justify-content: center;
     `}
 
+  &&:focus {
+    outline: none;
+    background: #7bb59e;
+  }
   &:hover {
     background: #3a5289;
   }

@@ -1,6 +1,6 @@
 import styled, { css } from "styled-components";
 
-export const MenuButton = styled.button<{ collapsed?: boolean }>`
+export const MenuButton = styled.button<{ collapsed?: boolean; $active?: boolean }>`
   display: flex;
   align-items: center;
   background: #2f4370;
@@ -21,6 +21,16 @@ export const MenuButton = styled.button<{ collapsed?: boolean }>`
     collapsed &&
     css`
       justify-content: center;
+    `}
+
+  &:focus {
+    outline: none;
+  }
+  
+  ${({ $active }) =>
+    $active &&
+    css`
+      background: #7bb59e; /* mesma cor do :active ou o que você quiser */
     `}
 
   &:hover {
