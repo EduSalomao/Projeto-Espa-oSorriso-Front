@@ -12,6 +12,7 @@ import PaginationOption from "../../components/PaginationOption/PaginationOption
 import DentistaCard from "../../components/Card/dentista/Card";
 import { FaSync } from "react-icons/fa";
 import { useSnackbar } from 'notistack';
+import { CardListView } from "../../components/Containers/CardListView";
 
 
 
@@ -36,6 +37,9 @@ const DentistasList = () => {
     useEffect(() => {
         const fetchPatients = async () => {
             try {
+                if (!spinning){
+                    setSpinning(true)
+                }
                 console.log(`${BACKEND_URL}/dentistas?page=${currentPage}&limit=${limit}`)
                 const response = await fetch(`${BACKEND_URL}/dentistas?page=${currentPage}&limit=${limit}`);
 
@@ -48,7 +52,6 @@ const DentistasList = () => {
                 if (data.dentistas.length === 0) {
                     enqueueSnackbar('Nenhum dentista encontrado!', { variant: 'info', autoHideDuration: 4000, TransitionProps: { direction: 'down' }, anchorOrigin: { vertical: 'top', horizontal: 'center' } });
                 }
-
                 setDentists(data.dentistas);
                 setTotalDentists(data.total);
                 setCurrentPage(data.page);
@@ -80,6 +83,43 @@ const DentistasList = () => {
         }
         setIsSearchModalOpen(false);
     };
+
+    
+    return (
+        <CardListView
+            items={dentists}
+            renderCard={(dentista, idx) => (
+                <DentistaCard
+                    key={idx}
+                    id={dentista.id}
+                    name={dentista.name}
+                    cro={dentista.cro}
+                    phone={dentista.phone}
+                    email={dentista.email}
+                    specialization={dentista.specialization}
+                    working_hours={dentista.working_hours} />
+            )}
+            currentPage={currentPage}
+            totalItems={totalDentists}
+            limit={limit}
+            onPageChange={handlePageChange}
+            onRefresh={handleRefresh}
+            spinning={spinning}
+            actionButtons={
+                <>
+                    <ActionButton onClick={handleOpenSearchModal}>Pesquisar</ActionButton>
+                    <ActionButton onClick={handleOpenCreateModal}>Cadastrar</ActionButton>
+                </>
+            }
+        >
+            {/* Modal de Cadastro */}
+            <CreateDentistModal isOpen={isCreateModalOpen} onClose={handleCloseCreateModal} />
+
+            {/* Modal de Pesquisa */}
+            <SearchDentistModal isOpen={isSearchModalOpen} onClose={handleCloseSearchModal} />
+        </CardListView>
+
+    );
 
     return (
         <MainContainerContent>

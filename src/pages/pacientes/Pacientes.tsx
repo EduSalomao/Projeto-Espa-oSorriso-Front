@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
-import {
-	ContainerPacientes,
-	CardsArea,
-	SidebarButtons,
-	ActionButton,
-	ContainerLista,
-	ListArea
-} from "./Pacientes.style";
+
+import { MainContainerContent } from "../../components/Containers/ContainerContent.style";
+import { ContainerLista } from "../../components/Containers/ContainerList.style";
+import { ListArea } from "../../components/Containers/ListArea.style";
+import { ActionButton, SidebarButtons } from "../../components/Buttons/Button.style";
+import { CardsArea } from "../../components/Containers/CardsArea.style";
 import PacienteCard from "../../components/Card/paciente/Card";
 import CreatePatientModal from "../../components/Modals/patient/createPatientModal/CreatePatientModal";
 import SearchPatientModal from "../../components/Modals/patient/searchPatientModal/SearchPatientModal";
@@ -15,6 +13,7 @@ import { RotatingIcon, PaginationAreaContainer, PaginationButtonsContainer } fro
 import { useSnackbar } from 'notistack';
 import { getPacientes } from '../../api/services/PacienteService'
 import { Paciente } from '../../api/types/paciente'
+import { CardListView } from "../../components/Containers/CardListView";
 
 
 
@@ -41,6 +40,9 @@ const PatientList = () => {
 	useEffect(() => {
 		
 		const fetchPatients = async () => {
+			if (!spinning){
+				setSpinning(true)
+			}
 			getPacientes({page: currentPage, limit: limit})
 				.then(res => {
 					const resp = res.data
@@ -82,9 +84,42 @@ const PatientList = () => {
 		}
 	};
 
-
 	return (
-		<ContainerPacientes >
+		<CardListView
+			items={patients}
+			renderCard={(pessoa, idx) => (
+				<PacienteCard
+					key={pessoa.id}
+					id={pessoa.id}
+					nome={pessoa.name}
+					cpf={pessoa.cpf}
+					telefone={pessoa.phone}
+					nascimento={pessoa.birthdate}
+					endereco={`${pessoa.address.slice(0, 25)}...`}
+				/>
+			)}
+			currentPage={currentPage}
+			totalItems={totalPatients}
+			limit={limit}
+			onPageChange={handlePageChange}
+			onRefresh={handleRefresh}
+			spinning={spinning}
+			actionButtons={
+				<>
+					<ActionButton onClick={handleOpenSearchModal}>Pesquisar</ActionButton>
+					<ActionButton onClick={handleOpenCreateModal}>Cadastrar</ActionButton>
+				</>
+			}
+		>
+			{/* Modais como children */}
+			<CreatePatientModal isOpen={isCreateModalOpen} onClose={handleCloseCreateModal} />
+			<SearchPatientModal isOpen={isSearchModalOpen} onClose={handleCloseSearchModal} />
+		</CardListView>
+
+	);
+	return (
+		
+		<MainContainerContent >
 			<ContainerLista>
 				<ListArea>
 					<CardsArea>
@@ -120,7 +155,7 @@ const PatientList = () => {
 			{/* Modal de Pesquisa */}
 			<SearchPatientModal isOpen={isSearchModalOpen} onClose={handleCloseSearchModal} />
 			
-		</ContainerPacientes>
+		</MainContainerContent>
 	);
 };
 
