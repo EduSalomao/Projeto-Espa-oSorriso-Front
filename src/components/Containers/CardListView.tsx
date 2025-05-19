@@ -34,6 +34,7 @@ export function CardListView<T>({
 	spinning,
 	children
 }: CardListViewProps<T>) {
+	
     console.log(spinning)
 	return (
 		<MainContainerContent>

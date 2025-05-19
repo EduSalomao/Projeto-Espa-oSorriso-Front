@@ -160,6 +160,7 @@ function CreatePatientModal({ isOpen, onClose }: Props) {
             placeholder="Digite o endereço"
           />
         </S.FieldWrapper>
+        
         </S.FormContainer>
         <S.ButtonGroup>
             <S.Button onClick={handleSave}>Salvar</S.Button>
