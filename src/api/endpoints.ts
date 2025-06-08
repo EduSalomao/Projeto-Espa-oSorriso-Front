@@ -23,6 +23,14 @@ const endpoints = {
     listWithFilters: ({ page = 1, limit = 10, termo = '' }: Params = {}) =>
       `/dentistas?page=${page}&limit=${limit}&termo=${encodeURIComponent(termo)}`,
   },
+  procedimentos: {
+    base: '/procedimentos',
+    byId: (id: string | number) => `/procedimentos/${id}`,
+    update: (id: string | number) => `/procedimentos/${id}`,
+    delete: (id: string | number) => `/procedimentos/${id}`,
+    listWithFilters: ({ page = 1, limit = 10, termo = '' }: Params = {}) =>
+        `/procedimentos?page=${page}&limit=${limit}&termo=${encodeURIComponent(termo)}`,
+  },
 };
 
 export default endpoints;
