@@ -1,22 +1,18 @@
 import {
   SidebarContent,
   CollapseButton,
-  MenuButton
 } from "./Sidebar.style";
 
 import MenuItemButton from "../MenuButton/MenuButton";
 import {
   FaTooth,
   FaUser,
-  FaClipboard,
-  FaTools,
-  FaMoneyBill,
   FaProcedures,
   FaChevronLeft,
   FaChevronRight
 } from "react-icons/fa";
 
-export default function Sidebar({ collapsed, setCollapsed, setActiveSection }) {
+export default function Sidebar({ collapsed, setCollapsed }) {
   return (
     <SidebarContent collapsed={collapsed}>
         <CollapseButton 
@@ -34,14 +30,12 @@ export default function Sidebar({ collapsed, setCollapsed, setActiveSection }) {
           collapsed={collapsed}
           to="/dentistas"
         />
+        <MenuItemButton
+          icon={FaProcedures}
+          label="Procedimento"
+          collapsed={collapsed}
+          to="/procedimentos"
+        />
     </SidebarContent>
   );
 }
-
-/*
-<MenuButton collapsed={collapsed}><FaClipboard /> {!collapsed && "Consulta"}</MenuButton>
-<MenuButton collapsed={collapsed}><FaTools /> {!collapsed && "Manutenção"}</MenuButton>
-<MenuButton collapsed={collapsed}><FaMoneyBill /> {!collapsed && "Orçamento"}</MenuButton>
-<MenuButton collapsed={collapsed}><FaProcedures /> {!collapsed && "Procedimento"}</MenuButton>
-
-*/
