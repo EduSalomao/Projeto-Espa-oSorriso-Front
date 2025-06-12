@@ -1,0 +1,66 @@
+-- WARNING: This schema is for context only and is not meant to be run.
+-- Table order and constraints may not be valid for execution.
+
+CREATE TABLE public.calendario (
+  id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  id_dentista bigint NOT NULL,
+  data_hora timestamp without time zone NOT NULL,
+  duracao time without time zone NOT NULL,
+  CONSTRAINT calendario_pkey PRIMARY KEY (id),
+  CONSTRAINT calendario_id_dentista_fkey FOREIGN KEY (id_dentista) REFERENCES public.dentista(id)
+);
+CREATE TABLE public.dentista (
+  id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  name character varying NOT NULL,
+  cro character varying NOT NULL UNIQUE,
+  phone character varying NOT NULL,
+  working_hours character varying NOT NULL,
+  email character varying NOT NULL,
+  address character varying,
+  notes character varying,
+  specialization character varying NOT NULL,
+  CONSTRAINT dentista_pkey PRIMARY KEY (id)
+);
+CREATE TABLE public.dentista_procedimento (
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  id_dentista bigint,
+  id_procedimento bigint,
+  CONSTRAINT dentista_procedimento_id_procedimento_fkey FOREIGN KEY (id_procedimento) REFERENCES public.procedimento(id),
+  CONSTRAINT dentista_procedimento_id_dentista_fkey FOREIGN KEY (id_dentista) REFERENCES public.dentista(id)
+);
+CREATE TABLE public.manutencao (
+  id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  id_paciente bigint,
+  id_dentista bigint,
+  data_hora timestamp without time zone,
+  duracao time without time zone,
+  data_hora_fim timestamp without time zone,
+  CONSTRAINT manutencao_pkey PRIMARY KEY (id),
+  CONSTRAINT manutencao_id_paciente_fkey FOREIGN KEY (id_paciente) REFERENCES public.paciente(id),
+  CONSTRAINT manutencao_id_dentista_fkey FOREIGN KEY (id_dentista) REFERENCES public.dentista(id)
+);
+CREATE TABLE public.paciente (
+  id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  name character varying NOT NULL,
+  cpf character varying NOT NULL UNIQUE,
+  phone character varying NOT NULL,
+  birthdate date NOT NULL,
+  address json NOT NULL,
+  CONSTRAINT paciente_pkey PRIMARY KEY (id)
+);
+CREATE TABLE public.procedimento (
+  id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  name character varying NOT NULL,
+  tipo character varying NOT NULL,
+  duracao time without time zone NOT NULL,
+  custo real NOT NULL,
+  descricao text,
+  categoria character varying,
+  observacoes text,
+  CONSTRAINT procedimento_pkey PRIMARY KEY (id)
+);

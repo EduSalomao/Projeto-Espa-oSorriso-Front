@@ -1,0 +1,221 @@
+const supabase = require('../config/supabase');
+
+// Cadastrar procedimento
+async function cadastrarProcedimento({ 
+        name,
+        tipo,
+        duracao,
+        custo,
+        descricao = null,
+        categoria = null,
+        observacoes = null,
+        dentistas = [] // Array de IDs dos dentistas
+    }) {
+    // 1. Inserir na tabela procedimento
+    const { data: procedimento, error: errorProcedimento } = await supabase
+        .from('procedimento')
+        .insert([{
+        name,
+        tipo,
+        duracao,
+        custo,
+        descricao,
+        categoria,
+        observacoes
+        }])
+        .select('*')
+        .single();
+
+    if (errorProcedimento) throw new Error(errorProcedimento.message);
+    console.log("Dentistas:", dentistas);
+    // 2. Inserir os relacionamentos na tabela dentista_procedimento
+    const dentistasResp = [];
+    if (dentistas.length > 0) {
+        const dentistaProcedimentos = dentistas.map(idDentista => ({
+        id_procedimento: procedimento.id,
+        id_dentista: idDentista
+        }));
+
+        const { data: dentistasResp, error: errorRelacionamento } = await supabase
+            .from('dentista_procedimento')
+            .insert(dentistaProcedimentos);
+
+        if (errorRelacionamento) throw new Error(errorRelacionamento.message);
+    }
+    
+    return {
+        procedimento,
+        dentistas: dentistasResp
+    };
+}
+
+// Editar procedimento e seus dentistas associados
+async function editarProcedimento(id, {
+  name,
+  tipo,
+  duracao_estimada,
+  custo,
+  descricao = null,
+  categoria = null,
+  observacoes = null,
+  dentistas = [] // Array de IDs dos dentistas atualizados
+}) {
+  // 1. Atualizar procedimento
+  const { data: procedimento, error: errorProcedimento } = await supabase
+    .from('procedimento')
+    .update({
+      name,
+      tipo,
+      duracao_estimada,
+      custo,
+      descricao,
+      categoria,
+      observacoes
+    })
+    .eq('id', id)
+    .select('*')
+    .single();
+
+  if (errorProcedimento) throw new Error(errorProcedimento.message);
+
+  // 2. Atualizar dentistas associados
+  // 2.1 Deletar relacionamentos antigos
+  const { error: errorDelete } = await supabase
+    .from('dentista_procedimento')
+    .delete()
+    .eq('id_procedimento', id);
+
+  if (errorDelete) throw new Error(errorDelete.message);
+
+  // 2.2 Inserir os novos relacionamentos
+  if (dentistas.length > 0) {
+    const novosRelacionamentos = dentistas.map(idDentista => ({
+      id_procedimento: id,
+      id_dentista: idDentista
+    }));
+
+    const { error: errorInsert } = await supabase
+      .from('dentista_procedimento')
+      .insert(novosRelacionamentos);
+
+    if (errorInsert) throw new Error(errorInsert.message);
+  }
+
+  return procedimento;
+}
+
+// Listar todos os procedimentos com seus dentistas
+async function listarProcedimentos(page = 1, limit = 10, termo='') {
+    const offset = (page - 1) * limit;
+
+    let query = supabase
+        .from('procedimento')
+        .select(`
+            *,
+            dentista_procedimento (
+                dentista (
+                id,
+                name,
+                cro
+                )
+            )
+        `,
+        { count: 'exact' })
+        .range(offset, offset + limit - 1)
+    
+    if (termo) {
+        query = query.or(`name.ilike.%${termo}%`);
+    }
+    
+    const { data, error, count } = await query
+        
+
+    if (error) throw new Error(error.message);
+
+    // Organiza o retorno para ficar mais limpo
+    const procedimentos = data.map(p => ({
+        id: p.id,
+        name: p.name,
+        tipo: p.tipo,
+        duracao_estimada: p.duracao_estimada,
+        custo: p.custo,
+        descricao: p.descricao,
+        categoria: p.categoria,
+        observacoes: p.observacoes,
+        dentistas: p.dentista_procedimento.map(d => d.dentista)
+    }));
+
+    return {
+        procedimentos: procedimentos,
+        total: count,
+        totalPages: Math.ceil(count / limit), // Calcula o número total de páginas
+        page,
+    };
+}
+
+// Buscar procedimento por ID com seus dentistas
+async function buscarProcedimentoPorId(id) {
+  const { data, error } = await supabase
+    .from('procedimento')
+    .select(`
+        *,
+        dentista_procedimento (
+            dentista (
+            id,
+            name,
+            cro
+            )
+        )
+    `)
+    .eq('id', id)
+    .single();
+
+  if (error) throw new Error(error.message);
+
+  const procedimento = {
+    id_procedimento: data.id_procedimento,
+    name: data.name,
+    tipo: data.tipo,
+    duracao_estimada: data.duracao_estimada,
+    custo: data.custo,
+    descricao: data.descricao,
+    categoria: data.categoria,
+    observacoes: data.observacoes,
+    dentistas: data.dentista_procedimento.map(d => d.dentista)
+  };
+
+  return procedimento;
+}
+
+// Excluir procedimento
+async function excluirProcedimento(id) {
+  // Primeiro exclui os relacionamentos na tabela associativa
+  const { error: errorRelacao } = await supabase
+    .from('dentista_procedimento')
+    .delete()
+    .eq('id_procedimento', id);
+
+  if (errorRelacao) {
+    throw new Error(`Erro ao excluir relação com dentistas: ${errorRelacao.message}`);
+  }
+
+  // Depois exclui o próprio procedimento
+  const { error: errorProcedimento } = await supabase
+    .from('procedimento')
+    .delete()
+    .eq('id', id);
+
+  if (errorProcedimento) {
+    throw new Error(`Erro ao excluir procedimento: ${errorProcedimento.message}`);
+  }
+
+  return { message: 'Procedimento excluído com sucesso.' };
+}
+
+module.exports = {
+  cadastrarProcedimento,
+  editarProcedimento,
+  listarProcedimentos,
+  buscarProcedimentoPorId,
+  excluirProcedimento
+};

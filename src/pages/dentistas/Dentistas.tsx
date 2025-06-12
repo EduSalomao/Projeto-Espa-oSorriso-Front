@@ -7,7 +7,7 @@ import { ActionButton, SidebarButtons } from "../../components/Buttons/Button.st
 import { CardsArea } from "../../components/Containers/CardsArea.style";
 import { RotatingIcon, PaginationAreaContainer, PaginationButtonsContainer } from "../../components/Containers/PaginationAreaContainer.style";
 import CreateDentistModal from "../../components/Modals/dentist/createDentistModal/CreateDentistModal";
-import SearchDentistModal from "../../components/Modals/dentist/searchDentistModal/searchDentistModal";
+import SearchDentistModal from "../../components/Modals/dentist/searchDentistModal/SearchDentistModal";
 import PaginationOption from "../../components/PaginationOption/PaginationOption";
 import DentistaCard from "../../components/Card/dentista/Card";
 import { FaSync } from "react-icons/fa";
