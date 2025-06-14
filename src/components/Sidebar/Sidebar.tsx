@@ -2,14 +2,14 @@ import {
   SidebarContent,
   CollapseButton,
 } from "./Sidebar.style";
-
 import MenuItemButton from "../MenuButton/MenuButton";
 import {
   FaTooth,
   FaUser,
   FaProcedures,
   FaChevronLeft,
-  FaChevronRight
+  FaChevronRight,
+  FaTools // Importar ícone
 } from "react-icons/fa";
 
 export default function Sidebar({ collapsed, setCollapsed }) {
@@ -35,6 +35,13 @@ export default function Sidebar({ collapsed, setCollapsed }) {
           label="Procedimento"
           collapsed={collapsed}
           to="/procedimentos"
+        />
+        {/* Novo botão de menu */}
+        <MenuItemButton
+          icon={FaTools}
+          label="Manutenção"
+          collapsed={collapsed}
+          to="/manutencoes"
         />
     </SidebarContent>
   );

@@ -3,10 +3,12 @@ import Home from "./pages/home/Home";
 import Pacientes from "./pages/pacientes";
 import Dentistas from "./pages/dentistas";
 import Procedimentos from "./pages/procedimentos";
+import Manutencoes from "./pages/manutencao"; // Importar
 import MainLayout from "./layout/MainLayout";
 import PacienteDetails from './pages/pacientes/PacienteDetails/PacienteDetails';
 import DentistaDetails from './pages/dentistas/DentistaDetails';
 import ProcedimentoDetails from "./pages/procedimentos/ProcedimentosDetails";
+import ManutencaoDetails from "./pages/manutencao/ManutencaoDetails"; // Importar
 
 function App() {
   return (
@@ -20,6 +22,9 @@ function App() {
           <Route path="dentistas/:id" element={<DentistaDetails />} />
           <Route path="procedimentos" element={<Procedimentos />} />
           <Route path="procedimentos/:id" element={<ProcedimentoDetails />} />
+          {/* Rotas de Manutenção */}
+          <Route path="manutencoes" element={<Manutencoes />} />
+          <Route path="manutencoes/:id" element={<ManutencaoDetails />} />
         </Route>
       </Routes>
     </BrowserRouter>

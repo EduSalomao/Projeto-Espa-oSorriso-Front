@@ -1,11 +1,3 @@
-// src/api/endpoints.ts
-
-type Params = {
-  page?: number;
-  limit?: number;
-  termo?: string;
-};
-
 const endpoints = {
   pacientes: {
     base: '/pacientes',
@@ -30,6 +22,15 @@ const endpoints = {
     delete: (id: string | number) => `/procedimentos/${id}`,
     listWithFilters: ({ page = 1, limit = 10, termo = '' }: Params = {}) =>
         `/procedimentos?page=${page}&limit=${limit}&termo=${encodeURIComponent(termo)}`,
+  },
+  // Novo endpoint para manutenções
+  manutencoes: {
+    base: '/manutencoes',
+    byId: (id: string | number) => `/manutencoes/${id}`,
+    update: (id: string | number) => `/manutencoes/${id}`,
+    delete: (id: string | number) => `/manutencoes/${id}`,
+    listWithFilters: ({ page = 1, limit = 10, termo = '' }: Params = {}) =>
+        `/manutencoes?page=${page}&limit=${limit}&termo=${encodeURIComponent(termo)}`,
   },
 };
 
