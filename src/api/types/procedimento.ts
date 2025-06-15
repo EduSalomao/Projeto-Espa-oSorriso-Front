@@ -8,7 +8,7 @@ export interface Procedimento {
     descricao?: string;
     categoria?: string;
     observacoes?: string;
-    dentistas: { id: number; name: string; cro: string }[];
+    dentistas: number[];
   }
   
   export interface ProcedimentoCreate {

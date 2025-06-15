@@ -11,11 +11,12 @@ type Props = {
 
 function DeleteProcedimentoModal({ isOpen, onClose, procedimentoId }: Props) {
   const { enqueueSnackbar } = useSnackbar();
-
+  console.log("Procedimento ID:", procedimentoId);
   const handleDelete = async () => {
     if (!procedimentoId) return;
     try {
       await deleteProcedimento(procedimentoId);
+      
       enqueueSnackbar('Procedimento excluído com sucesso!', { variant: 'success' });
       onClose();
     } catch (error: any) {

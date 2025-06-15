@@ -28,6 +28,7 @@ const ProcedimentoDetails = () => {
         }
     }, [id, navigate, enqueueSnackbar]);
 
+    console.log("Procedimento Details:", procedimento);
     useEffect(() => {
         fetchProcedimento();
     }, [fetchProcedimento]);

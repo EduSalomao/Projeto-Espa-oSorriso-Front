@@ -4,6 +4,7 @@ import * as S from "../patient/createPatientModal/CreatePatientModal.style";
 import { useSnackbar } from 'notistack';
 import { updateProcedimento } from "../../../api/services/ProcedimentoService";
 import { Procedimento } from "../../../api/types/procedimento";
+import { DentistaMultiAutocomplete } from "../dentist/DentistaMultiAutocomplete";
 
 type Props = {
   isOpen: boolean;
@@ -21,9 +22,10 @@ function EditProcedimentoModal({ isOpen, onClose, procedimento }: Props) {
     descricao: '',
     categoria: '',
     observacoes: '',
-    dentistas: ''
+    dentistas: []
   });
 
+  console.log("Procedimento to edit:", procedimento);
   useEffect(() => {
     if (procedimento) {
       setForm({
@@ -34,7 +36,7 @@ function EditProcedimentoModal({ isOpen, onClose, procedimento }: Props) {
         descricao: procedimento.descricao || '',
         categoria: procedimento.categoria || '',
         observacoes: procedimento.observacoes || '',
-        dentistas: procedimento.dentistas.map(d => d.id).join(', ')
+        dentistas: procedimento.dentistas
       });
     }
   }, [procedimento]);
@@ -57,7 +59,7 @@ function EditProcedimentoModal({ isOpen, onClose, procedimento }: Props) {
         return;
     }
 
-    const dentistaIds = form.dentistas.split(',').map(id => parseInt(id.trim())).filter(id => !isNaN(id));
+    const dentistaIds = form.dentistas.map(d => parseInt(d.id))
      if (dentistaIds.length === 0) {
         enqueueSnackbar('Por favor, insira IDs de dentistas válidos.', { variant: 'warning' });
         return;
@@ -101,10 +103,11 @@ function EditProcedimentoModal({ isOpen, onClose, procedimento }: Props) {
                 <S.Label htmlFor="custo">Custo (R$) *</S.Label>
                 <S.Input name="custo" type="number" value={form.custo} onChange={handleChange} />
             </S.FieldWrapper>
-            <S.FieldWrapper style={{ width: "100%" }}>
+            {/* <S.FieldWrapper style={{ width: "100%" }}>
                 <S.Label htmlFor="dentistas">IDs dos Dentistas (separados por vírgula) *</S.Label>
                 <S.Input name="dentistas" value={form.dentistas} onChange={handleChange}/>
-            </S.FieldWrapper>
+            </S.FieldWrapper> */}
+            <DentistaMultiAutocomplete value={form.dentistas} onChangeForm={handleChange}/>
             <S.FieldWrapper style={{ width: "100%" }}>
                 <S.Label htmlFor="descricao">Descrição</S.Label>
                 <S.Input as="textarea" name="descricao" value={form.descricao} onChange={handleChange} />

@@ -1,14 +1,25 @@
 // src/components/Modals/procedimento/CreateProcedimentoModal.tsx
-import { useState } from "react";
-import * as S from "../patient/createPatientModal/CreatePatientModal.style"; // Reusing styles
+import React, { useState } from "react";
+import { DentistaMultiAutocomplete } from "../dentist/DentistaMultiAutocomplete.tsx";
+
+import * as S from "../Modal.styles.ts"; // Reusing styles
 import { useSnackbar } from 'notistack';
 import { createProcedimento } from "../../../api/services/ProcedimentoService";
+import { getDentistas } from "../../../api/services/DentistaService";
+import { Dentista } from "../../../api/types/dentista";
 
 type Props = {
   isOpen: boolean;
   onClose: () => void;
   onSuccess: () => void;
 };
+
+const Wrapper = S.Container;
+const Label = S.Label;
+const Input = S.Input;
+const ButtonGroup = S.ButtonGroup;
+const Button = S.Button;
+const CancelButton = S.CancelButton;
 
 function CreateProcedimentoModal({ isOpen, onClose, onSuccess }: Props) {
   const { enqueueSnackbar } = useSnackbar();
@@ -20,13 +31,17 @@ function CreateProcedimentoModal({ isOpen, onClose, onSuccess }: Props) {
     descricao: '',
     categoria: '',
     observacoes: '',
-    dentistas: ''
+    dentistas: []
   });
+
+  const [dentistas, setDentistas] = useState<Dentista[]>([]);
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  console.log("Form data:", form);
   const handleSave = async () => {
     if (!form.name || !form.tipo || !form.duracao || !form.custo || !form.dentistas) {
       enqueueSnackbar('Preencha todos os campos obrigatórios.', { variant: 'warning' });
@@ -39,8 +54,9 @@ function CreateProcedimentoModal({ isOpen, onClose, onSuccess }: Props) {
         return;
     }
 
-    const dentistaIds = form.dentistas.split(',').map(id => parseInt(id.trim())).filter(id => !isNaN(id));
+    const dentistaIds = form.dentistas.map((d: Dentista) => d.id)
 
+    console.log("Dentista IDs:", dentistaIds);
     if (dentistaIds.length === 0) {
         enqueueSnackbar('Por favor, insira IDs de dentistas válidos.', { variant: 'warning' });
         return;
@@ -66,47 +82,49 @@ function CreateProcedimentoModal({ isOpen, onClose, onSuccess }: Props) {
   
   return (
     <S.ModalOverlay>
-      <S.Container>
+      <Wrapper>
         <S.Title>Novo Procedimento</S.Title>
         <S.FormContainer>
           <S.FieldWrapper style={{ width: "68%" }}>
-            <S.Label htmlFor="name">Nome do Procedimento *</S.Label>
-            <S.Input name="name" value={form.name} onChange={handleChange} placeholder="Ex: Limpeza" />
+            <Label htmlFor="name">Nome do Procedimento *</Label>
+            <Input name="name" value={form.name} onChange={handleChange} placeholder="Ex: Limpeza" />
           </S.FieldWrapper>
           <S.FieldWrapper style={{ width: "30%" }}>
-            <S.Label htmlFor="tipo">Tipo *</S.Label>
-            <S.Input name="tipo" value={form.tipo} onChange={handleChange} placeholder="Ex: Comum" />
+            <Label htmlFor="tipo">Tipo *</Label>
+            <Input name="tipo" value={form.tipo} onChange={handleChange} placeholder="Ex: Comum" />
           </S.FieldWrapper>
           <S.FieldWrapper style={{ width: "48%" }}>
-            <S.Label htmlFor="duracao">Duração (HH:MM) *</S.Label>
+            <Label htmlFor="duracao">Duração (HH:MM) *</Label>
             <S.MaskedInput mask="00:00" name="duracao" value={form.duracao} onAccept={(value: any) => setForm(prev => ({ ...prev, duracao: value }))} />
           </S.FieldWrapper>
           <S.FieldWrapper style={{ width: "48%" }}>
-            <S.Label htmlFor="custo">Custo (R$) *</S.Label>
-            <S.Input name="custo" type="number" value={form.custo} onChange={handleChange} placeholder="150.00" />
+            <Label htmlFor="custo">Custo (R$) *</Label>
+            <Input name="custo" type="number" value={form.custo} onChange={handleChange} placeholder="150.00" />
           </S.FieldWrapper>
+          {/* <S.FieldWrapper style={{ width: "100%" }}>
+            <Label htmlFor="dentistas">IDs dos Dentistas (separados por vírgula) *</Label>
+            <Input name="dentistas" value={form.dentistas} onChange={handleChange} placeholder="1, 2, 3" />
+          </S.FieldWrapper> */}
+          <DentistaMultiAutocomplete value={form.dentistas} onChangeForm={handleChange}/>
           <S.FieldWrapper style={{ width: "100%" }}>
-            <S.Label htmlFor="dentistas">IDs dos Dentistas (separados por vírgula) *</S.Label>
-            <S.Input name="dentistas" value={form.dentistas} onChange={handleChange} placeholder="1, 2, 3" />
-          </S.FieldWrapper>
-          <S.FieldWrapper style={{ width: "100%" }}>
-            <S.Label htmlFor="descricao">Descrição</S.Label>
-            <S.Input as="textarea" name="descricao" value={form.descricao} onChange={handleChange} placeholder="Descrição detalhada do procedimento" />
+            <Label htmlFor="descricao">Descrição</Label>
+            <Input as="textarea" name="descricao" value={form.descricao} onChange={handleChange} placeholder="Descrição detalhada do procedimento" />
           </S.FieldWrapper>
            <S.FieldWrapper style={{ width: "48%" }}>
-            <S.Label htmlFor="categoria">Categoria</S.Label>
-            <S.Input name="categoria" value={form.categoria} onChange={handleChange} placeholder="Ex: Estética" />
+            <Label htmlFor="categoria">Categoria</Label>
+            <Input name="categoria" value={form.categoria} onChange={handleChange} placeholder="Ex: Estética" />
           </S.FieldWrapper>
           <S.FieldWrapper style={{ width: "100%" }}>
-            <S.Label htmlFor="observacoes">Observações</S.Label>
-            <S.Input as="textarea" name="observacoes" value={form.observacoes} onChange={handleChange} />
+            <Label htmlFor="observacoes">Observações</Label>
+            <Input as="textarea" name="observacoes" value={form.observacoes} onChange={handleChange} />
           </S.FieldWrapper>
         </S.FormContainer>
-        <S.ButtonGroup>
-          <S.Button onClick={handleSave}>Salvar</S.Button>
-          <S.CancelButton onClick={onClose}>Cancelar</S.CancelButton>
-        </S.ButtonGroup>
-      </S.Container>
+        <ButtonGroup>
+          <Button onClick={handleSave}>Salvar</Button>
+          <CancelButton onClick={onClose}>Cancelar</CancelButton>
+        </ButtonGroup>
+        
+      </Wrapper>
     </S.ModalOverlay>
   );
 }
