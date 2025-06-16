@@ -105,7 +105,7 @@ function CreateProcedimentoModal({ isOpen, onClose, onSuccess }: Props) {
             <Label htmlFor="dentistas">IDs dos Dentistas (separados por vírgula) *</Label>
             <Input name="dentistas" value={form.dentistas} onChange={handleChange} placeholder="1, 2, 3" />
           </S.FieldWrapper> */}
-          <DentistaMultiAutocomplete value={form.dentistas} onChangeForm={handleChange}/>
+          <DentistaMultiAutocomplete value={form.dentistas} onChangeForm={handleChange} />
           <S.FieldWrapper style={{ width: "100%" }}>
             <Label htmlFor="descricao">Descrição</Label>
             <Input as="textarea" name="descricao" value={form.descricao} onChange={handleChange} placeholder="Descrição detalhada do procedimento" />

@@ -21,6 +21,7 @@ const ManutencoesList = () => {
         setSpinning(true);
         try {
             const response = await getManutencoes({ page: currentPage, limit, termo: searchTerm });
+            console.log("Manutenções fetched:", response.data);
             setManutencoes(response.data.manutencoes);
             setTotalItems(response.data.total);
         } catch (error) {

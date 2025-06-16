@@ -3,6 +3,7 @@ interface Params {
   page?: number;
   limit?: number;
   termo?: string;
+  idDentista?: number | null;
 }
 
 const endpoints = {
@@ -27,8 +28,8 @@ procedimentos: {
   byId: (id: string | number) => `/procedimentos/${id}`,
   update: (id: string | number) => `/procedimentos/${id}`,
   delete: (id: string | number) => `/procedimentos/${id}`,
-  listWithFilters: ({ page = 1, limit = 10, termo = '' }: Params = {}) =>
-      `/procedimentos?page=${page}&limit=${limit}&termo=${encodeURIComponent(termo)}`,
+  listWithFilters: ({ page = 1, limit = 10, termo = '', idDentista = '' }: Params = {}) =>
+      `/procedimentos?page=${page}&limit=${limit}&termo=${encodeURIComponent(termo)}&idDentista=${idDentista}`,
 },
 manutencoes: {
   base: '/manutencoes',

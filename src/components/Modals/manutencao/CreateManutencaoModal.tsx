@@ -1,7 +1,9 @@
 import { useState } from "react";
-import * as S from "../patient/createPatientModal/CreatePatientModal.style";
+import * as S from "../Modal.styles.ts";
 import { useSnackbar } from 'notistack';
 import { createManutencao } from "../../../api/services/ManutencaoService";
+import { DentistaAutocomplete } from "../dentist/DentistAutocomplete";
+import { PacienteAutocomplete } from "../patient/PacienteAutocomplete";
 
 type Props = {
   isOpen: boolean;
@@ -22,6 +24,7 @@ function CreateManutencaoModal({ isOpen, onClose, onSuccess }: Props) {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+    console.log("Form data:", form);
   const handleSave = async () => {
     if (!form.id_paciente || !form.id_dentista || !form.data_hora || !form.duracao) {
       enqueueSnackbar('Preencha todos os campos obrigatórios.', { variant: 'warning' });
@@ -31,8 +34,8 @@ function CreateManutencaoModal({ isOpen, onClose, onSuccess }: Props) {
     try {
       await createManutencao({
         ...form,
-        id_paciente: Number(form.id_paciente),
-        id_dentista: Number(form.id_dentista),
+        id_paciente: Number(form.id_paciente.id),
+        id_dentista: Number(form.id_dentista.id),
       });
       enqueueSnackbar('Manutenção cadastrada com sucesso!', { variant: 'success' });
       onSuccess();
@@ -46,18 +49,26 @@ function CreateManutencaoModal({ isOpen, onClose, onSuccess }: Props) {
   if (!isOpen) return null;
   
   return (
+    
     <S.ModalOverlay>
+      <S.DateTimePickerStyle />
       <S.Container>
         <S.Title>Nova Manutenção</S.Title>
         <S.FormContainer>
-          <S.FieldWrapper style={{ width: "48%" }}>
+          {/* <S.FieldWrapper style={{ width: "48%" }}>
             <S.Label htmlFor="id_paciente">ID do Paciente *</S.Label>
             <S.Input name="id_paciente" type="number" value={form.id_paciente} onChange={handleChange} placeholder="ID do Paciente" />
-          </S.FieldWrapper>
-          <S.FieldWrapper style={{ width: "48%" }}>
+          </S.FieldWrapper> */}
+          <PacienteAutocomplete
+            value={form.id_paciente}
+            onChangeForm={handleChange}
+            name="id_paciente"
+          />
+          {/* <S.FieldWrapper style={{ width: "48%" }}>
             <S.Label htmlFor="id_dentista">ID do Dentista *</S.Label>
             <S.Input name="id_dentista" type="number" value={form.id_dentista} onChange={handleChange} placeholder="ID do Dentista" />
-          </S.FieldWrapper>
+          </S.FieldWrapper> */}
+          <DentistaAutocomplete value={form.id_dentista} onChangeForm={handleChange} name="id_dentista"/>
           <S.FieldWrapper style={{ width: "48%" }}>
             <S.Label htmlFor="data_hora">Data e Hora *</S.Label>
             <S.Input name="data_hora" type="datetime-local" value={form.data_hora} onChange={handleChange} />

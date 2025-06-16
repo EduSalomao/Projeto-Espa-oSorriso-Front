@@ -67,6 +67,15 @@ export const Input = styled.input`
     opacity: 1;  /* Garante que a cor será visível */
   }
 `;
+// Fora do styled-component, adicione este CSS globalmente:
+import { createGlobalStyle } from "styled-components";
+
+export const DateTimePickerStyle = createGlobalStyle`
+  input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+    filter: invert(0.5) sepia(1) saturate(5) hue-rotate(180deg);
+    cursor: pointer;
+  }
+`;
 
 export const MaskedInput = styled(IMaskInput)`
   padding: 0.5rem;

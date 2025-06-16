@@ -85,7 +85,7 @@ export const ContentOptionsMenu = styled.div`
 export const ContentSetOptionsMenu = styled.div`
   display: flex;
   flex-direction: column;
-  margin-left:30px;
+  margin-left: 30px;
 `
 export const ContentTitleOptionsMenu = styled.h2`
    color: #3d5582;
