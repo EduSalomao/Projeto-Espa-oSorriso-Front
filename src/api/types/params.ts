@@ -2,5 +2,6 @@ export interface RequestParams {
   page?: number;
   limit?: number;
   termo?: string;
-  idDentista?: number | null;
+  idDentista?: number | string | null;
+  idPaciente?: number | string | null;
 }

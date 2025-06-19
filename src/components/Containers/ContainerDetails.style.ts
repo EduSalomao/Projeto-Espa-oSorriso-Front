@@ -64,13 +64,18 @@ export const ContainerOptionsMenu = styled.div`
 
 export const OptionsMenu = styled.p<{ selected?: boolean }>`
     color: #3d5582;
+    text-align: center;
     font-family: 'Roboto Condensed', sans-serif;
     font-size: 20px;
     width: 100%;
     font-weight: bold;
     margin: 0;
+    cursor: pointer;
     border-color: #3d5582;
     border-bottom: ${({ selected }) => (selected ? "2px solid" : "transparent")};
+    &&:hover {
+        color:rgb(148, 163, 193);
+    }
 `;
 
 export const ContentOptionsMenu = styled.div`
