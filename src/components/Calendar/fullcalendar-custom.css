@@ -54,7 +54,11 @@
   color: #1e3a8a;
 }
 
-.fc-scrollgrid-sync-table {
-    width: 100%;
+.fc-scrollgrid-sync-table,
+.fc-col-header,
+.fc-daygrid-body {
+    width: 100% !important;
 }
+
+
 
