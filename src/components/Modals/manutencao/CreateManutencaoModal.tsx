@@ -38,6 +38,12 @@ function CreateManutencaoModal({ isOpen, onClose, onSuccess }: Props) {
         id_dentista: Number(form.id_dentista.id),
       });
       enqueueSnackbar('Manutenção cadastrada com sucesso!', { variant: 'success' });
+      setForm({
+        id_paciente: '',
+        id_dentista: '',
+        data_hora: '',
+        duracao: '01:00:00' // Resetando para o valor padrão
+      });
       onSuccess();
       onClose();
     } catch (error: any) {
