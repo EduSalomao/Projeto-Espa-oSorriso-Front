@@ -9,7 +9,8 @@ import {
   FaProcedures,
   FaChevronLeft,
   FaChevronRight,
-  FaTools // Importar ícone
+  FaTools, // Importar ícone
+  FaCalendar,
 } from "react-icons/fa";
 
 export default function Sidebar({ collapsed, setCollapsed }) {
@@ -19,6 +20,11 @@ export default function Sidebar({ collapsed, setCollapsed }) {
           onClick={() => setCollapsed((prev) => !prev)}>
             {collapsed ? <FaChevronRight /> : <FaChevronLeft />}
         </CollapseButton>
+        <MenuItemButton 
+          icon={FaCalendar}
+          label="Agenda"
+          collapsed={collapsed} 
+          to="/agenda"/> 
         <MenuItemButton 
           icon={FaUser}
           label="Paciente"
@@ -36,7 +42,6 @@ export default function Sidebar({ collapsed, setCollapsed }) {
           collapsed={collapsed}
           to="/procedimentos"
         />
-        {/* Novo botão de menu */}
         <MenuItemButton
           icon={FaTools}
           label="Manutenção"

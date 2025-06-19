@@ -11,6 +11,7 @@ export const SidebarContent = styled(motion.div)<{ collapsed: boolean }>`
 `;
 
 export const CollapseButton = styled(motion.button)<{ collapsed?: boolean }>`
+  z-index: 1000;
   display: flex;
   border: none;
   color: white;

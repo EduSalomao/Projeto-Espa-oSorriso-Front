@@ -1,0 +1,60 @@
+/* Título (mês, semana, dia) */
+.fc-toolbar-title {
+  color: #1e40af; /* azul */
+  font-weight: bold;
+}
+
+/* Botões (prev, next, today) */
+.fc-button {
+  background-color: #1e3a8a; /* azul escuro */
+  border: none;
+  color: white;
+  font-weight: bold;
+  padding: 6px 12px;
+}
+
+.fc-button:hover {
+  background-color: #2563eb; /* azul claro */
+}
+
+/* Botão ativo (view atual) */
+.fc-button-active {
+  background-color: #3b82f6 !important;
+}
+
+/* Fundo dos dias */
+.fc-daygrid-day {
+  background-color: #f9fafb; /* cinza bem claro */
+}
+
+/* Eventos */
+.fc-event {
+  background-color: #34d399; /* verde */
+  border: none;
+  color: white;
+  padding: 2px 4px;
+  font-size: 0.9rem;
+  border-radius: 4px;
+}
+
+/* Personaliza o número das horas (08:00, 09:00 etc.) */
+.fc-timegrid-slot-label {
+  color: #1e3a8a; /* azul */
+  font-weight: bold;
+  font-size: 0.95rem;
+  padding-left: 8px;
+}
+
+/* Opcional: muda o fundo da coluna das horas */
+.fc-timegrid-axis {
+  background-color: #f0f4f8;
+}
+
+.fc-timegrid-axis-cushion {
+  color: #1e3a8a;
+}
+
+.fc-scrollgrid-sync-table {
+    width: 100%;
+}
+
