@@ -10,6 +10,8 @@ const ManutencaoDetails = () => {
     const navigate = useNavigate();
     const { id } = useParams();
     const [manutencao, setManutencao] = useState<Manutencao | null>(null);
+    const [dataHoraFormatada, setDataHoraFormatada] = useState("");
+    const [dataHoraFimFormatada, setDataHoraFimFormatada] = useState("");
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
@@ -18,6 +20,9 @@ const ManutencaoDetails = () => {
         try {
             const response = await getManutencaoById(id);
             setManutencao(response.data);
+            setDataHoraFormatada(new Date(response.data.data_hora).toLocaleString('pt-BR'));
+            setDataHoraFimFormatada(new Date(response.data.data_hora_fim).toLocaleString('pt-BR'));
+
         } catch (error) {
             console.error("Erro ao buscar manutenção:", error);
             navigate("/manutencoes");
@@ -38,13 +43,15 @@ const ManutencaoDetails = () => {
                 <S.ContainerAside>
                     <S.DescriptionArea>
                         <S.Title>Manutenção Agendada</S.Title>
-                        <S.Data><strong>Paciente:</strong> {manutencao.paciente_nome}</S.Data>
-                        <S.Data><strong>CPF Paciente:</strong> {manutencao.paciente_cpf}</S.Data>
-                        <S.Data><strong>Dentista:</strong> {manutencao.dentista_nome}</S.Data>
-                        <S.Data><strong>CRO Dentista:</strong> {manutencao.dentista_cro}</S.Data>
-                        <S.Data><strong>Data e Hora:</strong> {new Date(manutencao.data_hora).toLocaleString('pt-BR')}</S.Data>
-                        <S.Data><strong>Duração:</strong> {manutencao.duracao}</S.Data>
-                        <S.Data><strong>Horário de Fim:</strong> {new Date(manutencao.data_hora_fim).toLocaleString('pt-BR')}</S.Data>
+                        <S.InfoGrid>
+                            <S.Label>Paciente:</S.Label> <S.Value>{manutencao.paciente_nome}</S.Value>
+                            <S.Label>CPF Paciente:</S.Label> <S.Value>{manutencao.paciente_cpf}</S.Value>
+                            <S.Label>Dentista:</S.Label> <S.Value>{manutencao.dentista_nome}</S.Value>
+                            <S.Label>CRO Dentista:</S.Label> <S.Value>{manutencao.dentista_cro}</S.Value>
+                            <S.Label>Data e Hora:</S.Label> <S.Value>{dataHoraFormatada}</S.Value>
+                            <S.Label>Duração:</S.Label> <S.Value>{manutencao.duracao}</S.Value>
+                            <S.Label>Horário de Fim:</S.Label> <S.Value>{dataHoraFimFormatada}</S.Value>
+                        </S.InfoGrid>
                     </S.DescriptionArea>
                 </S.ContainerAside>
                 <S.SidebarButtons>

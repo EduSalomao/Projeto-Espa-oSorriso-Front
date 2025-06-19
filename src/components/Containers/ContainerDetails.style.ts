@@ -139,3 +139,24 @@ export const ActionButton = styled.button`
     background-color: #0e2c57;
   }
 `;
+
+export const InfoGrid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  row-gap: 12px;
+  column-gap: 20px;
+  font-size: 1rem;
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+export const Label = styled.span`
+  font-weight: bold;
+  color: #374151;
+`;
+
+export const Value = styled.span`
+  color: #111827;
+`;
