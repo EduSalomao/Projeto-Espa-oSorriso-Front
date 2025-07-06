@@ -81,7 +81,7 @@ function CreateManutencaoModal({ isOpen, onClose, onSuccess }: Props) {
           </S.FieldWrapper>
           <S.FieldWrapper style={{ width: "48%" }}>
             <S.Label htmlFor="duracao">Duração *</S.Label>
-            <S.MaskedInput mask="00:00:00" name="duracao" value={form.duracao} onAccept={(value: any) => setForm(prev => ({ ...prev, duracao: value }))} />
+            <S.MaskedInput mask="00:00" name="duracao" value={form.duracao} onAccept={(value: any) => setForm(prev => ({ ...prev, duracao: value }))} />
           </S.FieldWrapper>
         </S.FormContainer>
         <S.ButtonGroup>

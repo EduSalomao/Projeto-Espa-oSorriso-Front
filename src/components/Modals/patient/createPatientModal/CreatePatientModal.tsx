@@ -1,5 +1,5 @@
 import { useState } from "react";
-import * as S from "./CreatePatientModal.style";
+import * as S from "../../Modal.styles.ts";
 import { useNavigate } from "react-router-dom";
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 import { useSnackbar } from 'notistack';
@@ -106,10 +106,11 @@ function CreatePatientModal({ isOpen, onClose }: Props) {
   
   return (
     <S.ModalOverlay>
+      <S.DatePickerStyle />
       <S.Container>
         <S.Title>Novo Paciente</S.Title>
         <S.FormContainer>
-        <S.FieldWrapper style={{ width: "70%" }}>
+        <S.FieldWrapper style={{ width: "50%" }}>
           <S.Label htmlFor="name">Nome</S.Label>
           <S.Input
             name="name"
@@ -118,7 +119,7 @@ function CreatePatientModal({ isOpen, onClose }: Props) {
             placeholder="Digite o nome"
           />
         </S.FieldWrapper>
-        <S.FieldWrapper>
+        <S.FieldWrapper style={{ width: "30%" }}>
           <S.Label htmlFor="birthdate">Data de Nascimento</S.Label>
           <S.Input
             name="birthdate"
@@ -127,7 +128,7 @@ function CreatePatientModal({ isOpen, onClose }: Props) {
             onChange={handleChange}
           />
         </S.FieldWrapper>
-        <S.FieldWrapper style={{ width: "60%" }}>
+        <S.FieldWrapper style={{ width: "40%" }}>
           <S.Label htmlFor="cpf">CPF</S.Label>
           <S.MaskedInput
             mask="000.000.000-00"
@@ -138,7 +139,7 @@ function CreatePatientModal({ isOpen, onClose }: Props) {
             }
           />
         </S.FieldWrapper>
-        <S.FieldWrapper>
+        <S.FieldWrapper style={{ width: "40%" }}>
           <S.Label htmlFor="phone">Telefone</S.Label>
           
           <S.MaskedInput

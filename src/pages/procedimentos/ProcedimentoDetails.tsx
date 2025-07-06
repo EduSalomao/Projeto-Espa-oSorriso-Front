@@ -20,6 +20,13 @@ const ProcedimentoDetails = () => {
         if (!id) return;
         try {
             const response = await getProcedimentoById(id);
+            if (!response.data) {
+                throw new Error("Procedimento não encontrado");
+            }
+            
+            const rawDuracao = response.data.duracao || "00:00";
+            response.data.duracao = rawDuracao.length === 8 ? rawDuracao.slice(0, 5) : rawDuracao;
+
             setProcedimento(response.data);
         } catch (error) {
             console.error("Erro ao buscar procedimento:", error);
@@ -54,7 +61,7 @@ const ProcedimentoDetails = () => {
                     <S.DescriptionArea>
                         <S.Title>{procedimento.name}</S.Title>
                         <S.Data><strong>Tipo:</strong> {procedimento.tipo}</S.Data>
-                        <S.Data><strong>Duração:</strong> {procedimento.duracao} (HH:MM)</S.Data>
+                        <S.Data><strong>Duração:</strong> {procedimento.duracao}</S.Data>
                         <S.Data><strong>Custo:</strong> R$ {procedimento.custo.toFixed(2)}</S.Data>
                         <S.Data><strong>Categoria:</strong> {procedimento.categoria || 'Não informada'}</S.Data>
                         <S.Data><strong>Descrição:</strong> {procedimento.descricao || 'Não informada'}</S.Data>

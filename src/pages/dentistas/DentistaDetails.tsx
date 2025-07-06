@@ -25,6 +25,9 @@ const DentistaDetails = () => {
             try {
                 const resp = await getProcedimentos({ idDentista: id });
                 console.log(resp.data.procedimentos)
+                for (const p of resp.data.procedimentos) {
+                    p.custo = parseFloat(p.custo).toFixed(2); // Formata o custo para duas casas decimais
+                }
                 setProcedimentos(resp.data.procedimentos); // ajuste conforme resposta da sua API
                 console.log("Dados dos procedimentos:", procedimentos);
                 console.log("Dados dos procedimentos resp:", resp.data.procedimentos);
@@ -145,7 +148,7 @@ const DentistaDetails = () => {
                                             <Td>{proc.name}</Td>
                                             <Td>{proc.tipo}</Td>
                                             <Td>{proc.duracao}</Td>
-                                            <Td>{proc.custo}</Td>
+                                            <Td>R$ {proc.custo}</Td>
                                         </Tr>
                                         ))}
                                     </Tbody>

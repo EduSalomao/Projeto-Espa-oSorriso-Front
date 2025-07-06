@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { IMaskInput } from "react-imask";
 
 export const ModalOverlay = styled.div`
   position: fixed;
@@ -97,5 +98,21 @@ export const CancelButton = styled(Button)`
 
   &:hover {
     background-color: #5a75a3;
+  }
+`;
+
+export const MaskedInput = styled(IMaskInput)`
+  padding: 0.5rem;
+  font-size: 1rem;
+  color: #000;
+  width: 100%;
+  background-color: #fff;
+  border: none;
+  border-radius: 6px;
+  text-align: left;
+
+  &::placeholder {
+    color: #000;
+    opacity: 1;
   }
 `;

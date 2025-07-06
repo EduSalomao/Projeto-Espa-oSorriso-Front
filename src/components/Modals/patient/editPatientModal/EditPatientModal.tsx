@@ -136,21 +136,25 @@ function EditPacientModal({ paciente, isOpen, onClose }: Props) {
         </S.FieldWrapper>
         <S.FieldWrapper style={{ width: "60%" }}>
           <S.Label htmlFor="cpf">CPF</S.Label>
-          <S.Input
-            name="cpf"
+          <S.MaskedInput
+            mask="000.000.000-00"
             value={form.cpf}
-            onChange={handleChange}
-            placeholder="XXX.XXX.XXX-XX"
+            placeholder="xxx.xxx.xxx-xx"
+            onAccept={(value: any) =>
+              setForm((prev) => ({ ...prev, cpf: value }))
+            }
           />
         </S.FieldWrapper>
         <S.FieldWrapper>
           <S.Label htmlFor="phone">Telefone</S.Label>
-          <S.Input
-          name="phone"
-          value={form.phone}
-          onChange={handleChange}
-          placeholder="(XX) XXXXX-XXXX"
-        />
+          <S.MaskedInput
+            mask="(00) 00000-0000"
+            value={form.phone}
+            placeholder="(XX) XXXXX-XXXX"
+            onAccept={(value: any) =>
+              setForm((prev) => ({ ...prev, phone: value }))
+            }
+          />
         </S.FieldWrapper>
         <S.FieldWrapper style={{ width: "100%" }}>
           <S.Label htmlFor="address">Endereço</S.Label>

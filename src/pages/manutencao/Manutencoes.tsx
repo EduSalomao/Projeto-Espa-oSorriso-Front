@@ -6,6 +6,11 @@ import ManutencaoCard from "../../components/Card/manutencao/Card";
 import { ActionButton } from "../../components/Buttons/Button.style";
 import { getManutencoes } from "../../api/services/ManutencaoService";
 import { Manutencao } from "../../api/types/manutencao";
+import { enqueueSnackbar } from "notistack";
+/* import { DateRangePicker } from 'react-date-range';
+import { addDays } from 'date-fns';
+import 'react-date-range/dist/styles.css'; // main css file
+import 'react-date-range/dist/theme/default.css'; // theme css file */
 
 const ManutencoesList = () => {
     const [manutencoes, setManutencoes] = useState<Manutencao[]>([]);
@@ -22,9 +27,14 @@ const ManutencoesList = () => {
         try {
             const response = await getManutencoes({ page: currentPage, limit, termo: searchTerm });
             console.log("Manutenções fetched:", response.data);
+            if (response.data.manutencoes.length === 0) {
+                enqueueSnackbar('Nenhuma manutenção encontrada.', { variant: 'info' });
+                return;
+            }
             setManutencoes(response.data.manutencoes);
             setTotalItems(response.data.total);
         } catch (error) {
+
             console.error("Erro ao carregar manutenções:", error);
         } finally {
             setSpinning(false);
@@ -44,7 +54,26 @@ const ManutencoesList = () => {
         setCurrentPage(1); // Reset page on new search
     };
 
+    const handleRefresh = () => {
+        setSearchTerm('');
+        setCurrentPage(1); // Reset to first page on refresh
+    }
+
+  /*   const [state, setState] = useState({
+    selection: {
+        startDate: new Date(),
+        endDate: null,
+        key: 'selection'
+    },
+    compare: {
+        startDate: new Date(),
+        endDate: addDays(new Date(), 3),
+        key: 'compare'
+    }
+    }); */
     return (
+        <>
+        
         <CardListView
             items={manutencoes}
             renderCard={(manutencao, idx) => (
@@ -54,7 +83,7 @@ const ManutencoesList = () => {
             totalItems={totalItems}
             limit={limit}
             onPageChange={handlePageChange}
-            onRefresh={fetchItems}
+            onRefresh={handleRefresh}
             spinning={spinning}
             actionButtons={
                 <>
@@ -63,6 +92,15 @@ const ManutencoesList = () => {
                 </>
             }
         >
+            {/* <DateRangePicker
+            onChange={item => setState({ ...state, ...item })}
+            months={1}
+            minDate={addDays(new Date(), -300)}
+            maxDate={addDays(new Date(), 900)}
+            direction="vertical"
+            scroll={{ enabled: true }}
+            ranges={[state.selection, state.compare]}
+            />; */}
             <CreateManutencaoModal 
                 isOpen={isCreateModalOpen} 
                 onClose={() => setIsCreateModalOpen(false)}
@@ -74,6 +112,7 @@ const ManutencoesList = () => {
                 onSearch={handleSearch}
             />
         </CardListView>
+        </>
     );
 };
 

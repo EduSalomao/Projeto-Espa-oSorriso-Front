@@ -23,8 +23,9 @@ const ProcedimentosList = () => {
         setSpinning(true);
         try {
             const response = await getProcedimentos({ page, limit, termo: term });
-            if (response.data.procedimentos.length === 0 && page === 1 && !term) {
-                 enqueueSnackbar('Nenhum procedimento encontrado.', { variant: 'info' });
+            if (response.data.procedimentos.length === 0) {
+                enqueueSnackbar('Nenhum procedimento encontrado.', { variant: 'info' });
+                return
             }
             setProcedimentos(response.data.procedimentos);
             setTotalItems(response.data.total);

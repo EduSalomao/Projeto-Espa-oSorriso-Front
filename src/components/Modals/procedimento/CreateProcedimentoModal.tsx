@@ -74,7 +74,12 @@ function CreateProcedimentoModal({ isOpen, onClose, onSuccess }: Props) {
       onClose();
     } catch (error: any) {
       console.error(error);
-      enqueueSnackbar(error.response?.data?.error || "Erro ao cadastrar procedimento.", { variant: 'error' });
+      if (error.response?.data?.error === 'duplicate key value violates unique constraint "unq_nome_procedimento"') {
+        enqueueSnackbar("Nome de Procedimento já existe", { variant: 'warning' });
+      } else {
+        enqueueSnackbar(error.response?.data?.error || "Erro ao cadastrar procedimento.", { variant: 'error' });
+      }
+      
     }
   };
 

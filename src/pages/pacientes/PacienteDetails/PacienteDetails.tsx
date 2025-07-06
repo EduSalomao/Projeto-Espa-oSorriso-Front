@@ -26,6 +26,15 @@ const PacienteDetails = () => {
                 try {
                     const resp = await getManutencoes({ idPaciente: id });
                     console.log(resp.data.manutencoes)
+                    for (const m of resp.data.manutencoes) {
+                        m.data_hora = new Date(m.data_hora).toLocaleString("pt-BR", {
+                            day: '2-digit',
+                            month: '2-digit',
+                            year: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        });
+                    }
                     setManutencoes(resp.data.manutencoes); // ajuste conforme resposta da sua API
                     console.log("Dados das manutenções:", manutencoes);
                     console.log("Dados das manutenções resp:", resp.data.manutencoes);
@@ -62,6 +71,10 @@ const PacienteDetails = () => {
             try {
                 const response = await fetch(`${BACKEND_URL}/pacientes/${id}`);
                 const data = await response.json();
+                if (!response.ok) {
+                    throw new Error(data.error || "Erro ao buscar paciente");
+                }
+                data.birthdate = new Date(data.birthdate).toLocaleDateString("pt-BR");
                 setPaciente(data);
             } catch (error) {
                 console.error("Erro ao buscar paciente:", error);
