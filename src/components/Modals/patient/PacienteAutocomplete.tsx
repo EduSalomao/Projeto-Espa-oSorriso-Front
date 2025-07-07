@@ -71,13 +71,13 @@ export const PacienteAutocomplete: React.FC<PacienteAutocompleteProps> = ({
   const handleSearch = async (val: string) => {
     setTerm(val);
     if (val.length < 2) {
-      const resp = await getPacientes({ termo: "", page: 1, limit: 5 });
+      const resp = await getPacientes({ termo: "", page: 1, limit: 1000 });
       setOptions(resp.data.pacientes);
       setShowOptions(true);
       return;
     }
     try {
-      const resp = await getPacientes({ termo: val, page: 1, limit: 5 });
+      const resp = await getPacientes({ termo: val, page: 1, limit: 1000 });
       setOptions(resp.data.pacientes);
       setShowOptions(true);
     } catch {

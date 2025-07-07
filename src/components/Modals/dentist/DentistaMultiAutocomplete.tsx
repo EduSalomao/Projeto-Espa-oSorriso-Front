@@ -81,13 +81,13 @@ export const DentistaMultiAutocomplete: React.FC<DentistaMultiAutocompleteProps>
   const handleSearch = async (val: string) => {
     setTerm(val);
     if (val.length < 2) {
-      const resp = await getDentistas({ termo: "", page: 1, limit: 5 });
+      const resp = await getDentistas({ termo: "", page: 1, limit: 1000 });
       setOptions(resp.data.dentistas.filter(d => !value.some(v => v.id === d.id)));
       setShowOptions(true);
       return;
     }
     try {
-      const resp = await getDentistas({ termo: val, page: 1, limit: 5 });
+      const resp = await getDentistas({ termo: val, page: 1, limit: 1000 });
       // Remove já selecionados das opções
       setOptions(resp.data.dentistas.filter(d => !value.some(v => v.id === d.id)));
       setShowOptions(true);

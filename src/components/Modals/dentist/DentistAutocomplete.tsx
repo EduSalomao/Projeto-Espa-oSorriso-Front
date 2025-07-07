@@ -68,7 +68,7 @@ export const DentistaAutocomplete: React.FC<DentistaAutocompleteProps> = ({
   const handleSearch = async (val: string) => {
     setTerm(val);
     if (val.length < 2) {
-      const resp = await getDentistas({ termo: "", page: 1, limit: 5 });
+      const resp = await getDentistas({ termo: "", page: 1, limit: 1000 });
       setOptions(resp.data.dentistas);
       setShowOptions(true);
       return;

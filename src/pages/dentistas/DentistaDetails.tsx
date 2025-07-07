@@ -135,16 +135,16 @@ const DentistaDetails = () => {
                                 <TableWrapper>
                                     <Table>
                                     <Thead>
-                                        <Tr>
-                                        <Th first>Nome</Th>
-                                        <Th>Tipo</Th>
-                                        <Th>Duração</Th>
-                                        <Th last>Custo</Th>
-                                        </Tr>
+                                        
+                                            <Th first>Nome</Th>
+                                            <Th>Tipo</Th>
+                                            <Th>Duração</Th>
+                                            <Th last>Custo</Th>
+                                        
                                     </Thead>
                                     <Tbody>
                                         {procedimentos.map(proc => (
-                                        <Tr key={proc.id}>
+                                        <Tr onClick={() => navigate(`/procedimentos/${proc.id}`)} key={proc.id}>
                                             <Td>{proc.name}</Td>
                                             <Td>{proc.tipo}</Td>
                                             <Td>{proc.duracao}</Td>

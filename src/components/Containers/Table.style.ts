@@ -31,7 +31,12 @@ export const Th = styled.th`
   border-top-right-radius: ${({ last }: { last?: boolean }) => last ? "8px" : "0"};
 `;
 
-export const Tr = styled.tr``;
+export const Tr = styled.tr`
+  &&:hover {
+    background: #d3d3d3;
+    cursor: pointer
+  }
+`;
 
 export const Td = styled.td`
   color: #3d5582;

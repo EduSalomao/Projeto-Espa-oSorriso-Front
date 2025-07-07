@@ -5,6 +5,7 @@ interface Params {
   termo?: string;
   idDentista?: number | string | null;
   idPaciente?: number | string | null;
+  dateRange?: [Date | null, Date | null] | [];
 }
 
 const endpoints = {
@@ -37,8 +38,10 @@ manutencoes: {
   byId: (id: string | number) => `/manutencoes/${id}`,
   update: (id: string | number) => `/manutencoes/${id}`,
   delete: (id: string | number) => `/manutencoes/${id}`,
-  listWithFilters: ({ page = 1, limit = 10, termo = '', idPaciente = `` }: Params = {}) =>
-      `/manutencoes?page=${page}&limit=${limit}&termo=${encodeURIComponent(termo)}&idPaciente=${idPaciente}`,
+  listWithFilters: ({ page = 1, limit = 10, termo = '', idPaciente = ``, dateRange = [] }: Params = {}) => {
+    const [startDate, endDate] = dateRange;
+    return `/manutencoes?page=${page}&limit=${limit}&termo=${encodeURIComponent(termo)}&idPaciente=${idPaciente}&startDate=${startDate ? new Date(startDate).toISOString() : ''}&endDate=${endDate ? new Date(endDate).toISOString() : ''}`;
+  }
 },
 };
 

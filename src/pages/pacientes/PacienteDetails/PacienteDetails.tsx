@@ -152,15 +152,13 @@ const PacienteDetails = () => {
                             <TableWrapper>
                                 <Table>
                                 <Thead>
-                                    <Tr>
                                     <Th first>Data e Hora</Th>
                                     <Th>Duração</Th>
                                     <Th>Dentista</Th>
-                                    </Tr>
                                 </Thead>
                                 <Tbody>
                                     {manutencoes.map(man => (
-                                    <Tr key={man.id}>
+                                    <Tr onClick={() => navigate(`/manutencoes/${man.id}`)} key={man.id}>
                                         <Td>{man.data_hora}</Td>
                                         <Td>{man.duracao}</Td>
                                         <Td>{man.dentista_nome}</Td>
