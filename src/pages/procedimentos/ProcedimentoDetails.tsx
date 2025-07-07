@@ -7,6 +7,7 @@ import DeleteProcedimentoModal from "../../components/Modals/procedimento/Delete
 import { getProcedimentoById } from "../../api/services/ProcedimentoService";
 import { Procedimento } from "../../api/types/procedimento";
 import { useSnackbar } from "notistack";
+import { Table, TableWrapper, Tbody, Td, Th, Thead, Tr } from "../../components/Containers/Table.style";
 
 const ProcedimentoDetails = () => {
     const navigate = useNavigate();
@@ -59,13 +60,18 @@ const ProcedimentoDetails = () => {
             <S.ContainerDetails>
                 <S.ContainerAside>
                     <S.DescriptionArea>
-                        <S.Title>{procedimento.name}</S.Title>
-                        <S.Data><strong>Tipo:</strong> {procedimento.tipo}</S.Data>
-                        <S.Data><strong>Duração:</strong> {procedimento.duracao}</S.Data>
-                        <S.Data><strong>Custo:</strong> R$ {procedimento.custo.toFixed(2)}</S.Data>
-                        <S.Data><strong>Categoria:</strong> {procedimento.categoria || 'Não informada'}</S.Data>
-                        <S.Data><strong>Descrição:</strong> {procedimento.descricao || 'Não informada'}</S.Data>
-                        <S.Data><strong>Observações:</strong> {procedimento.observacoes || 'Nenhuma'}</S.Data>
+                        <S.Title>🔬 {procedimento.name}</S.Title>
+                        <S.InfoSection>
+                            <S.SectionTitle>📒 Informações</S.SectionTitle>
+                                <S.InfoGrid>
+                                    <S.Label>Tipo:</S.Label><S.Value>{procedimento.tipo}</S.Value>
+                                    <S.Label>Duração:</S.Label><S.Value>{procedimento.duracao}</S.Value>
+                                    <S.Label>Custo:</S.Label><S.Value>R$ {procedimento.custo.toFixed(2)}</S.Value>
+                                    <S.Label>Categoria:</S.Label><S.Value>{procedimento.categoria || 'Não informada'}</S.Value>
+                                    <S.Label>Descrição:</S.Label><S.Value>{procedimento.descricao || 'Não informada'}</S.Value>
+                                    <S.Label>Observações:</S.Label><S.Value>{procedimento.observacoes || 'Nenhuma'}</S.Value>
+                                </S.InfoGrid>
+                        </S.InfoSection>
                     </S.DescriptionArea>
                      <S.ContainerOptions>
                         <S.ContainerOptionsMenu>
@@ -74,12 +80,26 @@ const ProcedimentoDetails = () => {
                         <S.Line/>
                         <S.ContentOptionsMenu>
                             {procedimento.dentistas && procedimento.dentistas.length > 0 ? (
-                                procedimento.dentistas.map(dentista => (
-                                    <S.ContentSetOptionsMenu key={dentista.id}>
-                                        <S.ContentTitleOptionsMenu>{dentista.name}</S.ContentTitleOptionsMenu>
-                                        <S.ContentDescriptionOptionsMenu>CRO: {dentista.cro}</S.ContentDescriptionOptionsMenu>
-                                    </S.ContentSetOptionsMenu>
-                                ))
+                                <TableWrapper>
+                                    <Table>
+                                    <Thead>
+                                        <Th first>Nome</Th>
+                                        <Th>CRO</Th>
+                                        <th>Horario Disponível</th>
+                                    </Thead>
+                                    <Tbody>
+                                        {procedimento.dentistas.map(den => (
+                                        <Tr onClick={() => navigate(`/dentistas/${den.id}`)} key={den.id}>
+                                            <Td>{den.name}</Td>
+                                            <Td>{den.cro}</Td>
+                                            <Td>{den.working_hours}</Td>
+
+                                        </Tr>
+                                        ))}
+                                    </Tbody>
+                                    </Table>
+                                </TableWrapper>
+                                
                             ) : (
                                 <S.ContentDescriptionOptionsMenu>Nenhum dentista vinculado.</S.ContentDescriptionOptionsMenu>
                             )}

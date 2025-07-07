@@ -17,7 +17,10 @@ const ManutencaoCard = ({ manutencao }: ManutencaoCardProps) => {
       <CardInfoGrid>
         <CardInfo><strong>Data e Hora:</strong> {dataFormatada}</CardInfo>
         <CardInfo><strong>Dentista:</strong> {manutencao.dentista_nome}</CardInfo>
-        <CardInfo><strong>Duração:</strong> {manutencao.duracao}</CardInfo>
+        <CardInfo><strong>Duração:</strong> {" "}
+  {manutencao.duracao && manutencao.duracao.length === 8
+    ? manutencao.duracao.slice(0, 5)
+    : manutencao.duracao}</CardInfo>
       </CardInfoGrid>
     </Card>
   );

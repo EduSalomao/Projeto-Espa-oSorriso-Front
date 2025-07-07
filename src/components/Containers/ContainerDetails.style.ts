@@ -146,7 +146,7 @@ export const InfoGrid = styled.div`
   row-gap: 12px;
   column-gap: 20px;
   font-size: 1rem;
-
+  
   @media (max-width: 600px) {
     grid-template-columns: 1fr;
   }
@@ -159,4 +159,18 @@ export const Label = styled.span`
 
 export const Value = styled.span`
   color: #111827;
+`;
+
+export const InfoSection = styled.div`
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e5e7eb;
+`;
+
+export const SectionTitle = styled.h3`
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #1f2937;
+  font-family: 'Roboto Condensed', sans-serif;
 `;

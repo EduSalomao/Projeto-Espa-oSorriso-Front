@@ -41,18 +41,37 @@ const ManutencaoDetails = () => {
         <>
             <S.ContainerDetails>
                 <S.ContainerAside>
-                    <S.DescriptionArea>
-                        <S.Title>Manutenção Agendada</S.Title>
-                        <S.InfoGrid>
-                            <S.Label>Paciente:</S.Label> <S.Value>{manutencao.paciente_nome}</S.Value>
-                            <S.Label>CPF Paciente:</S.Label> <S.Value>{manutencao.paciente_cpf}</S.Value>
-                            <S.Label>Dentista:</S.Label> <S.Value>{manutencao.dentista_nome}</S.Value>
-                            <S.Label>CRO Dentista:</S.Label> <S.Value>{manutencao.dentista_cro}</S.Value>
-                            <S.Label>Data e Hora:</S.Label> <S.Value>{dataHoraFormatada}</S.Value>
-                            <S.Label>Duração:</S.Label> <S.Value>{manutencao.duracao}</S.Value>
-                            <S.Label>Horário de Fim:</S.Label> <S.Value>{dataHoraFimFormatada}</S.Value>
-                        </S.InfoGrid>
-                    </S.DescriptionArea>
+                <S.DescriptionArea>
+                    <S.Title>🦷 Manutenção Agendada</S.Title>
+
+                    <S.InfoSection>
+                    <S.SectionTitle>👤 Paciente</S.SectionTitle>
+                    <S.InfoGrid>
+                        <S.Label>Nome:</S.Label><S.Value>{manutencao.paciente_nome}</S.Value>
+                        <S.Label>CPF:</S.Label><S.Value>{manutencao.paciente_cpf}</S.Value>
+                    </S.InfoGrid>
+                    </S.InfoSection>
+
+                    <S.InfoSection>
+                    <S.SectionTitle>🧑‍⚕️ Dentista</S.SectionTitle>
+                    <S.InfoGrid>
+                        <S.Label>Nome:</S.Label><S.Value>{manutencao.dentista_nome}</S.Value>
+                        <S.Label>CRO:</S.Label><S.Value>{manutencao.dentista_cro}</S.Value>
+                    </S.InfoGrid>
+                    </S.InfoSection>
+
+                    <S.InfoSection>
+                    <S.SectionTitle>📅 Consulta</S.SectionTitle>
+                    <S.InfoGrid>
+                        <S.Label>Data e Hora:</S.Label><S.Value>{dataHoraFormatada}</S.Value>
+                        <S.Label>Duração:</S.Label><S.Value>{" "}
+                            {manutencao.duracao && manutencao.duracao.length === 8
+                                ? manutencao.duracao.slice(0, 5)
+                                : manutencao.duracao}</S.Value>
+                        <S.Label>Horário de Fim:</S.Label><S.Value>{dataHoraFimFormatada}</S.Value>
+                    </S.InfoGrid>
+                    </S.InfoSection>
+                </S.DescriptionArea>
                 </S.ContainerAside>
                 <S.SidebarButtons>
                     <S.ActionButton onClick={() => setIsEditModalOpen(true)}>Editar</S.ActionButton>

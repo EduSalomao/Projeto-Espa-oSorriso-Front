@@ -1,4 +1,4 @@
-import {ContentSetOptionsMenu, ContentOptionsMenu, ContentDescriptionOptionsMenu, ContentTitleOptionsMenu, Line, ContainerOptionsMenu, OptionsMenu, DescriptionArea, Title, Data, ContainerDetails, ContainerAside, ContainerOptions, SidebarButtons, ActionButton } from "../../../components/Containers/ContainerDetails.style";
+import * as S from "../../../components/Containers/ContainerDetails.style";
 import DeletePacientModal from "../../../components/Modals/patient/deletePatientModal/DeletePatientModal";
 import EditPacientModal from "../../../components/Modals/patient/editPatientModal/EditPatientModal";
 import { useParams } from "react-router-dom";
@@ -87,67 +87,72 @@ const PacienteDetails = () => {
     }, [id]);
 
     return (
-    <ContainerDetails>
-        <ContainerAside>
-            <DescriptionArea>
-                <Title>{paciente.name}</Title>
-                <Data>Telefone: {paciente.phone}</Data>
-                <Data>CPF: {paciente.cpf}</Data>
-                <Data>Data de Nascimento: {paciente.birthdate}</Data>
-                <Data>Endereço: {paciente.address}</Data>
-            </DescriptionArea>
-            <ContainerOptions>
-                <ContainerOptionsMenu>
-                    <OptionsMenu selected={selectedTab === "fichaClinica"} onClick={() => handleTabChange("fichaClinica")}>Ficha Clínica</OptionsMenu>
-                    <OptionsMenu selected={selectedTab === "anamnese"} onClick={() => handleTabChange("anamnese")}>Anamnese</OptionsMenu>
-                    <OptionsMenu selected={selectedTab === "orcamentos"} onClick={() => handleTabChange("orcamentos")}>Orçamentos</OptionsMenu>
-                    <OptionsMenu selected={selectedTab === "consultas"} onClick={() => handleTabChange("consultas")}>Consultas</OptionsMenu>
-                    <OptionsMenu selected={selectedTab === "manutencoes"} onClick={() => handleTabChange("manutencoes")}>Manutenções</OptionsMenu>
-                </ContainerOptionsMenu>
-                <Line/>
-                <ContentOptionsMenu>
+    <S.ContainerDetails>
+        <S.ContainerAside>
+            <S.DescriptionArea>
+                <S.Title>👤 {paciente.name}</S.Title>
+                <S.InfoSection>
+                    <S.SectionTitle>📒 Informações</S.SectionTitle>
+                        <S.InfoGrid>
+                            <S.Label>Telefone:</S.Label><S.Value>{paciente.phone}</S.Value>
+                            <S.Label>CPF:</S.Label><S.Value>{paciente.cpf}</S.Value>
+                            <S.Label>Data de Nascimento:</S.Label><S.Value>{paciente.birthdate}</S.Value>
+                            <S.Label>Endereço:</S.Label><S.Value>{paciente.address}</S.Value>
+                        </S.InfoGrid>
+                </S.InfoSection>
+            </S.DescriptionArea>
+            <S.ContainerOptions>
+                <S.ContainerOptionsMenu>
+                    <S.OptionsMenu selected={selectedTab === "fichaClinica"} onClick={() => handleTabChange("fichaClinica")}>Ficha Clínica</S.OptionsMenu>
+                    <S.OptionsMenu selected={selectedTab === "anamnese"} onClick={() => handleTabChange("anamnese")}>Anamnese</S.OptionsMenu>
+                    <S.OptionsMenu selected={selectedTab === "orcamentos"} onClick={() => handleTabChange("orcamentos")}>Orçamentos</S.OptionsMenu>
+                    <S.OptionsMenu selected={selectedTab === "consultas"} onClick={() => handleTabChange("consultas")}>Consultas</S.OptionsMenu>
+                    <S.OptionsMenu selected={selectedTab === "manutencoes"} onClick={() => handleTabChange("manutencoes")}>Manutenções</S.OptionsMenu>
+                </S.ContainerOptionsMenu>
+                <S.Line/>
+                <S.ContentOptionsMenu>
                     {selectedTab === "consultas" && (
                         <>
-                            <ContentSetOptionsMenu>
-                                <ContentTitleOptionsMenu>Próximas Consultas</ContentTitleOptionsMenu>
-                                <ContentDescriptionOptionsMenu>Não há nenhum agendamento</ContentDescriptionOptionsMenu>
-                            </ContentSetOptionsMenu>
-                            <ContentSetOptionsMenu>
-                                <ContentTitleOptionsMenu>Histórico de Consultas</ContentTitleOptionsMenu>
-                                <ContentDescriptionOptionsMenu>Não há nenhum agendamento</ContentDescriptionOptionsMenu>
-                            </ContentSetOptionsMenu>
+                            <S.ContentSetOptionsMenu>
+                                <S.ContentTitleOptionsMenu>Próximas Consultas</S.ContentTitleOptionsMenu>
+                                <S.ContentDescriptionOptionsMenu>Não há nenhum agendamento</S.ContentDescriptionOptionsMenu>
+                            </S.ContentSetOptionsMenu>
+                            <S.ContentSetOptionsMenu>
+                                <S.ContentTitleOptionsMenu>Histórico de Consultas</S.ContentTitleOptionsMenu>
+                                <S.ContentDescriptionOptionsMenu>Não há nenhum agendamento</S.ContentDescriptionOptionsMenu>
+                            </S.ContentSetOptionsMenu>
                         </>
                     )}
                     {selectedTab === "anamnese" && (
                         <>
-                            <ContentSetOptionsMenu>
-                                <ContentTitleOptionsMenu>Perguntas e Respostas</ContentTitleOptionsMenu>
-                                <ContentDescriptionOptionsMenu>Não disponível</ContentDescriptionOptionsMenu>
-                            </ContentSetOptionsMenu>
+                            <S.ContentSetOptionsMenu>
+                                <S.ContentTitleOptionsMenu>Perguntas e Respostas</S.ContentTitleOptionsMenu>
+                                <S.ContentDescriptionOptionsMenu>Não disponível</S.ContentDescriptionOptionsMenu>
+                            </S.ContentSetOptionsMenu>
                         </>
                     )}
                     {selectedTab === "fichaClinica" && (
                         <>
-                            <ContentSetOptionsMenu>
-                                <ContentTitleOptionsMenu>Informações</ContentTitleOptionsMenu>
-                                <ContentDescriptionOptionsMenu>Não disponível</ContentDescriptionOptionsMenu>
-                            </ContentSetOptionsMenu>
+                            <S.ContentSetOptionsMenu>
+                                <S.ContentTitleOptionsMenu>Informações</S.ContentTitleOptionsMenu>
+                                <S.ContentDescriptionOptionsMenu>Não disponível</S.ContentDescriptionOptionsMenu>
+                            </S.ContentSetOptionsMenu>
                         </>
                     )}
                     {selectedTab === "orcamentos" && (
                         <>
-                            <ContentSetOptionsMenu>
-                                <ContentTitleOptionsMenu>Orçamentos realzados</ContentTitleOptionsMenu>
-                                <ContentDescriptionOptionsMenu>Não há nenhum orçamento</ContentDescriptionOptionsMenu>
-                            </ContentSetOptionsMenu>
+                            <S.ContentSetOptionsMenu>
+                                <S.ContentTitleOptionsMenu>Orçamentos realzados</S.ContentTitleOptionsMenu>
+                                <S.ContentDescriptionOptionsMenu>Não há nenhum orçamento</S.ContentDescriptionOptionsMenu>
+                            </S.ContentSetOptionsMenu>
                         </>
                     )}
                     {selectedTab === "manutencoes" && (
-                        <ContentSetOptionsMenu style={{ width: "100%", marginLeft: "0px" }} >
+                        <S.ContentSetOptionsMenu style={{ width: "100%", marginLeft: "0px" }} >
                         {loadingManutencoes ? (
-                            <ContentDescriptionOptionsMenu>Carregando...</ContentDescriptionOptionsMenu>
+                            <S.ContentDescriptionOptionsMenu>Carregando...</S.ContentDescriptionOptionsMenu>
                         ) : manutencoes.length === 0 ? (
-                            <ContentDescriptionOptionsMenu>Nenhuma manutenção associada.</ContentDescriptionOptionsMenu>
+                            <S.ContentDescriptionOptionsMenu>Nenhuma manutenção associada.</S.ContentDescriptionOptionsMenu>
                         ) : (
                             <TableWrapper>
                                 <Table>
@@ -168,25 +173,25 @@ const PacienteDetails = () => {
                                 </Table>
                             </TableWrapper>
                         )}
-                        </ContentSetOptionsMenu>
+                        </S.ContentSetOptionsMenu>
                     )}
                     
                     
-                </ContentOptionsMenu>
-            </ContainerOptions>
+                </S.ContentOptionsMenu>
+            </S.ContainerOptions>
             
-        </ContainerAside>
-        <SidebarButtons>
-            <ActionButton onClick={handleOpenEditModal}>Editar</ActionButton>
-            <ActionButton onClick={handleOpenDeleteModal}>Excluir</ActionButton>
-        </SidebarButtons>
+        </S.ContainerAside>
+        <S.SidebarButtons>
+            <S.ActionButton onClick={handleOpenEditModal}>Editar</S.ActionButton>
+            <S.ActionButton onClick={handleOpenDeleteModal}>Excluir</S.ActionButton>
+        </S.SidebarButtons>
         {/* Modal de Cadastro */}
         <DeletePacientModal isOpen={isDeleteModalOpen} onClose={handleCloseDeleteModal} />
         {/* Modal de Cadastro */}
         <EditPacientModal paciente={paciente} isOpen={isEditModalOpen} onClose={handleCloseEditModal} />
 
       
-    </ContainerDetails>
+    </S.ContainerDetails>
     );
 }
 

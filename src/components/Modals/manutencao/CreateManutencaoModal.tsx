@@ -17,7 +17,7 @@ function CreateManutencaoModal({ isOpen, onClose, onSuccess }: Props) {
     id_paciente: '',
     id_dentista: '',
     data_hora: '',
-    duracao: '01:00:00' // Valor padrão
+    duracao: '01:00' // Valor padrão
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -36,13 +36,14 @@ function CreateManutencaoModal({ isOpen, onClose, onSuccess }: Props) {
         ...form,
         id_paciente: Number(form.id_paciente.id),
         id_dentista: Number(form.id_dentista.id),
+        duracao: `${form.duracao}:00`
       });
       enqueueSnackbar('Manutenção cadastrada com sucesso!', { variant: 'success' });
       setForm({
         id_paciente: '',
         id_dentista: '',
         data_hora: '',
-        duracao: '01:00:00' // Resetando para o valor padrão
+        duracao: '01:00' // Resetando para o valor padrão
       });
       onSuccess();
       onClose();

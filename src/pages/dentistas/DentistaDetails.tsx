@@ -1,4 +1,4 @@
-import {ContentSetOptionsMenu, ContentOptionsMenu, ContentDescriptionOptionsMenu, ContentTitleOptionsMenu, Line, ContainerOptionsMenu, OptionsMenu, DescriptionArea, Title, Data, ContainerDetails, ContainerAside, ContainerOptions, SidebarButtons, ActionButton } from "../../components/Containers/ContainerDetails.style";
+import * as S from "../../components/Containers/ContainerDetails.style";
 import DeleteDentistModal from "../../components/Modals/dentist/deleteDetistModal/DeleteDentistModal";
 import EditDentistModal from "../../components/Modals/dentist/editDentistModal/EditDentistModal";
 import { getProcedimentos } from "../../api/services/ProcedimentoService";
@@ -89,48 +89,54 @@ const DentistaDetails = () => {
     }, [id]);
 
     return (
-    <ContainerDetails>
-        <ContainerAside>
-            <DescriptionArea>
-                <Title>{dentista.name}</Title>
-                <Data>CRO: {dentista.cro}</Data>
-                <Data>Especialização: {dentista.specialization}</Data>
-                <Data>Horário de Trabalho: {dentista.working_hours}</Data>
-                <Data>Telefone: {dentista.phone}</Data>
-                <Data>Email: {dentista.email}</Data>
-                <Data>Endereço: {dentista.address}</Data>
-                <Data>Notas: {dentista.notes}</Data>
-            </DescriptionArea>
-            <ContainerOptions>
-                <ContainerOptionsMenu>
-                    <OptionsMenu selected={selectedTab === "consultas"} onClick={() => handleTabChange("consultas")}>
+    <S.ContainerDetails>
+        <S.ContainerAside>
+            <S.DescriptionArea>
+                <S.Title>🧑‍⚕️ {dentista.name}</S.Title>
+                <S.InfoSection>
+                    <S.SectionTitle>📒 Informações</S.SectionTitle>
+                        <S.InfoGrid>
+                            <S.Label>CRO:</S.Label><S.Value>{dentista.cro}</S.Value>
+                            <S.Label>Especialização:</S.Label><S.Value>{dentista.specialization}</S.Value>
+                            <S.Label>Horário de Trabalho:</S.Label><S.Value>{dentista.working_hours}</S.Value>
+                            <S.Label>Telefone:</S.Label><S.Value>{dentista.phone}</S.Value>
+                            <S.Label>Email:</S.Label><S.Value>{dentista.email}</S.Value>
+                            <S.Label>Endereço:</S.Label><S.Value>{dentista.address}</S.Value>
+                            <S.Label>Notas:</S.Label><S.Value>{dentista.notes}</S.Value>
+                        </S.InfoGrid>
+                </S.InfoSection>
+            </S.DescriptionArea>
+           
+            <S.ContainerOptions>
+                <S.ContainerOptionsMenu>
+                    <S.OptionsMenu selected={selectedTab === "consultas"} onClick={() => handleTabChange("consultas")}>
                         Consultas
-                    </OptionsMenu>
-                    <OptionsMenu selected={selectedTab === "procedimentos"} onClick={() => handleTabChange("procedimentos")}>
+                    </S.OptionsMenu>
+                    <S.OptionsMenu selected={selectedTab === "procedimentos"} onClick={() => handleTabChange("procedimentos")}>
                         Procedimentos
-                    </OptionsMenu>
-                </ContainerOptionsMenu>
-                <Line/>
-                <ContentOptionsMenu>
+                    </S.OptionsMenu>
+                </S.ContainerOptionsMenu>
+                <S.Line/>
+                <S.ContentOptionsMenu>
                     {selectedTab === "consultas" && (
                         <>
-                            <ContentSetOptionsMenu>
-                                <ContentTitleOptionsMenu>Próximas Consultas</ContentTitleOptionsMenu>
-                                <ContentDescriptionOptionsMenu>Não há nenhum agendamento</ContentDescriptionOptionsMenu>
-                            </ContentSetOptionsMenu>
-                            <ContentSetOptionsMenu>
-                                <ContentTitleOptionsMenu>Histórico de Consultas</ContentTitleOptionsMenu>
-                                <ContentDescriptionOptionsMenu>Não há nenhum agendamento</ContentDescriptionOptionsMenu>
-                            </ContentSetOptionsMenu>
+                            <S.ContentSetOptionsMenu>
+                                <S.ContentTitleOptionsMenu>Próximas Consultas</S.ContentTitleOptionsMenu>
+                                <S.ContentDescriptionOptionsMenu>Não há nenhum agendamento</S.ContentDescriptionOptionsMenu>
+                            </S.ContentSetOptionsMenu>
+                            <S.ContentSetOptionsMenu>
+                                <S.ContentTitleOptionsMenu>Histórico de Consultas</S.ContentTitleOptionsMenu>
+                                <S.ContentDescriptionOptionsMenu>Não há nenhum agendamento</S.ContentDescriptionOptionsMenu>
+                            </S.ContentSetOptionsMenu>
                             </>
                         )}
                         {selectedTab === "procedimentos" && (
-                            <ContentSetOptionsMenu style={{ width: "100%", marginLeft: "0px" }} >
+                            <S.ContentSetOptionsMenu style={{ width: "100%", marginLeft: "0px" }} >
                             
                             {loadingProcedimentos ? (
-                                <ContentDescriptionOptionsMenu>Carregando...</ContentDescriptionOptionsMenu>
+                                <S.ContentDescriptionOptionsMenu>Carregando...</S.ContentDescriptionOptionsMenu>
                             ) : procedimentos.length === 0 ? (
-                                <ContentDescriptionOptionsMenu>Nenhum procedimento associado.</ContentDescriptionOptionsMenu>
+                                <S.ContentDescriptionOptionsMenu>Nenhum procedimento associado.</S.ContentDescriptionOptionsMenu>
                             ) : (
                                 <TableWrapper>
                                     <Table>
@@ -155,25 +161,25 @@ const DentistaDetails = () => {
                                     </Table>
                                 </TableWrapper>
                             )}
-                            </ContentSetOptionsMenu>
+                            </S.ContentSetOptionsMenu>
                         )}
                     
                     
-                </ContentOptionsMenu>
-            </ContainerOptions>
+                </S.ContentOptionsMenu>
+            </S.ContainerOptions>
             
-        </ContainerAside>
-        <SidebarButtons>
-            <ActionButton onClick={handleOpenEditModal}>Editar</ActionButton>
-            <ActionButton onClick={handleOpenDeleteModal}>Excluir</ActionButton>
-        </SidebarButtons>
+        </S.ContainerAside>
+        <S.SidebarButtons>
+            <S.ActionButton onClick={handleOpenEditModal}>Editar</S.ActionButton>
+            <S.ActionButton onClick={handleOpenDeleteModal}>Excluir</S.ActionButton>
+        </S.SidebarButtons>
         {/* Modal de Cadastro */}
         <DeleteDentistModal isOpen={isDeleteModalOpen} onClose={handleCloseDeleteModal} />
         {/* Modal de Cadastro */}
         <EditDentistModal dentista={dentista} isOpen={isEditModalOpen} onClose={handleCloseEditModal} />
 
       
-    </ContainerDetails>
+    </S.ContainerDetails>
     );
 }
 
