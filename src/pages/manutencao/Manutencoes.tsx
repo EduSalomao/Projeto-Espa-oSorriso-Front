@@ -106,9 +106,9 @@ const ManutencoesList = () => {
             spinning={spinning}
             actionButtons={
                 <>
-                    <ActionButton onClick={() => setIsSearchModalOpen(true)}>Pesquisar</ActionButton>
+                    <ActionButton onClick={() => setIsSearchModalOpen(true)}>Pesquisar Nome</ActionButton>
+                    <ActionButton onClick={() => setDateRangeModalOpen(true)}>Pesquisar Data</ActionButton>
                     <ActionButton onClick={() => setIsCreateModalOpen(true)}>Cadastrar</ActionButton>
-                    <ActionButton onClick={() => setDateRangeModalOpen(true)}>Data</ActionButton>
                 </>
             }
         >
