@@ -16,7 +16,7 @@ const ProcedimentoCard = ({ procedimento }: ProcedimentoCardProps) => {
       <CardLine />
       <CardInfoGrid>
         <CardInfo><strong>Tipo:</strong> {procedimento.tipo}</CardInfo>
-        <CardInfo><strong>Custo:</strong> R$ {procedimento.custo.toFixed(2)}</CardInfo>
+        <CardInfo><strong>Custo:</strong> R$ {procedimento.custo.toFixed(2).replace('.', ',')}</CardInfo>
         <CardInfo><strong>Duração:</strong> {" "}
   {procedimento.duracao && procedimento.duracao.length === 8
     ? procedimento.duracao.slice(0, 5)

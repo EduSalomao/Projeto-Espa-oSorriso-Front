@@ -39,7 +39,7 @@ export const CardLine = styled.hr`
 
 export const CardInfoGrid = styled.div`
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: 1fr 1fr;
   column-gap: 5px;
   row-gap: 0px;
   padding: 0 10px;

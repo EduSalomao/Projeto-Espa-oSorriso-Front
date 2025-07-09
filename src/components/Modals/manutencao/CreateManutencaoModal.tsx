@@ -17,7 +17,8 @@ function CreateManutencaoModal({ isOpen, onClose, onSuccess }: Props) {
     id_paciente: '',
     id_dentista: '',
     data_hora: '',
-    duracao: '01:00' // Valor padrão
+    duracao: '01:00', // Valor padrão
+    price: 0
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -26,7 +27,7 @@ function CreateManutencaoModal({ isOpen, onClose, onSuccess }: Props) {
 
     console.log("Form data:", form);
   const handleSave = async () => {
-    if (!form.id_paciente || !form.id_dentista || !form.data_hora || !form.duracao) {
+    if (!form.id_paciente || !form.id_dentista || !form.data_hora || !form.duracao || form.price <= 0) {
       enqueueSnackbar('Preencha todos os campos obrigatórios.', { variant: 'warning' });
       return;
     }
@@ -43,7 +44,8 @@ function CreateManutencaoModal({ isOpen, onClose, onSuccess }: Props) {
         id_paciente: '',
         id_dentista: '',
         data_hora: '',
-        duracao: '01:00' // Resetando para o valor padrão
+        duracao: '01:00', // Resetando para o valor padrão
+        price: 0
       });
       onSuccess();
       onClose();
@@ -83,6 +85,10 @@ function CreateManutencaoModal({ isOpen, onClose, onSuccess }: Props) {
           <S.FieldWrapper style={{ width: "48%" }}>
             <S.Label htmlFor="duracao">Duração *</S.Label>
             <S.MaskedInput mask="00:00" name="duracao" value={form.duracao} onAccept={(value: any) => setForm(prev => ({ ...prev, duracao: value }))} />
+          </S.FieldWrapper>
+          <S.FieldWrapper style={{ width: "48%" }}>
+            <S.Label htmlFor="price">Preço *</S.Label>
+            <S.Input name="price" type="number" value={form.price} onChange={handleChange} placeholder="Preço" />
           </S.FieldWrapper>
         </S.FormContainer>
         <S.ButtonGroup>

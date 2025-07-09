@@ -46,6 +46,7 @@ const ManutencoesList = () => {
             : null;
             const response = await getManutencoes({ page: currentPage, limit, termo: searchTerm, dateRange: [startDateFormatted, endDateFormatted] });
            
+            console.log("Response data:", response.data);
             if (response.data.manutencoes.length === 0) {
                 enqueueSnackbar('Nenhuma manutenção encontrada.', { variant: 'info' });
                 return;

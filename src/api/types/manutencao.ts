@@ -10,6 +10,7 @@ export interface Manutencao {
     id_dentista: number;
     dentista_nome: string;
     dentista_cro: string;
+    price: number;
   }
   
   export interface ManutencaoDetalhada extends Manutencao {

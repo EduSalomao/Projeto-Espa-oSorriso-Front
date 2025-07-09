@@ -21,6 +21,7 @@ const ManutencaoCard = ({ manutencao }: ManutencaoCardProps) => {
   {manutencao.duracao && manutencao.duracao.length === 8
     ? manutencao.duracao.slice(0, 5)
     : manutencao.duracao}</CardInfo>
+        <CardInfo><strong>Preço:</strong> R$ {manutencao.price.toFixed(2).replace('.', ',')}</CardInfo>
       </CardInfoGrid>
     </Card>
   );

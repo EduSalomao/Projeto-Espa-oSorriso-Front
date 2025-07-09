@@ -118,7 +118,7 @@ export const DentistaMultiAutocomplete: React.FC<DentistaMultiAutocompleteProps>
         type="text"
         value={term}
         onChange={e => handleSearch(e.target.value)}
-        placeholder="Buscar dentista por nome ou CRO"
+        placeholder="Buscar dentista por nome ou CRO (Clique para abrir a listagem)"
         autoComplete="off"
         onFocus={() => handleSearch("")}
         onBlur={() => setTimeout(() => setShowOptions(false), 150)}

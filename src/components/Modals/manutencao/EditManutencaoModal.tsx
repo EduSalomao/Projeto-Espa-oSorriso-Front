@@ -13,13 +13,18 @@ type Props = {
 
 function EditManutencaoModal({ isOpen, onClose, onSuccess, manutencao }: Props) {
   const { enqueueSnackbar } = useSnackbar();
-  const [form, setForm] = useState({ data_hora: '', duracao: '' });
+  const [form, setForm] = useState({ data_hora: '', duracao: '', price: 0 });
 
   useEffect(() => {
     if (manutencao) {
         // Formata a data para o input datetime-local
-      const dataHora = new Date(manutencao.data_hora).toISOString().slice(0, 16);
-      setForm({ data_hora: dataHora, duracao: manutencao.duracao });
+      const data = new Date(manutencao.data_hora);
+      // Corrige para UTC-3 (ajustando 3 horas)
+      data.setHours(data.getHours() - 3);
+
+      // Formata para input datetime-local
+      const dataHora = data.toISOString().slice(0, 16);
+      setForm({ data_hora: dataHora, duracao: manutencao.duracao, price: manutencao.price });
     }
   }, [manutencao]);
 
@@ -55,6 +60,10 @@ function EditManutencaoModal({ isOpen, onClose, onSuccess, manutencao }: Props) 
             <S.Label htmlFor="duracao">Duração</S.Label>
             <S.MaskedInput mask="00:00:00" name="duracao" value={form.duracao} onAccept={(value: any) => setForm(prev => ({ ...prev, duracao: value }))} />
           </S.FieldWrapper>
+           <S.FieldWrapper style={{ width: "48%" }}>
+              <S.Label htmlFor="price">Preço *</S.Label>
+              <S.Input name="price" type="number" value={form.price} onChange={handleChange} placeholder="Preço" />
+            </S.FieldWrapper>
         </S.FormContainer>
         <S.ButtonGroup>
           <S.Button onClick={handleSave}>Salvar</S.Button>
