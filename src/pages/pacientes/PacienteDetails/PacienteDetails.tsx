@@ -73,8 +73,7 @@ const PacienteDetails = () => {
                 const data = await response.json();
                 if (!response.ok) {
                     throw new Error(data.error || "Erro ao buscar paciente");
-                }
-                data.birthdate = new Date(data.birthdate).toLocaleDateString("pt-BR");
+                };
                 setPaciente(data);
             } catch (error) {
                 console.error("Erro ao buscar paciente:", error);
@@ -96,7 +95,7 @@ const PacienteDetails = () => {
                         <S.InfoGrid>
                             <S.Label>Telefone:</S.Label><S.Value>{paciente.phone}</S.Value>
                             <S.Label>CPF:</S.Label><S.Value>{paciente.cpf}</S.Value>
-                            <S.Label>Data de Nascimento:</S.Label><S.Value>{paciente.birthdate}</S.Value>
+                            <S.Label>Data de Nascimento:</S.Label><S.Value>{new Date(paciente.birthdate).toLocaleDateString("pt-BR")}</S.Value>
                             <S.Label>Endereço:</S.Label><S.Value>{paciente.address}</S.Value>
                         </S.InfoGrid>
                 </S.InfoSection>

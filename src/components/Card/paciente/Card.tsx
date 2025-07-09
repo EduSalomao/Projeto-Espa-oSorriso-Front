@@ -12,7 +12,7 @@ const PacienteCard = ({ id, nome, cpf, telefone, nascimento, endereco }) => {
       <CardInfoGrid>
         <CardInfo><strong>CPF:</strong> {cpf}</CardInfo>
         <CardInfo><strong>Telefone:</strong> {telefone}</CardInfo>
-        <CardInfo><strong>Data de nascimento:</strong> {nascimento}</CardInfo>
+        <CardInfo><strong>Data de nascimento:</strong> {nascimento.split("-").reverse().join("/")}</CardInfo>
         <CardInfo><strong>Endereço:</strong> {endereco}</CardInfo>
       </CardInfoGrid>
     </Card>

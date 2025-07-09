@@ -29,7 +29,7 @@ type Props = {
 
 function EditPacientModal({ paciente, isOpen, onClose }: Props) {
   const { enqueueSnackbar } = useSnackbar();
-
+  
   const [form, setForm] = useState<PatientFormData>({
     name: paciente.name,
     birthdate: paciente.birthdate,
@@ -38,6 +38,8 @@ function EditPacientModal({ paciente, isOpen, onClose }: Props) {
     address: paciente.address,
   });
   
+
+
   useEffect(() => {
     setForm({
       name: paciente.name,

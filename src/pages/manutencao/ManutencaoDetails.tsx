@@ -69,7 +69,7 @@ const ManutencaoDetails = () => {
                                 ? manutencao.duracao.slice(0, 5)
                                 : manutencao.duracao}</S.Value>
                         <S.Label>Horário de Fim:</S.Label><S.Value>{dataHoraFimFormatada}</S.Value>
-                        <S.Label>Preço:</S.Label><S.Value>{manutencao.price}</S.Value>
+                        <S.Label>Preço:</S.Label><S.Value>R$ {manutencao.price.toFixed(2)}</S.Value>
                     </S.InfoGrid>
                     </S.InfoSection>
                 </S.DescriptionArea>
