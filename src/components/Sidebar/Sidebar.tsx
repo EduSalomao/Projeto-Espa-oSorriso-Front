@@ -9,8 +9,9 @@ import {
   FaProcedures,
   FaChevronLeft,
   FaChevronRight,
-  FaTools, // Importar ícone
+  FaTools,
   FaCalendar,
+  FaNotesMedical, // Ícone para Consultas
 } from "react-icons/fa";
 
 export default function Sidebar({ collapsed, setCollapsed }) {
@@ -47,6 +48,12 @@ export default function Sidebar({ collapsed, setCollapsed }) {
           label="Manutenção"
           collapsed={collapsed}
           to="/manutencoes"
+        />
+        <MenuItemButton
+          icon={FaNotesMedical}
+          label="Consulta"
+          collapsed={collapsed}
+          to="/consultas"
         />
     </SidebarContent>
   );
