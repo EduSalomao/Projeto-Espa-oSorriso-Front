@@ -53,9 +53,10 @@ const ConsultasList = () => {
             if (response.data.consultas.length === 0) {
                 if (searchTerm || searchDate) {
                     enqueueSnackbar('Nenhuma consulta encontrada.', { variant: 'info' });
+                } else {
+                    setConsultas([]);
+                    setTotalItems(0);
                 }
-                setConsultas([]);
-                setTotalItems(0);
                 return;
             }
 
@@ -64,7 +65,6 @@ const ConsultasList = () => {
             setCurrentPage(response.data.page);
         } catch (error) {
             console.error("Erro ao carregar consultas:", error);
-            enqueueSnackbar("Erro ao carregar consultas.", { variant: 'error' });
         } finally {
             setSpinning(false);
         }
@@ -93,11 +93,7 @@ const ConsultasList = () => {
             }
         ]);
         setSearchDate(false); 
-        if (currentPage === 1) {
-            fetchItems();
-        } else {
-            setCurrentPage(1);
-        }
+        setCurrentPage(1);
     }
 
     return (
