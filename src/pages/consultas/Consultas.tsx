@@ -9,8 +9,8 @@ import SearchConsultaModal from "../../components/Modals/consulta/SearchConsulta
 import { useSnackbar } from "notistack";
 import { DateRange } from 'react-date-range';
 import { format } from 'date-fns';
-import 'react-date-range/dist/styles.css'; // main css file
-import 'react-date-range/dist/theme/default.css'; // theme css file
+import 'react-date-range/dist/styles.css'; 
+import 'react-date-range/dist/theme/default.css';
 import * as S from "../../components/Modals/Modal.styles";
 
 
@@ -51,9 +51,13 @@ const ConsultasList = () => {
                 endDate: searchDate ? endDateFormatted : ''
             });
 
-            if (response.data.consultas.length === 0 && currentPage === 1) {
-                enqueueSnackbar('Nenhuma consulta encontrada com os filtros aplicados.', { variant: 'info' });
+            if (response.data.consultas.length === 0) {
+                if (searchTerm || searchDate) {
+                    enqueueSnackbar('Nenhuma consulta encontrada.', { variant: 'info' });
+                    return;
+                }
             }
+
             setConsultas(response.data.consultas);
             setTotalItems(response.data.total);
             setCurrentPage(response.data.page);
@@ -88,9 +92,9 @@ const ConsultasList = () => {
                 key: 'selection'
             }
         ]);
-        setSearchDate(false); // Desativa o filtro de data
+        setSearchDate(false); 
         if (currentPage === 1) {
-            // A alteração no estado já vai disparar o fetchItems
+            fetchItems();
         } else {
             setCurrentPage(1);
         }
@@ -146,7 +150,7 @@ const ConsultasList = () => {
             <CreateConsultaModal
                 isOpen={isCreateModalOpen}
                 onClose={() => setIsCreateModalOpen(false)}
-                onSuccess={handleRefresh} // Usar handleRefresh para limpar e recarregar
+                onSuccess={handleRefresh}
             />
             <SearchConsultaModal
                 isOpen={isSearchModalOpen}
