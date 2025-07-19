@@ -40,22 +40,23 @@ const ConsultasList = () => {
     const fetchItems = useCallback(async () => {
         setSpinning(true);
         try {
-            const startDateFormatted = dateRange[0].startDate ? format(dateRange[0].startDate, "yyyy-MM-dd'T'00:00:00") : '';
-            const endDateFormatted = dateRange[0].endDate ? format(dateRange[0].endDate, "yyyy-MM-dd'T'23:59:59") : '';
+            const startDateFormatted = dateRange[0].startDate ? format(dateRange[0].startDate, "yyyy-MM-dd'T'HH:mm:ss") : null;
+            const endDateFormatted = dateRange[0].endDate ? format(dateRange[0].endDate, "yyyy-MM-dd'T'23:59:59") : null;
 
             const response = await getConsultas({
                 page: currentPage,
                 limit,
                 termo: searchTerm,
-                startDate: searchDate ? startDateFormatted : '',
-                endDate: searchDate ? endDateFormatted : ''
+                dateRange: searchDate ? [startDateFormatted, endDateFormatted] : []
             });
 
             if (response.data.consultas.length === 0) {
                 if (searchTerm || searchDate) {
                     enqueueSnackbar('Nenhuma consulta encontrada.', { variant: 'info' });
-                    return;
                 }
+                setConsultas([]);
+                setTotalItems(0);
+                return;
             }
 
             setConsultas(response.data.consultas);
@@ -69,10 +70,9 @@ const ConsultasList = () => {
         }
     }, [currentPage, limit, searchTerm, searchDate, dateRange, enqueueSnackbar]);
 
-
     useEffect(() => {
         fetchItems();
-    }, [currentPage, searchTerm, searchDate, fetchItems]);
+    }, [fetchItems]);
 
     const handlePageChange = (newPage: number) => {
         setCurrentPage(newPage);

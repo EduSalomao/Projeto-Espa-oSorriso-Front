@@ -48,8 +48,12 @@ const endpoints = {
     byId: (id: string | number) => `/consultas/${id}`,
     update: (id: string | number) => `/consultas/${id}`,
     delete: (id: string | number) => `/consultas/${id}`,
-    listWithFilters: ({ page = 1, limit = 10, termo = '', startDate = '', endDate = '' }: Params = {}) =>
-      `/consultas?page=${page}&limit=${limit}&termo=${encodeURIComponent(termo)}&startDate=${startDate}&endDate=${endDate}`,
+    listWithFilters: ({ page = 1, limit = 10, termo = '', dateRange = [] }: Params = {}) => {
+      const [startDate, endDate] = dateRange;
+      const startDateISO = startDate ? new Date(startDate as string).toISOString() : '';
+      const endDateISO = endDate ? new Date(endDate as string).toISOString() : '';
+      return `/consultas?page=${page}&limit=${limit}&termo=${encodeURIComponent(termo)}&startDate=${startDateISO}&endDate=${endDateISO}`;
+    }
   },
 };
 
