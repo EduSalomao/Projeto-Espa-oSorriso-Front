@@ -41,14 +41,6 @@ const ConsultaDetails = () => {
                 <S.DescriptionArea>
                     <S.Title>📄 Detalhes da Consulta</S.Title>
                     <S.InfoSection>
-                        <S.SectionTitle>📅 Agendamento</S.SectionTitle>
-                        <S.InfoGrid>
-                            <S.Label>Data e Hora:</S.Label><S.Value>{new Date(consulta.data_hora).toLocaleString('pt-BR')}</S.Value>
-                            <S.Label>Duração:</S.Label><S.Value>{consulta.duracao?.slice(0, 5)}</S.Value>
-                            <S.Label>Motivo:</S.Label><S.Value>{consulta.motivo}</S.Value>
-                        </S.InfoGrid>
-                    </S.InfoSection>
-                    <S.InfoSection>
                         <S.SectionTitle>👤 Paciente</S.SectionTitle>
                         <S.InfoGrid>
                             <S.Label>Nome:</S.Label><S.Value>{consulta.paciente_nome}</S.Value>
@@ -60,6 +52,15 @@ const ConsultaDetails = () => {
                         <S.InfoGrid>
                             <S.Label>Nome:</S.Label><S.Value>{consulta.dentista_nome}</S.Value>
                             <S.Label>CRO:</S.Label><S.Value>{consulta.dentista_cro}</S.Value>
+                        </S.InfoGrid>
+                    </S.InfoSection>
+                    <S.InfoSection>
+                        <S.SectionTitle>📅 Consulta</S.SectionTitle>
+                        <S.InfoGrid>
+                            <S.Label>Data e Hora:</S.Label><S.Value>{new Date(consulta.data_hora).toLocaleString('pt-BR')}</S.Value>
+                            <S.Label>Duração:</S.Label><S.Value>{consulta.duracao?.slice(0, 5)}</S.Value>
+                            <S.Label>Data e Hora Fim:</S.Label><S.Value>{new Date(consulta.data_hora_fim).toLocaleString('pt-BR')}</S.Value>
+                            <S.Label>Motivo:</S.Label><S.Value>{consulta.motivo}</S.Value>
                         </S.InfoGrid>
                     </S.InfoSection>
                 </S.DescriptionArea>
