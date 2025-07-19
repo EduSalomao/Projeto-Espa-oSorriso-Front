@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import * as S from "../Modal.styles.ts";
 import { useSnackbar } from 'notistack';
 import { updateConsulta } from "../../../api/services/ConsultaService";
-import { getProcedimentos } from "../../../api/services/ProcedimentoService.ts";
 import { Consulta } from "../../../api/types/consulta";
 import { Dentista } from "../../../api/types/dentista.ts";
 import { Paciente } from "../../../api/types/paciente.ts";
@@ -32,8 +31,10 @@ function EditConsultaModal({ isOpen, onClose, onSuccess, consulta }: Props) {
   useEffect(() => {
     if (consulta) {
       const data = new Date(consulta.data_hora);
-      data.setHours(data.getHours() - 3);
-      const dataHoraLocal = data.toISOString().slice(0, 16);
+      // Ajuste para o fuso horário local antes de formatar
+      const offset = data.getTimezoneOffset();
+      const adjustedDate = new Date(data.getTime() - (offset*60*1000));
+      const dataHoraLocal = adjustedDate.toISOString().slice(0, 16);
 
       setForm({
         data_hora: dataHoraLocal,
@@ -41,7 +42,11 @@ function EditConsultaModal({ isOpen, onClose, onSuccess, consulta }: Props) {
         motivo: consulta.motivo,
         paciente: { id: consulta.id_paciente, name: consulta.paciente_nome, cpf: consulta.paciente_cpf } as Paciente,
         dentista: { id: consulta.id_dentista, name: consulta.dentista_nome, cro: consulta.dentista_cro } as Dentista,
-        procedimentos: consulta.procedimentos || []
+        procedimentos: consulta.procedimentos.map(p => ({
+            id: p.id,
+            name: p.nome, // Corrigido para 'p.nome' que vem da API
+            ...p
+        })) || []
       });
     }
   }, [consulta]);
@@ -76,7 +81,7 @@ function EditConsultaModal({ isOpen, onClose, onSuccess, consulta }: Props) {
   };
 
   if (!isOpen) return null;
-  
+
   return (
     <S.ModalOverlay>
       <S.DateTimePickerStyle />
