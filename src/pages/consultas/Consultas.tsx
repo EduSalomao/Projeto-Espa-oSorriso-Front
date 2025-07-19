@@ -1,96 +1,77 @@
-import React, { useEffect, useState, useCallback } from "react";
+// src/pages/consultas/Consultas.tsx
+import { useEffect, useState, useCallback } from "react";
 import { CardListView } from "../../components/Containers/CardListView";
-import CreateConsultaModal from "../../components/Modals/consulta/CreateConsultaModal";
-import SearchConsultaModal from "../../components/Modals/consulta/SearchConsultaModal";
-import ConsultaCard from "../../components/Card/consulta/Card";
 import { ActionButton } from "../../components/Buttons/Button.style";
 import { getConsultas } from "../../api/services/ConsultaService";
 import { Consulta } from "../../api/types/consulta";
-import { enqueueSnackbar } from "notistack";
-import { DateRange } from 'react-date-range';
-import { format } from 'date-fns';
-import 'react-date-range/dist/styles.css'; 
-import 'react-date-range/dist/theme/default.css';
-import * as S from "../../components/Modals/Modal.styles"
+import ConsultaCard from "../../components/Card/consulta/Card";
+import CreateConsultaModal from "../../components/Modals/consulta/CreateConsultaModal";
+import SearchConsultaModal from "../../components/Modals/consulta/SearchConsultaModal";
+import { useSnackbar } from "notistack";
+
+type SearchParams = {
+  termo?: string;
+  startDate?: string;
+  endDate?: string;
+};
 
 const ConsultasList = () => {
     const [consultas, setConsultas] = useState<Consulta[]>([]);
     const [totalItems, setTotalItems] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
-    
     const [limit] = useState(5);
-    const [searchTerm, setSearchTerm] = useState('');
     const [spinning, setSpinning] = useState(false);
+    const [searchParams, setSearchParams] = useState<SearchParams>({});
+
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
     const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
+    const { enqueueSnackbar } = useSnackbar();
 
-    const [dateRangeModalOpen, setDateRangeModalOpen] = useState(false);
-    const [dateRange, setDateRange] = useState([
-        {
-        startDate: new Date(),
-        endDate: null,
-        key: 'selection'
-        }
-    ]);
-    const [searchDate, setSearchDate] = useState(false);
-
-    
-    const fetchItems = useCallback(async () => {
+    const fetchItems = useCallback(async (page: number, params: SearchParams) => {
         setSpinning(true);
         try {
-            const startDateFormatted = format(dateRange[0].startDate, "yyyy-MM-dd'T'HH:mm:ss");
-            const endDateFormatted = dateRange[0].endDate 
-            ? format(dateRange[0].endDate, "yyyy-MM-dd'T'23:59:59") 
-            : null;
-            const response = await getConsultas({ page: currentPage, limit, termo: searchTerm, dateRange: [startDateFormatted, endDateFormatted] });
-           
-            if (response.data.consultas.length === 0) {
-                enqueueSnackbar('Nenhuma consulta encontrada.', { variant: 'info' });
+            const response = await getConsultas({ page, limit, ...params });
+            if (response.data.consultas.length === 0 && page === 1) {
+                enqueueSnackbar('Nenhuma consulta encontrada com os filtros aplicados.', { variant: 'info' });
             }
             setConsultas(response.data.consultas);
             setTotalItems(response.data.total);
-            
+            setCurrentPage(response.data.page);
         } catch (error) {
             console.error("Erro ao carregar consultas:", error);
+            enqueueSnackbar("Erro ao carregar consultas.", { variant: 'error' });
         } finally {
-            
             setSpinning(false);
         }
-    }, [currentPage, limit, searchTerm, searchDate]);
+    }, [limit, enqueueSnackbar]);
 
     useEffect(() => {
-        fetchItems();
-    }, [fetchItems]);
+        fetchItems(currentPage, searchParams);
+    }, [currentPage, searchParams, fetchItems]);
 
     const handlePageChange = (newPage: number) => {
         setCurrentPage(newPage);
     };
     
-    const handleSearch = (term: string) => {
-        setSearchTerm(term);
-        setCurrentPage(1); 
+    const handleSearch = (params: SearchParams) => {
+        setSearchParams(params);
+        setCurrentPage(1);
     };
 
     const handleRefresh = () => {
-        setSearchTerm('');
-        setDateRange([
-            {
-                startDate: new Date(),
-                endDate: null,
-                key: 'selection'
-            }
-        ]);
-        setSearchDate(!searchDate);
-        
-        setCurrentPage(1);
+        setSearchParams({});
+        if (currentPage === 1) {
+            fetchItems(1, {});
+        } else {
+            setCurrentPage(1);
+        }
     }
 
     return (
-        
         <CardListView
             items={consultas}
-            renderCard={(consulta, idx) => (
-                <ConsultaCard key={idx} consulta={consulta} />
+            renderCard={(consulta) => (
+                <ConsultaCard key={consulta.id} consulta={consulta} />
             )}
             currentPage={currentPage}
             totalItems={totalItems}
@@ -100,49 +81,20 @@ const ConsultasList = () => {
             spinning={spinning}
             actionButtons={
                 <>
-                    <ActionButton onClick={() => setIsSearchModalOpen(true)}>Pesquisar Nome</ActionButton>
-                    <ActionButton onClick={() => setDateRangeModalOpen(true)}>Pesquisar Data</ActionButton>
+                    <ActionButton onClick={() => setIsSearchModalOpen(true)}>Pesquisar Por Nome</ActionButton>
+                    <ActionButton onClick={() => setIsSearchModalOpen(true)}>Pesquisar Por Data</ActionButton>
                     <ActionButton onClick={() => setIsCreateModalOpen(true)}>Cadastrar</ActionButton>
                 </>
             }
         >
-            {dateRangeModalOpen && (
-                <S.ModalOverlay>
-                    <S.Container style={{width: 'auto'}}>
-                        <S.Title>Pesquisar por Datas</S.Title>
-                        <S.FormContainer style={{justifyContent: 'center'}}>
-                            <DateRange
-                            editableDateInputs={true}
-                            onChange={item => setDateRange([item.selection])}
-                            moveRangeOnFirstSelection={false}
-                            ranges={dateRange}
-                            />
-                        </S.FormContainer>
-                        <S.ButtonGroup style={{marginTop: '20px'}}>
-                            <S.Button onClick={() => {
-                                setSearchDate(!searchDate);
-                                setDateRangeModalOpen(false);
-                            }}>
-                                Filtrar
-                            </S.Button>
-                            <S.Button onClick={() => setDateRangeModalOpen(false)}>
-                                Fechar
-                            </S.Button>
-                        </S.ButtonGroup>
-                    
-                    </S.Container>
-                </S.ModalOverlay>
-
-            )}
-            
-            <CreateConsultaModal 
-                isOpen={isCreateModalOpen} 
+            <CreateConsultaModal
+                isOpen={isCreateModalOpen}
                 onClose={() => setIsCreateModalOpen(false)}
-                onSuccess={fetchItems}
+                onSuccess={() => fetchItems(currentPage, searchParams)}
             />
-            <SearchConsultaModal 
-                isOpen={isSearchModalOpen} 
-                onClose={() => setIsSearchModalOpen(false)} 
+            <SearchConsultaModal
+                isOpen={isSearchModalOpen}
+                onClose={() => setIsSearchModalOpen(false)}
                 onSearch={handleSearch}
             />
         </CardListView>

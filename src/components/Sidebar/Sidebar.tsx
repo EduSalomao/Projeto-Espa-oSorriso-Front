@@ -44,16 +44,16 @@ export default function Sidebar({ collapsed, setCollapsed }) {
           to="/procedimentos"
         />
         <MenuItemButton
+          icon={FaNotesMedical} // Novo item
+          label="Consulta"
+          collapsed={collapsed}
+          to="/consultas"
+        />
+        <MenuItemButton
           icon={FaTools}
           label="Manutenção"
           collapsed={collapsed}
           to="/manutencoes"
-        />
-        <MenuItemButton
-          icon={FaNotesMedical}
-          label="Consulta"
-          collapsed={collapsed}
-          to="/consultas"
         />
     </SidebarContent>
   );

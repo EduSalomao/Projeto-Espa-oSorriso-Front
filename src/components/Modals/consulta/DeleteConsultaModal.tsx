@@ -1,6 +1,8 @@
-import * as S from "../patient/deletePatientModal/DeletePatientModal.style";
+// src/components/Modals/consulta/DeleteConsultaModal.tsx
+import React from 'react';
 import { useSnackbar } from 'notistack';
-import { deleteConsulta } from "../../../api/services/ConsultaService";
+import * as S from '../Modal.styles';
+import { deleteConsulta } from '../../../api/services/ConsultaService';
 
 type Props = {
   isOpen: boolean;
@@ -9,19 +11,24 @@ type Props = {
   consultaId: number | null;
 };
 
-function DeleteConsultaModal({ isOpen, onClose, onSuccess, consultaId }: Props) {
+const DeleteConsultaModal: React.FC<Props> = ({ isOpen, onClose, onSuccess, consultaId }) => {
   const { enqueueSnackbar } = useSnackbar();
 
   const handleDelete = async () => {
-    if (!consultaId) return;
+    if (!consultaId) {
+        enqueueSnackbar('ID da consulta inválido.', { variant: 'error' });
+        return
+    };
+
     try {
       await deleteConsulta(consultaId);
       enqueueSnackbar('Consulta excluída com sucesso!', { variant: 'success' });
       onSuccess();
       onClose();
     } catch (error: any) {
-      console.error(error);
-      enqueueSnackbar(error.response?.data?.error || "Erro ao excluir consulta.", { variant: 'error' });
+      console.error("Falha ao excluir consulta:", error);
+      const errorMessage = error?.response?.data?.error || error?.message || 'Erro ao excluir consulta.';
+      enqueueSnackbar(errorMessage, { variant: 'error' });
     }
   };
 
@@ -29,16 +36,19 @@ function DeleteConsultaModal({ isOpen, onClose, onSuccess, consultaId }: Props) 
 
   return (
     <S.ModalOverlay>
-      <S.ModalContent>
-        <S.Title>Excluir Consulta</S.Title>
-        <S.Description>Deseja realmente excluir esta consulta?<br/>Esta ação é irreversível!</S.Description>
+      <S.Container>
+        <S.Title>Confirmar Exclusão</S.Title>
+        <p style={{ fontFamily: 'var(--font-roboto)', fontSize: '18px', textAlign: 'center' }}>
+          Tem certeza de que deseja excluir esta consulta? <br/>
+          Esta ação não pode ser desfeita.
+        </p>
         <S.ButtonGroup>
-          <S.Button onClick={handleDelete}>Excluir</S.Button>
+          <S.DeleteButton onClick={handleDelete}>Excluir</S.DeleteButton>
           <S.CancelButton onClick={onClose}>Cancelar</S.CancelButton>
         </S.ButtonGroup>
-      </S.ModalContent>
+      </S.Container>
     </S.ModalOverlay>
   );
-}
+};
 
 export default DeleteConsultaModal;

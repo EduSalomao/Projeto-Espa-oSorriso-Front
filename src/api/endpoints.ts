@@ -1,3 +1,4 @@
+// src/api/endpoints.ts
 interface Params {
   page?: number;
   limit?: number;
@@ -29,8 +30,8 @@ const endpoints = {
     byId: (id: string | number) => `/procedimentos/${id}`,
     update: (id: string | number) => `/procedimentos/${id}`,
     delete: (id: string | number) => `/procedimentos/${id}`,
-    listWithFilters: ({ page = 1, limit = 10, termo = '', idDentista = '' }: Params = {}) =>
-        `/procedimentos?page=${page}&limit=${limit}&termo=${encodeURIComponent(termo)}&idDentista=${idDentista}`,
+    listWithFilters: ({ page = 1, limit = 10, termo = '', idDentista = null }: Params = {}) =>
+        `/procedimentos?page=${page}&limit=${limit}&termo=${encodeURIComponent(termo)}&idDentista=${idDentista || ''}`,
   },
   manutencoes: {
     base: '/manutencoes',
@@ -47,10 +48,8 @@ const endpoints = {
     byId: (id: string | number) => `/consultas/${id}`,
     update: (id: string | number) => `/consultas/${id}`,
     delete: (id: string | number) => `/consultas/${id}`,
-    listWithFilters: ({ page = 1, limit = 10, termo = '', idPaciente = ``, dateRange = [] }: Params = {}) => {
-        const [startDate, endDate] = dateRange;
-        return `/consultas?page=${page}&limit=${limit}&termo=${encodeURIComponent(termo)}&idPaciente=${idPaciente}&startDate=${startDate ? new Date(startDate).toISOString() : ''}&endDate=${endDate ? new Date(endDate).toISOString() : ''}`;
-    }
+    listWithFilters: ({ page = 1, limit = 10, termo = '', startDate = '', endDate = '' }: Params = {}) =>
+      `/consultas?page=${page}&limit=${limit}&termo=${encodeURIComponent(termo)}&startDate=${startDate}&endDate=${endDate}`,
   },
 };
 

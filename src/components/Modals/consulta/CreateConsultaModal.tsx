@@ -4,6 +4,10 @@ import { useSnackbar } from 'notistack';
 import { createConsulta } from "../../../api/services/ConsultaService";
 import { DentistaAutocomplete } from "../dentist/DentistAutocomplete";
 import { PacienteAutocomplete } from "../patient/PacienteAutocomplete";
+import { ProcedimentoMultiAutocomplete } from "../procedimento/ProcedimentoMultiAutocomplete.tsx";
+import { Paciente } from "../../../api/types/paciente.ts";
+import { Dentista } from "../../../api/types/dentista.ts";
+import { Procedimento } from "../../../api/types/procedimento.ts";
 
 type Props = {
   isOpen: boolean;
@@ -14,38 +18,41 @@ type Props = {
 function CreateConsultaModal({ isOpen, onClose, onSuccess }: Props) {
   const { enqueueSnackbar } = useSnackbar();
   const [form, setForm] = useState({
-    id_paciente: '',
-    id_dentista: '',
+    paciente: null as Paciente | null,
+    dentista: null as Dentista | null,
     data_hora: '',
-    duracao: '01:00', 
-    motivo: ''
+    duracao: '01:00',
+    motivo: '',
+    procedimentos: [] as Procedimento[]
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+  const handleChange = (e: any) => {
+    const { name, value } = e.target;
+
+    // Se o dentista for alterado, limpa os procedimentos
+    if (name === 'dentista') {
+      setForm(prev => ({ ...prev, procedimentos: [], [name]: value }));
+    } else {
+      setForm(prev => ({ ...prev, [name]: value }));
+    }
   };
 
   const handleSave = async () => {
-    if (!form.id_paciente || !form.id_dentista || !form.data_hora || !form.duracao || !form.motivo) {
+    if (!form.paciente || !form.dentista || !form.data_hora || !form.duracao || !form.motivo) {
       enqueueSnackbar('Preencha todos os campos obrigatórios.', { variant: 'warning' });
       return;
     }
     
     try {
       await createConsulta({
-        ...form,
-        id_paciente: Number(form.id_paciente.id),
-        id_dentista: Number(form.id_dentista.id),
-        duracao: `${form.duracao}:00`
+        id_paciente: form.paciente.id,
+        id_dentista: Number(form.dentista.id),
+        data_hora: form.data_hora,
+        duracao: `${form.duracao}:00`,
+        motivo: form.motivo,
+        procedimentos: form.procedimentos.map(p => p.id)
       });
       enqueueSnackbar('Consulta cadastrada com sucesso!', { variant: 'success' });
-      setForm({
-        id_paciente: '',
-        id_dentista: '',
-        data_hora: '',
-        duracao: '01:00',
-        motivo: ''
-      });
       onSuccess();
       onClose();
     } catch (error: any) {
@@ -57,29 +64,30 @@ function CreateConsultaModal({ isOpen, onClose, onSuccess }: Props) {
   if (!isOpen) return null;
   
   return (
-    
     <S.ModalOverlay>
       <S.DateTimePickerStyle />
       <S.Container>
         <S.Title>Nova Consulta</S.Title>
         <S.FormContainer>
-          <PacienteAutocomplete
-            value={form.id_paciente}
+          <PacienteAutocomplete value={form.paciente} onChangeForm={handleChange} name="paciente"/>
+          <DentistaAutocomplete value={form.dentista} onChangeForm={handleChange} name="dentista"/>
+          <ProcedimentoMultiAutocomplete 
+            value={form.procedimentos}
             onChangeForm={handleChange}
-            name="id_paciente"
+            dentistaId={form.dentista ? Number(form.dentista.id) : null}
+            name="procedimentos"
           />
-          <DentistaAutocomplete value={form.id_dentista} onChangeForm={handleChange} name="id_dentista"/>
-          <S.FieldWrapper style={{ width: "48%" }}>
+          <S.FieldWrapper style={{ width: "48%", marginTop: "1rem" }}>
             <S.Label htmlFor="data_hora">Data e Hora *</S.Label>
             <S.Input name="data_hora" type="datetime-local" value={form.data_hora} onChange={handleChange} />
           </S.FieldWrapper>
-          <S.FieldWrapper style={{ width: "48%" }}>
+          <S.FieldWrapper style={{ width: "48%", marginTop: "1rem" }}>
             <S.Label htmlFor="duracao">Duração *</S.Label>
             <S.MaskedInput mask="00:00" name="duracao" value={form.duracao} onAccept={(value: any) => setForm(prev => ({ ...prev, duracao: value }))} />
           </S.FieldWrapper>
-          <S.FieldWrapper style={{ width: "100%" }}>
+          <S.FieldWrapper style={{ width: "100%", marginTop: "1rem" }}>
             <S.Label htmlFor="motivo">Motivo *</S.Label>
-            <S.Input name="motivo" value={form.motivo} onChange={handleChange} placeholder="Motivo da consulta" />
+            <S.Input as="textarea" name="motivo" value={form.motivo} onChange={handleChange} placeholder="Motivo da consulta" />
           </S.FieldWrapper>
         </S.FormContainer>
         <S.ButtonGroup>

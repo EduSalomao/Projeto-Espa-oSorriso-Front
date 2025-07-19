@@ -17,11 +17,7 @@ const ConsultaCard = ({ consulta }: ConsultaCardProps) => {
       <CardInfoGrid>
         <CardInfo><strong>Data e Hora:</strong> {dataFormatada}</CardInfo>
         <CardInfo><strong>Dentista:</strong> {consulta.dentista_nome}</CardInfo>
-        <CardInfo><strong>Duração:</strong> {" "}
-          {consulta.duracao && consulta.duracao.length === 8
-            ? consulta.duracao.slice(0, 5)
-            : consulta.duracao}
-        </CardInfo>
+        <CardInfo><strong>Duração:</strong> {consulta.duracao?.slice(0, 5)}</CardInfo>
         <CardInfo><strong>Motivo:</strong> {consulta.motivo}</CardInfo>
       </CardInfoGrid>
     </Card>
