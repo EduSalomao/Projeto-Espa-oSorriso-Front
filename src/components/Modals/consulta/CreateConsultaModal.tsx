@@ -2,7 +2,7 @@ import { useState } from "react";
 import * as S from "../Modal.styles.ts";
 import { useSnackbar } from 'notistack';
 import { createConsulta } from "../../../api/services/ConsultaService";
-import { DentistaAutocomplete } from "../dentist/DentistAutocomplete";
+import { DentistaAutocomplete } from "../dentist/DentistAutocomplete.tsx";
 import { PacienteAutocomplete } from "../patient/PacienteAutocomplete";
 import { ProcedimentoMultiAutocomplete } from "../procedimento/ProcedimentoMultiAutocomplete.tsx";
 import { Paciente } from "../../../api/types/paciente.ts";
@@ -15,22 +15,32 @@ type Props = {
   onSuccess: () => void;
 };
 
+const initialFormState = {
+  paciente: null as Paciente | null,
+  dentista: null as Dentista | null,
+  data_hora: '',
+  duracao: '01:00',
+  motivo: '',
+  procedimentos: [] as Procedimento[]
+};
+
 function CreateConsultaModal({ isOpen, onClose, onSuccess }: Props) {
   const { enqueueSnackbar } = useSnackbar();
-  const [form, setForm] = useState({
-    paciente: null as Paciente | null,
-    dentista: null as Dentista | null,
-    data_hora: '',
-    duracao: '01:00',
-    motivo: '',
-    procedimentos: [] as Procedimento[]
-  });
+  const [form, setForm] = useState(initialFormState);
+
+  const resetForm = () => {
+    setForm(initialFormState);
+  };
+
+  const handleClose = () => {
+    resetForm();
+    onClose();
+  };
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;
 
-    // Se o dentista for alterado, limpa os procedimentos
-    if (name === 'dentista') {
+    if (name === 'dentista' && value !== form.dentista) {
       setForm(prev => ({ ...prev, procedimentos: [], [name]: value }));
     } else {
       setForm(prev => ({ ...prev, [name]: value }));
@@ -42,7 +52,7 @@ function CreateConsultaModal({ isOpen, onClose, onSuccess }: Props) {
       enqueueSnackbar('Preencha todos os campos obrigatórios.', { variant: 'warning' });
       return;
     }
-    
+
     try {
       await createConsulta({
         id_paciente: form.paciente.id,
@@ -53,6 +63,7 @@ function CreateConsultaModal({ isOpen, onClose, onSuccess }: Props) {
         procedimentos: form.procedimentos.map(p => p.id)
       });
       enqueueSnackbar('Consulta cadastrada com sucesso!', { variant: 'success' });
+      resetForm();
       onSuccess();
       onClose();
     } catch (error: any) {
@@ -62,7 +73,7 @@ function CreateConsultaModal({ isOpen, onClose, onSuccess }: Props) {
   };
 
   if (!isOpen) return null;
-  
+
   return (
     <S.ModalOverlay>
       <S.DateTimePickerStyle />
@@ -71,7 +82,7 @@ function CreateConsultaModal({ isOpen, onClose, onSuccess }: Props) {
         <S.FormContainer>
           <PacienteAutocomplete value={form.paciente} onChangeForm={handleChange} name="paciente"/>
           <DentistaAutocomplete value={form.dentista} onChangeForm={handleChange} name="dentista"/>
-          <ProcedimentoMultiAutocomplete 
+          <ProcedimentoMultiAutocomplete
             value={form.procedimentos}
             onChangeForm={handleChange}
             dentistaId={form.dentista ? Number(form.dentista.id) : null}
@@ -92,7 +103,7 @@ function CreateConsultaModal({ isOpen, onClose, onSuccess }: Props) {
         </S.FormContainer>
         <S.ButtonGroup>
           <S.Button onClick={handleSave}>Salvar</S.Button>
-          <S.CancelButton onClick={onClose}>Cancelar</S.CancelButton>
+          <S.CancelButton onClick={handleClose}>Cancelar</S.CancelButton>
         </S.ButtonGroup>
       </S.Container>
     </S.ModalOverlay>
