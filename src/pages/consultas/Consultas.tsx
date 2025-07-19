@@ -47,8 +47,8 @@ const ConsultasList = () => {
                 page: currentPage,
                 limit,
                 termo: searchTerm,
-                startDate: startDateFormatted,
-                endDate: endDateFormatted
+                startDate: searchDate ? startDateFormatted : '',
+                endDate: searchDate ? endDateFormatted : ''
             });
 
             if (response.data.consultas.length === 0 && currentPage === 1) {
@@ -63,12 +63,12 @@ const ConsultasList = () => {
         } finally {
             setSpinning(false);
         }
-    }, [currentPage, limit, searchTerm, searchDate, enqueueSnackbar]);
+    }, [currentPage, limit, searchTerm, searchDate, dateRange, enqueueSnackbar]);
 
 
     useEffect(() => {
         fetchItems();
-    }, [currentPage, fetchItems]);
+    }, [currentPage, searchTerm, searchDate, fetchItems]);
 
     const handlePageChange = (newPage: number) => {
         setCurrentPage(newPage);
@@ -88,9 +88,9 @@ const ConsultasList = () => {
                 key: 'selection'
             }
         ]);
-        setSearchDate(prev => !prev);
+        setSearchDate(false); // Desativa o filtro de data
         if (currentPage === 1) {
-            fetchItems();
+            // A alteração no estado já vai disparar o fetchItems
         } else {
             setCurrentPage(1);
         }
@@ -126,15 +126,13 @@ const ConsultasList = () => {
                                 onChange={item => setDateRange([item.selection])}
                                 moveRangeOnFirstSelection={false}
                                 ranges={dateRange}
-                                maxDate={new Date()}
                             />
                         </S.FormContainer>
                         <S.ButtonGroup style={{ marginTop: '20px' }}>
                             <S.Button onClick={() => {
-                                setSearchDate(prev => !prev);
+                                setSearchDate(true); // Ativa o filtro de data
                                 setDateRangeModalOpen(false);
-                                setCurrentPage(1);
-                                fetchItems();
+                                setCurrentPage(1); 
                             }}>
                                 Filtrar
                             </S.Button>
@@ -148,7 +146,7 @@ const ConsultasList = () => {
             <CreateConsultaModal
                 isOpen={isCreateModalOpen}
                 onClose={() => setIsCreateModalOpen(false)}
-                onSuccess={() => fetchItems()}
+                onSuccess={handleRefresh} // Usar handleRefresh para limpar e recarregar
             />
             <SearchConsultaModal
                 isOpen={isSearchModalOpen}
