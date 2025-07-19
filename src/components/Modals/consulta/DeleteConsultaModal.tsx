@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSnackbar } from 'notistack';
-import * as S from '../Modal.styles';
+import * as S from "../patient/deletePatientModal/DeletePatientModal.style"; // Importando o estilo correto
 import { deleteConsulta } from '../../../api/services/ConsultaService';
 
 type Props = {
@@ -22,13 +22,13 @@ const DeleteConsultaModal: React.FC<Props> = ({ isOpen, onClose, onSuccess, cons
     try {
       await deleteConsulta(consultaId);
       enqueueSnackbar('Consulta excluída com sucesso!', { variant: 'success' });
-      onSuccess(); // Chama a função de sucesso que fará a navegação
+      onSuccess();
     } catch (error: any) {
       console.error("Falha ao excluir consulta:", error);
       const errorMessage = error?.response?.data?.error || error?.message || 'Erro ao excluir consulta.';
       enqueueSnackbar(errorMessage, { variant: 'error' });
     } finally {
-      onClose(); // Fecha o modal independentemente do resultado
+      onClose();
     }
   };
 
@@ -36,17 +36,18 @@ const DeleteConsultaModal: React.FC<Props> = ({ isOpen, onClose, onSuccess, cons
 
   return (
     <S.ModalOverlay>
-      <S.Container>
-        <S.Title>Confirmar Exclusão</S.Title>
-        <p style={{ fontFamily: 'var(--font-roboto)', fontSize: '18px', textAlign: 'center' }}>
-          Tem certeza de que deseja excluir esta consulta? <br/>
-          Esta ação não pode ser desfeita.
-        </p>
+      <S.ModalContent>
+        <S.Title>Excluir Consulta</S.Title>
+        <S.Description>
+          Deseja realmente excluir esta consulta?
+          <br/>
+          Esta ação é irreversível!
+        </S.Description>
         <S.ButtonGroup>
           <S.Button onClick={handleDelete}>Excluir</S.Button>
           <S.CancelButton onClick={onClose}>Cancelar</S.CancelButton>
         </S.ButtonGroup>
-      </S.Container>
+      </S.ModalContent>
     </S.ModalOverlay>
   );
 };
