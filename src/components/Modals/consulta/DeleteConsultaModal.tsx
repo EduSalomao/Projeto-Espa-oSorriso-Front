@@ -1,4 +1,3 @@
-// src/components/Modals/consulta/DeleteConsultaModal.tsx
 import React from 'react';
 import { useSnackbar } from 'notistack';
 import * as S from '../Modal.styles';
@@ -17,18 +16,19 @@ const DeleteConsultaModal: React.FC<Props> = ({ isOpen, onClose, onSuccess, cons
   const handleDelete = async () => {
     if (!consultaId) {
         enqueueSnackbar('ID da consulta inválido.', { variant: 'error' });
-        return
-    };
+        return;
+    }
 
     try {
       await deleteConsulta(consultaId);
       enqueueSnackbar('Consulta excluída com sucesso!', { variant: 'success' });
-      onSuccess();
-      onClose();
+      onSuccess(); // Chama a função de sucesso que fará a navegação
     } catch (error: any) {
       console.error("Falha ao excluir consulta:", error);
       const errorMessage = error?.response?.data?.error || error?.message || 'Erro ao excluir consulta.';
       enqueueSnackbar(errorMessage, { variant: 'error' });
+    } finally {
+      onClose(); // Fecha o modal independentemente do resultado
     }
   };
 
@@ -43,7 +43,7 @@ const DeleteConsultaModal: React.FC<Props> = ({ isOpen, onClose, onSuccess, cons
           Esta ação não pode ser desfeita.
         </p>
         <S.ButtonGroup>
-          <S.DeleteButton onClick={handleDelete}>Excluir</S.DeleteButton>
+          <S.Button onClick={handleDelete}>Excluir</S.Button>
           <S.CancelButton onClick={onClose}>Cancelar</S.CancelButton>
         </S.ButtonGroup>
       </S.Container>

@@ -1,4 +1,3 @@
-// src/pages/consultas/Consultas.tsx
 import { useEffect, useState, useCallback } from "react";
 import { CardListView } from "../../components/Containers/CardListView";
 import { ActionButton } from "../../components/Buttons/Button.style";
@@ -8,12 +7,12 @@ import ConsultaCard from "../../components/Card/consulta/Card";
 import CreateConsultaModal from "../../components/Modals/consulta/CreateConsultaModal";
 import SearchConsultaModal from "../../components/Modals/consulta/SearchConsultaModal";
 import { useSnackbar } from "notistack";
+import { DateRange } from 'react-date-range';
+import { format } from 'date-fns';
+import 'react-date-range/dist/styles.css'; // main css file
+import 'react-date-range/dist/theme/default.css'; // theme css file
+import * as S from "../../components/Modals/Modal.styles";
 
-type SearchParams = {
-  termo?: string;
-  startDate?: string;
-  endDate?: string;
-};
 
 const ConsultasList = () => {
     const [consultas, setConsultas] = useState<Consulta[]>([]);
@@ -21,17 +20,38 @@ const ConsultasList = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [limit] = useState(5);
     const [spinning, setSpinning] = useState(false);
-    const [searchParams, setSearchParams] = useState<SearchParams>({});
+    const [searchTerm, setSearchTerm] = useState('');
 
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
     const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
     const { enqueueSnackbar } = useSnackbar();
 
-    const fetchItems = useCallback(async (page: number, params: SearchParams) => {
+    const [dateRangeModalOpen, setDateRangeModalOpen] = useState(false);
+    const [dateRange, setDateRange] = useState([
+        {
+            startDate: new Date(),
+            endDate: null,
+            key: 'selection'
+        }
+    ]);
+    const [searchDate, setSearchDate] = useState(false);
+
+
+    const fetchItems = useCallback(async () => {
         setSpinning(true);
         try {
-            const response = await getConsultas({ page, limit, ...params });
-            if (response.data.consultas.length === 0 && page === 1) {
+            const startDateFormatted = dateRange[0].startDate ? format(dateRange[0].startDate, "yyyy-MM-dd'T'00:00:00") : '';
+            const endDateFormatted = dateRange[0].endDate ? format(dateRange[0].endDate, "yyyy-MM-dd'T'23:59:59") : '';
+
+            const response = await getConsultas({
+                page: currentPage,
+                limit,
+                termo: searchTerm,
+                startDate: startDateFormatted,
+                endDate: endDateFormatted
+            });
+
+            if (response.data.consultas.length === 0 && currentPage === 1) {
                 enqueueSnackbar('Nenhuma consulta encontrada com os filtros aplicados.', { variant: 'info' });
             }
             setConsultas(response.data.consultas);
@@ -43,25 +63,34 @@ const ConsultasList = () => {
         } finally {
             setSpinning(false);
         }
-    }, [limit, enqueueSnackbar]);
+    }, [currentPage, limit, searchTerm, searchDate, enqueueSnackbar]);
+
 
     useEffect(() => {
-        fetchItems(currentPage, searchParams);
-    }, [currentPage, searchParams, fetchItems]);
+        fetchItems();
+    }, [currentPage, fetchItems]);
 
     const handlePageChange = (newPage: number) => {
         setCurrentPage(newPage);
     };
-    
-    const handleSearch = (params: SearchParams) => {
-        setSearchParams(params);
+
+    const handleSearch = (term: string) => {
+        setSearchTerm(term);
         setCurrentPage(1);
     };
 
     const handleRefresh = () => {
-        setSearchParams({});
+        setSearchTerm('');
+        setDateRange([
+            {
+                startDate: new Date(),
+                endDate: null,
+                key: 'selection'
+            }
+        ]);
+        setSearchDate(prev => !prev);
         if (currentPage === 1) {
-            fetchItems(1, {});
+            fetchItems();
         } else {
             setCurrentPage(1);
         }
@@ -82,15 +111,44 @@ const ConsultasList = () => {
             actionButtons={
                 <>
                     <ActionButton onClick={() => setIsSearchModalOpen(true)}>Pesquisar Por Nome</ActionButton>
-                    <ActionButton onClick={() => setIsSearchModalOpen(true)}>Pesquisar Por Data</ActionButton>
+                    <ActionButton onClick={() => setDateRangeModalOpen(true)}>Pesquisar Por Data</ActionButton>
                     <ActionButton onClick={() => setIsCreateModalOpen(true)}>Cadastrar</ActionButton>
                 </>
             }
         >
+            {dateRangeModalOpen && (
+                <S.ModalOverlay>
+                    <S.Container style={{ width: 'auto' }}>
+                        <S.Title>Pesquisar por Datas</S.Title>
+                        <S.FormContainer style={{ justifyContent: 'center' }}>
+                            <DateRange
+                                editableDateInputs={true}
+                                onChange={item => setDateRange([item.selection])}
+                                moveRangeOnFirstSelection={false}
+                                ranges={dateRange}
+                                maxDate={new Date()}
+                            />
+                        </S.FormContainer>
+                        <S.ButtonGroup style={{ marginTop: '20px' }}>
+                            <S.Button onClick={() => {
+                                setSearchDate(prev => !prev);
+                                setDateRangeModalOpen(false);
+                                setCurrentPage(1);
+                                fetchItems();
+                            }}>
+                                Filtrar
+                            </S.Button>
+                            <S.Button onClick={() => setDateRangeModalOpen(false)}>
+                                Fechar
+                            </S.Button>
+                        </S.ButtonGroup>
+                    </S.Container>
+                </S.ModalOverlay>
+            )}
             <CreateConsultaModal
                 isOpen={isCreateModalOpen}
                 onClose={() => setIsCreateModalOpen(false)}
-                onSuccess={() => fetchItems(currentPage, searchParams)}
+                onSuccess={() => fetchItems()}
             />
             <SearchConsultaModal
                 isOpen={isSearchModalOpen}
