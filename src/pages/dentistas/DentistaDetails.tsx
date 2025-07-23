@@ -2,6 +2,7 @@ import * as S from "../../components/Containers/ContainerDetails.style";
 import DeleteDentistModal from "../../components/Modals/dentist/deleteDetistModal/DeleteDentistModal";
 import EditDentistModal from "../../components/Modals/dentist/editDentistModal/EditDentistModal";
 import { getProcedimentos } from "../../api/services/ProcedimentoService";
+import { getConsultas } from "../../api/services/ConsultaService"; // Importado
 
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
@@ -17,6 +18,8 @@ const DentistaDetails = () => {
     const [selectedTab, setSelectedTab] = useState<"consultas" | "procedimentos">("consultas");
     const [procedimentos, setProcedimentos] = useState([]);
     const [loadingProcedimentos, setLoadingProcedimentos] = useState(false);
+    const [consultas, setConsultas] = useState([]); // Adicionado
+    const [loadingConsultas, setLoadingConsultas] = useState(false); // Adicionado
 
     const handleTabChange = async (tab) => {
         setSelectedTab(tab);
@@ -35,7 +38,25 @@ const DentistaDetails = () => {
                 setProcedimentos([]);
             }
             setLoadingProcedimentos(false);
-            
+        }
+        if (tab === "consultas") { // Adicionado
+            setLoadingConsultas(true);
+            try {
+                const resp = await getConsultas({ idDentista: id });
+                for (const c of resp.data.consultas) {
+                    c.data_hora = new Date(c.data_hora).toLocaleString("pt-BR", {
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+                }
+                setConsultas(resp.data.consultas);
+            } catch (err) {
+                setConsultas([]);
+            }
+            setLoadingConsultas(false);
         }
     };
 
@@ -119,16 +140,35 @@ const DentistaDetails = () => {
                 <S.Line/>
                 <S.ContentOptionsMenu>
                     {selectedTab === "consultas" && (
-                        <>
-                            <S.ContentSetOptionsMenu>
-                                <S.ContentTitleOptionsMenu>Próximas Consultas</S.ContentTitleOptionsMenu>
-                                <S.ContentDescriptionOptionsMenu>Não há nenhum agendamento</S.ContentDescriptionOptionsMenu>
-                            </S.ContentSetOptionsMenu>
-                            <S.ContentSetOptionsMenu>
-                                <S.ContentTitleOptionsMenu>Histórico de Consultas</S.ContentTitleOptionsMenu>
-                                <S.ContentDescriptionOptionsMenu>Não há nenhum agendamento</S.ContentDescriptionOptionsMenu>
-                            </S.ContentSetOptionsMenu>
-                            </>
+                         <S.ContentSetOptionsMenu style={{ width: "100%", marginLeft: "0px" }} >
+                         <S.ContentTitleOptionsMenu>Próximas Consultas</S.ContentTitleOptionsMenu>
+                         {loadingConsultas ? (
+                             <S.ContentDescriptionOptionsMenu>Carregando...</S.ContentDescriptionOptionsMenu>
+                         ) : consultas.length === 0 ? (
+                             <S.ContentDescriptionOptionsMenu>Nenhuma consulta associada.</S.ContentDescriptionOptionsMenu>
+                         ) : (
+                             <TableWrapper>
+                                 <Table>
+                                 <Thead>
+                                     <Th first>Data e Hora</Th>
+                                     <Th>Duração</Th>
+                                     <Th>Paciente</Th>
+                                     <Th>Motivo</Th>
+                                 </Thead>
+                                 <Tbody>
+                                     {consultas.map(con => (
+                                     <Tr onClick={() => navigate(`/consultas/${con.id}`)} key={con.id}>
+                                         <Td>{con.data_hora}</Td>
+                                         <Td>{con.duracao}</Td>
+                                         <Td>{con.paciente_nome}</Td>
+                                         <Td>{con.motivo}</Td>
+                                     </Tr>
+                                     ))}
+                                 </Tbody>
+                                 </Table>
+                             </TableWrapper>
+                         )}
+                         </S.ContentSetOptionsMenu>
                         )}
                         {selectedTab === "procedimentos" && (
                             <S.ContentSetOptionsMenu style={{ width: "100%", marginLeft: "0px" }} >
