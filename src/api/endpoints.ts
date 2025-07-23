@@ -1,4 +1,3 @@
-// src/api/endpoints.ts
 interface Params {
   page?: number;
   limit?: number;
@@ -38,9 +37,11 @@ const endpoints = {
     byId: (id: string | number) => `/manutencoes/${id}`,
     update: (id: string | number) => `/manutencoes/${id}`,
     delete: (id: string | number) => `/manutencoes/${id}`,
-    listWithFilters: ({ page = 1, limit = 10, termo = '', idPaciente = ``, dateRange = [] }: Params = {}) => {
+    listWithFilters: ({ page = 1, limit = 10, termo = '', idPaciente = null, idDentista = null, dateRange = [] }: Params = {}) => {
       const [startDate, endDate] = dateRange;
-      return `/manutencoes?page=${page}&limit=${limit}&termo=${encodeURIComponent(termo)}&idPaciente=${idPaciente}&startDate=${startDate ? new Date(startDate).toISOString() : ''}&endDate=${endDate ? new Date(endDate).toISOString() : ''}`;
+      const startDateISO = startDate ? new Date(startDate as string).toISOString() : '';
+      const endDateISO = endDate ? new Date(endDate as string).toISOString() : '';
+      return `/manutencoes?page=${page}&limit=${limit}&termo=${encodeURIComponent(termo)}&idPaciente=${idPaciente || ''}&idDentista=${idDentista || ''}&startDate=${startDateISO}&endDate=${endDateISO}`;
     }
   },
   consultas: {
@@ -48,11 +49,11 @@ const endpoints = {
     byId: (id: string | number) => `/consultas/${id}`,
     update: (id: string | number) => `/consultas/${id}`,
     delete: (id: string | number) => `/consultas/${id}`,
-    listWithFilters: ({ page = 1, limit = 10, termo = '', dateRange = [] }: Params = {}) => {
+    listWithFilters: ({ page = 1, limit = 10, termo = '', idPaciente = null, idDentista = null, dateRange = [] }: Params = {}) => {
       const [startDate, endDate] = dateRange;
       const startDateISO = startDate ? new Date(startDate as string).toISOString() : '';
       const endDateISO = endDate ? new Date(endDate as string).toISOString() : '';
-      return `/consultas?page=${page}&limit=${limit}&termo=${encodeURIComponent(termo)}&startDate=${startDateISO}&endDate=${endDateISO}`;
+      return `/consultas?page=${page}&limit=${limit}&termo=${encodeURIComponent(termo)}&idPaciente=${idPaciente || ''}&idDentista=${idDentista || ''}&startDate=${startDateISO}&endDate=${endDateISO}`;
     }
   },
 };

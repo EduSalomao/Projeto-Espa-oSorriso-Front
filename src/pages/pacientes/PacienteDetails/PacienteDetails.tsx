@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 import { useNavigate } from "react-router-dom";
 import { getManutencoes } from "../../../api/services/ManutencaoService";
+import { getConsultas } from "../../../api/services/ConsultaService";
 import { Table, TableWrapper, Tbody, Td, Th, Thead, Tr } from "../../../components/Containers/Table.style";
 
 
@@ -18,6 +19,9 @@ const PacienteDetails = () => {
     const [selectedTab, setSelectedTab] = useState<"consultas" | "procedimentos" | "fichaClinica" | "anamnese" | "orcamentos" | "manutencoes">("consultas");
     const [manutencoes, setManutencoes] = useState([]);
     const [loadingManutencoes, setLoadingManutencoes] = useState(false);
+    const [consultas, setConsultas] = useState([]);
+    const [loadingConsultas, setLoadingConsultas] = useState(false);
+
 
     const handleTabChange = async (tab) => {
             setSelectedTab(tab);
@@ -43,6 +47,25 @@ const PacienteDetails = () => {
                 }
                 setLoadingManutencoes(false);
 
+            }
+            if (tab === "consultas") {
+                setLoadingConsultas(true);
+                try {
+                    const resp = await getConsultas({ idPaciente: id });
+                    for (const c of resp.data.consultas) {
+                        c.data_hora = new Date(c.data_hora).toLocaleString("pt-BR", {
+                            day: '2-digit',
+                            month: '2-digit',
+                            year: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        });
+                    }
+                    setConsultas(resp.data.consultas);
+                } catch (err) {
+                    setConsultas([]);
+                }
+                setLoadingConsultas(false);
             }
         };
 
@@ -111,16 +134,34 @@ const PacienteDetails = () => {
                 <S.Line/>
                 <S.ContentOptionsMenu>
                     {selectedTab === "consultas" && (
-                        <>
-                            <S.ContentSetOptionsMenu>
-                                <S.ContentTitleOptionsMenu>Próximas Consultas</S.ContentTitleOptionsMenu>
-                                <S.ContentDescriptionOptionsMenu>Não há nenhum agendamento</S.ContentDescriptionOptionsMenu>
-                            </S.ContentSetOptionsMenu>
-                            <S.ContentSetOptionsMenu>
-                                <S.ContentTitleOptionsMenu>Histórico de Consultas</S.ContentTitleOptionsMenu>
-                                <S.ContentDescriptionOptionsMenu>Não há nenhum agendamento</S.ContentDescriptionOptionsMenu>
-                            </S.ContentSetOptionsMenu>
-                        </>
+                        <S.ContentSetOptionsMenu style={{ width: "100%", marginLeft: "0px" }} >
+                        {loadingConsultas ? (
+                            <S.ContentDescriptionOptionsMenu>Carregando...</S.ContentDescriptionOptionsMenu>
+                        ) : consultas.length === 0 ? (
+                            <S.ContentDescriptionOptionsMenu>Nenhuma consulta associada.</S.ContentDescriptionOptionsMenu>
+                        ) : (
+                            <TableWrapper>
+                                <Table>
+                                <Thead>
+                                    <Th first>Data e Hora</Th>
+                                    <Th>Duração</Th>
+                                    <Th>Dentista</Th>
+                                    <Th>Motivo</Th>
+                                </Thead>
+                                <Tbody>
+                                    {consultas.map(con => (
+                                    <Tr onClick={() => navigate(`/consultas/${con.id}`)} key={con.id}>
+                                        <Td>{con.data_hora}</Td>
+                                        <Td>{con.duracao}</Td>
+                                        <Td>{con.dentista_nome}</Td>
+                                        <Td>{con.motivo}</Td>
+                                    </Tr>
+                                    ))}
+                                </Tbody>
+                                </Table>
+                            </TableWrapper>
+                        )}
+                        </S.ContentSetOptionsMenu>
                     )}
                     {selectedTab === "anamnese" && (
                         <>
@@ -174,11 +215,11 @@ const PacienteDetails = () => {
                         )}
                         </S.ContentSetOptionsMenu>
                     )}
-                    
-                    
+
+
                 </S.ContentOptionsMenu>
             </S.ContainerOptions>
-            
+
         </S.ContainerAside>
         <S.SidebarButtons>
             <S.ActionButton onClick={handleOpenEditModal}>Editar</S.ActionButton>
@@ -189,7 +230,7 @@ const PacienteDetails = () => {
         {/* Modal de Cadastro */}
         <EditPacientModal paciente={paciente} isOpen={isEditModalOpen} onClose={handleCloseEditModal} />
 
-      
+
     </S.ContainerDetails>
     );
 }
